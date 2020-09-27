@@ -1,13 +1,8 @@
 package com.qcxk.component.netty;
 
-/**
- * Created by IntelliJ IDEA.
- * User: think
- * Date: 2020/3/3
- */
 public class Contents {
-    public static final String headSTR= "FEEF";
-    public static final byte[] headBYTE = new byte[]{(byte)0xEF,(byte)0XFE};
+    public static final String headSTR = "FEEF";
+    public static final byte[] headBYTE = new byte[]{(byte) 0xEF, (byte) 0XFE};
     //上传探测器基本信息功能码
     public static final String RECEIVE_BASIC_INFO_CODE = "a1";
     //上传探测器采集信息功能码
@@ -20,7 +15,4 @@ public class Contents {
     public static final String SEND_QUERY_DATA_CODE = "a5";
     //探测器收取到服务器数据回传命令
     public static final String RECEIVE_CALL_DATA_CODE = "a6";
-
-
-
 }

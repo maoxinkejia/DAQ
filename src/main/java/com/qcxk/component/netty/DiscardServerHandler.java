@@ -12,11 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
-/**
- * Created by IntelliJ IDEA.
- * User: think
- * Date: 2019/11/4
- */
 @ChannelHandler.Sharable
 public class DiscardServerHandler extends ChannelHandlerAdapter {
     private final static Logger LOGGER = LoggerFactory.getLogger(DiscardServerHandler.class);
@@ -49,8 +44,7 @@ public class DiscardServerHandler extends ChannelHandlerAdapter {
     }
 
     public static int byteToInt(byte b) {
-        int x = b & 0xff;
-        return x;
+        return b & 0xff;
     }
 
     //System.arraycopy()方法
@@ -66,9 +60,9 @@ public class DiscardServerHandler extends ChannelHandlerAdapter {
             char[] NewArray = new char[1000];
             char[] array = arg.toCharArray();
             int length = 0;
-            for (int i = 0; i < array.length; i++) {
-                if (array[i] != ' ') {
-                    NewArray[length] = array[i];
+            for (char c : array) {
+                if (c != ' ') {
+                    NewArray[length] = c;
                     length++;
                 }
             }
@@ -115,8 +109,8 @@ public class DiscardServerHandler extends ChannelHandlerAdapter {
         if (src == null || src.length <= 0) {
             return null;
         }
-        for (int i = 0; i < src.length; i++) {
-            int v = src[i] & 0xFF;
+        for (byte b : src) {
+            int v = b & 0xFF;
             String hv = Integer.toHexString(v);
             if (hv.length() < 2) {
                 stringBuilder.append(0);

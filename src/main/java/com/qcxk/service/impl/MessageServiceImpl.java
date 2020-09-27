@@ -6,7 +6,7 @@ import com.qcxk.model.Message;
 import com.qcxk.service.MessageService;
 import org.springframework.stereotype.Service;
 
-@Service(value = "messageService")
+@Service
 public class MessageServiceImpl extends ServiceImpl<MessageDao, Message> implements MessageService {
 
 }

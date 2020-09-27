@@ -7,17 +7,10 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * Created by IntelliJ IDEA.
- * User: think
- * Date: 2019/11/4
- */
 public class DiscardServer {
     private ChildChannelHandler childChannelHandler = new ChildChannelHandler();
     public static ExecutorService service = Executors.newCachedThreadPool();
@@ -25,7 +18,7 @@ public class DiscardServer {
 
     private static Channel serverChannel;
 
-    public static void startServer(){
+    public static void startServer() {
         service.submit(() -> {
             try {
                 discardServer = new DiscardServer();
@@ -36,15 +29,19 @@ public class DiscardServer {
             }
         });
     }
-    /** 关闭当前server */
+
+    /**
+     * 关闭当前server
+     */
     public static void closeServer() {
         if (serverChannel != null) {
             System.out.println("close server");
             serverChannel.close();
             serverChannel = null;
-            discardServer=null;
+            discardServer = null;
         }
     }
+
     public void run(int port) throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();

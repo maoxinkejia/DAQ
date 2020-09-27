@@ -1,12 +1,10 @@
 package com.qcxk.component.netty;
 
-import java.util.Arrays;
+import lombok.Getter;
+import lombok.Setter;
 
-/**
- * Created by IntelliJ IDEA.
- * User: think
- * Date: 2020/3/3
- */
+@Getter
+@Setter
 public class DataModel {
 
     //ID号
@@ -31,23 +29,23 @@ public class DataModel {
     private byte[] data;
     private String dataSTR;
 
-    public byte[] exCrcH(){
+    public byte[] exCrcH() {
         String data = "";
         int v = length & 0xFF;
         String hv = Integer.toHexString(v);
         if (hv.length() < 2) {
-            data+=(0);
+            data += (0);
         }
-        data+=(hv);
+        data += (hv);
 
         v = fun & 0xFF;
         hv = Integer.toHexString(v);
         if (hv.length() < 2) {
-            data+=(0);
+            data += (0);
         }
-        data+=(hv);
+        data += (hv);
 
-        data+=bytesToHexString(byteMerger(idNumber,body));
+        data += bytesToHexString(byteMerger(idNumber, body));
         if (data == null || data.equals("")) {
             return null;
         }
@@ -62,7 +60,7 @@ public class DataModel {
         /**
          * 用256求余最大是255，即16进制的FF
          */
-        int mod = total/256 % 256;
+        int mod = total / 256 % 256;
         String hex = Integer.toHexString(mod);
         len = hex.length();
         // 如果不够校验位的长度，补0,这里用的是两位校验
@@ -72,28 +70,30 @@ public class DataModel {
 
         return hexStringToBytes(hex.toUpperCase());
     }
+
     //System.arraycopy()方法
-    public static byte[] byteMerger(byte[] bt1, byte[] bt2){
-        byte[] bt3 = new byte[bt1.length+bt2.length];
+    public static byte[] byteMerger(byte[] bt1, byte[] bt2) {
+        byte[] bt3 = new byte[bt1.length + bt2.length];
         System.arraycopy(bt1, 0, bt3, 0, bt1.length);
         System.arraycopy(bt2, 0, bt3, bt1.length, bt2.length);
         return bt3;
     }
+
     //苏标校验码算法
     public static String makeChecksum(byte[] data) {
-        if (data == null || data.length==0) {
+        if (data == null || data.length == 0) {
             return "";
         }
         int total = 0;
-        for(byte b:data){
-            total+=b;
+        for (byte b : data) {
+            total += b;
         }
 
         /**
          * 用256求余最大是255，即16进制的FF
          */
         int mod = total % 256;
-        mod = 0x100-mod;
+        mod = 0x100 - mod;
         String hex = Integer.toHexString(mod);
         int len = hex.length();
         // 如果不够校验位的长度，补0,这里用的是两位校验
@@ -119,6 +119,7 @@ public class DataModel {
         }
         return stringBuilder.toString();
     }
+
     public static byte[] hexStringToBytes(String hexString) {
         if (hexString == null || hexString.equals("")) {
             return null;
@@ -133,10 +134,12 @@ public class DataModel {
         }
         return d;
     }
+
     private static byte charToByte(char c) {
         return (byte) "0123456789ABCDEF".indexOf(c);
     }
-//    public static void main(String[] args) {
+
+    //    public static void main(String[] args) {
 //        DataModel dataModel = new DataModel();
 //        dataModel.setLength((byte)0x06);
 //
@@ -155,120 +158,5 @@ public class DataModel {
     public static int byteToInt(byte b) {
         int x = b & 0xff;
         return x;
-    }
-    public byte[] getIdNumber() {
-        return idNumber;
-    }
-
-    public static Integer byteToInteger(Byte b) {
-        return 0xff & b;
-    }
-
-    public void setIdNumber(byte[] idNumber) {
-        this.idNumber = idNumber;
-    }
-
-    public String getIdNumberSTR() {
-        return idNumberSTR;
-    }
-
-    public void setIdNumberSTR(String idNumberSTR) {
-        this.idNumberSTR = idNumberSTR;
-    }
-
-    public byte getLength() {
-        return length;
-    }
-
-    public void setLength(byte length) {
-        this.length = length;
-    }
-
-    public int getLengthINT() {
-        return lengthINT;
-    }
-
-    public void setLengthINT(int lengthINT) {
-        this.lengthINT = lengthINT;
-    }
-
-    public byte getFun() {
-        return fun;
-    }
-
-    public void setFun(byte fun) {
-        this.fun = fun;
-    }
-
-    public String getFunSTR() {
-        return funSTR;
-    }
-
-    public void setFunSTR(String funSTR) {
-        this.funSTR = funSTR;
-    }
-
-    public byte[] getBody() {
-        return body;
-    }
-
-    public void setBody(byte[] body) {
-        this.body = body;
-    }
-
-    public String getBodySTR() {
-        return bodySTR;
-    }
-
-    public void setBodySTR(String bodySTR) {
-        this.bodySTR = bodySTR;
-    }
-
-    public byte getCrch() {
-        return crch;
-    }
-
-    public void setCrch(byte crch) {
-        this.crch = crch;
-    }
-
-    public String getCrchSTR() {
-        return crchSTR;
-    }
-
-    public void setCrchSTR(String crchSTR) {
-        this.crchSTR = crchSTR;
-    }
-
-    public byte getCrcl() {
-        return crcl;
-    }
-
-    public void setCrcl(byte crcl) {
-        this.crcl = crcl;
-    }
-
-    public String getCrclSTR() {
-        return crclSTR;
-    }
-
-    public void setCrclSTR(String crclSTR) {
-        this.crclSTR = crclSTR;
-    }
-
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
-    }
-
-    public String getDataSTR() {
-        return dataSTR;
-    }
-
-    public void setDataSTR(String dataSTR) {
-        this.dataSTR = dataSTR;
     }
 }
