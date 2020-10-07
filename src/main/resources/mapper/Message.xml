@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcxk.dao.MessageDao">
-  <resultMap id="BaseResultMap" type="com.qcxk.model.Message">
-			<id column="id" jdbcType="INTEGER" property="id" />
-			<result column="con" jdbcType="VARCHAR" property="con" />
-			<result column="state" jdbcType="VARCHAR" property="state" />
-			<result column="inserttime" jdbcType="VARCHAR" property="inserttime" />
-			<result column="sendtime" jdbcType="VARCHAR" property="sendtime" />
-			<result column="o1" jdbcType="VARCHAR" property="o1" />
-			<result column="o2" jdbcType="VARCHAR" property="o2" />
-			<result column="o3" jdbcType="VARCHAR" property="o3" />
-			<result column="o4" jdbcType="VARCHAR" property="o4" />
-  </resultMap>
 
- </mapper>
+</mapper>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcxk.dao.TerminalDeviceDao">
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO terminal_device(
+          device_num,
+          longitude,
+          latitude,
+          location,
+          tube_well_description,
+          control_status,
+          image_path,
+          remarks,
+          create_time,
+          boot_time,
+          shutdown_time,
+          update_time,
+          create_user,
+          update_user
+        ) VALUES (
+          #{deviceNum},
+          #{longitude},
+          #{latitude},
+          #{location},
+          #{tubeWellDescription},
+          #{controlStatus},
+          #{imagePath},
+          #{remarks},
+          #{createTime},
+          #{bootTime},
+          #{shutdownTime},
+          #{updateTime},
+          #{createUser},
+          #{updateUser}
+        )
+    </insert>
+
+    <update id="updateBatVolAndRssi">
+        UPDATE terminal_device
+        SET boot_time = #{bootTmie}, bat_vol = #{batVol}, rssi = #{rssi}
+        WHERE id = #{terminalId}
+    </update>
+
+    <update id="update">
+        <include refid="updateTerminalDevice"/>
+        WHERE id = #{id}
+    </update>
+
+    <select id="findByDeviceNum" resultType="com.qcxk.model.TerminalDevice">
+        <include refid="selectTerminalDevice"/>
+        WHERE t.device_num = #{deviceNum}
+    </select>
+
+    <sql id="updateTerminalDevice">
+        UPDATE terminal_device
+        <set>
+            <if test="ch4Concentration != null">
+                ch4_concentration = #{ch4Concentration},
+            </if>
+            <if test="liquidHeight != null">
+                liquid_height = #{liquidHeight},
+            </if>
+            <if test="temperature != null">
+                temperature = #{temperature},
+            </if>
+            <if test="batVol != null">
+                bat_vol = #{batVol},
+            </if>
+            <if test="rssi != null">
+                rssi = #{rssi},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="location != null">
+                location = #{location},
+            </if>
+            <if test="tubeWellDescription != null">
+                tube_well_description = #{tubeWellDescription},
+            </if>
+            <if test="waterDepthStatus != null">
+                water_depth_status = #{waterDepthStatus},
+            </if>
+            <if test="waterDepthThreshold != null">
+                water_depth_threshold = #{waterDepthThreshold},
+            </if>
+            <if test="gasSensorStatus != null">
+                gas_sensor_status = #{gasSensorStatus},
+            </if>
+            <if test="gasConcentrationThreshold != null">
+                gas_concentration_threshold = #{gasConcentrationThreshold},
+            </if>
+            <if test="gasConcentration != null">
+                gas_concentration = #{gasConcentration},
+            </if>
+            <if test="batVolThreshold != null">
+                bat_vol_threshold = #{batVolThreshold},
+            </if>
+            <if test="serverHost != null">
+                server_host = #{serverHost},
+            </if>
+            <if test="serverPort != null">
+                server_port = #{serverPort},
+            </if>
+            <if test="batLeftWorkTime != null">
+                bat_left_work_time = #{batLeftWorkTime},
+            </if>
+            <if test="controlStatus != null">
+                control_status = #{controlStatus},
+            </if>
+            <if test="imagePath != null">
+                image_path = #{imagePath},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+        </set>
+    </sql>
+
+    <sql id="selectTerminalDevice">
+        SELECT
+          t.id,
+          t.device_num AS deviceNum,
+          t.longitude,
+          t.latitude,
+          t.location,
+          t.tube_well_description AS tubeWellDescription,
+          t.control_status AS controlStatus,
+          t.image_path AS imagePath,
+          t.remarks，
+          t.create_time AS createTime,
+          t.boot_time AS bootTime,
+          t.shutdown_time AS shutdownTime,
+          t.update_time AS updateTime,
+          t.create_user AS createUser,
+          t.update_user AS updateUser
+        FROM
+          terminal_device t
+    </sql>
+</mapper>

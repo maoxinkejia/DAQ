@@ -13,13 +13,13 @@ import java.util.concurrent.Executors;
 
 public class DiscardServer {
     private ChildChannelHandler childChannelHandler = new ChildChannelHandler();
-    public static ExecutorService service = Executors.newCachedThreadPool();
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(5);
     private static DiscardServer discardServer;
 
     private static Channel serverChannel;
 
     public static void startServer() {
-        service.submit(() -> {
+        threadPool.submit(() -> {
             try {
                 discardServer = new DiscardServer();
                 discardServer.run(7878);
