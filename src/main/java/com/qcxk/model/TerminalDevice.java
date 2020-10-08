@@ -34,7 +34,7 @@ public class TerminalDevice {
     /**
      * 信号值
      */
-    private Double rssi;
+    private Integer rssi;
     /**
      * 经度
      */
@@ -123,4 +123,48 @@ public class TerminalDevice {
      * 修改人
      */
     private String updateUser;
+    /**
+     * 设备软件版本号
+     */
+    private String version;
+    /**
+     * 井盖状态 1：连接  0：未连接
+     */
+    private Integer wellLidStatus;
+    /**
+     * 井盖是否掀开 1：掀开 0：为掀开
+     */
+    private Integer wellLidOpenStatus;
+    /**
+     * 井盖电池电压
+     */
+    private Double wellLidBatVol;
+    /**
+     * 井盖上传数据时间
+     */
+    private Integer wellLidUploadTime;
+    /**
+     * 水位传感器状态 1：连接 0：未连接
+     */
+    private Integer waterSensorStatus;
+    /**
+     * 水位深度
+     */
+    private Double waterDepth;
+    /**
+     * 甲烷传感器状态 1：连接 0：未连接
+     */
+    private Integer ch4SensorStatus;
+    /**
+     * 甲烷气体浓度
+     */
+    private Double ch4GasConcentration;
+    /**
+     * 甲烷气体体积浓度
+     */
+    private Double ch4GasVolumeConcentration;
+    /**
+     * 甲烷气体传感器状态   0：整除 10：预热中 1xx(>100)：低功耗 40：温度正常
+     */
+    private Integer ch4SensorEnum;
 }

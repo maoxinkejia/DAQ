@@ -5,7 +5,10 @@ import com.qcxk.model.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.qcxk.util.Constants.*;
 
@@ -197,5 +200,121 @@ public class BusinessUtil {
         int num1 = Integer.parseInt(data.substring(78, 80), 16);
         int num2 = Integer.parseInt(data.substring(80, 82), 16);
         return Integer.parseInt(Integer.toString(num1) + num2);
+    }
+
+    /**
+     * 获取软件版本
+     */
+    public static String getVersion(String data) {
+        int num1 = Integer.parseInt(data.substring(14, 16), 16);
+        int num2 = Integer.parseInt(data.substring(16, 18), 16);
+        return "V" + num1 + "." + num2;
+    }
+
+    /**
+     * 获取井盖状态 1：连接 0：未连接
+     */
+    public static Integer getWellLidStatus(String data) {
+        return Integer.parseInt(data.substring(18, 20), 16);
+    }
+
+    /**
+     * 获取井盖是否掀开状态 1：掀开 0：为掀开
+     */
+    public static Integer getWellLidOpenStatus(String data) {
+        return Integer.parseInt(data.substring(20, 22), 16);
+    }
+
+    /**
+     * 获取井盖电池电压，得到值后需要除以10，并保留1位小数  单位：V
+     */
+    public static Double getWellLidBatVol(String data) {
+        int batVol = Integer.parseInt(data.substring(22, 24), 16);
+        return new BigDecimal(batVol).divide(new BigDecimal(10), 1, BigDecimal.ROUND_DOWN).doubleValue();
+    }
+
+    /**
+     * 获取井盖上传数据时间间隔 单位：分钟
+     */
+    public static Integer getWellLidUploadTime(String data) {
+        return Integer.parseInt(data.substring(24, 26), 16);
+    }
+
+    /**
+     * 获取硬件故障代码
+     */
+    public static Map<Integer, Boolean> getHardwareErrorCode(String data) {
+        int errorCode = Integer.parseInt(data.substring(32, 34), 16);
+        Map<Integer, Boolean> hardwareFailure = new HashMap<>(2);
+        hardwareFailure.put(CH4_SENSOR_FAILURE, (errorCode & CH4_SENSOR_FAILURE) == CH4_SENSOR_FAILURE);
+        hardwareFailure.put(WATER_HEIGHT_FAILURE, (errorCode & WATER_HEIGHT_FAILURE) == WATER_HEIGHT_FAILURE);
+
+        return hardwareFailure;
+    }
+
+    /**
+     * 获取水位传感器在线状态  1：连接  0：未连接
+     */
+    public static Integer getWaterSensorStatus(String data) {
+        return Integer.parseInt(data.substring(34, 36), 16);
+    }
+
+    /**
+     * 获取水位深度，需要除以10，结果保留一位小数 单位：米
+     */
+    public static Double getWaterDepth(String data) {
+        int waterDepth = Integer.parseInt(data.substring(36, 38), 16);
+        return new BigDecimal(waterDepth).divide(new BigDecimal(10), 1, BigDecimal.ROUND_DOWN).doubleValue();
+    }
+
+    /**
+     * 获取甲烷气体传感器在线状态  1：连接  0：未连接
+     */
+    public static Integer getCH4SensorStatus(String data) {
+        return Integer.parseInt(data.substring(38, 40), 16);
+    }
+
+    /**
+     * 获取甲烷气体浓度 取值为0-1000，获取后需要除以10，以百分比展示  单位：%
+     */
+    public static Double getCH4GasConcentration(String data) {
+        int ch4Concentration = Integer.parseInt(data.substring(40, 44), 16);
+        return new BigDecimal(ch4Concentration).divide(new BigDecimal(10), 1, BigDecimal.ROUND_DOWN).doubleValue();
+    }
+
+    /**
+     * 获取甲烷气体体积浓度，取值0-100，获取后需要除以10，以百分比展示 单位：%
+     */
+    public static Double getCH4GasVolumeConcentration(String data) {
+        int ch4VolumeConcentration = Integer.parseInt(data.substring(44, 46), 16);
+        return new BigDecimal(ch4VolumeConcentration).divide(new BigDecimal(10), 1, BigDecimal.ROUND_DOWN).doubleValue();
+    }
+
+    /**
+     * 获取甲烷气体传感器状态
+     */
+    public static Integer getCH4SensorEnum(String data) {
+        return Integer.parseInt(data.substring(46, 48), 16);
+    }
+
+    public static Map<Integer,Boolean> getSystemErrorCode(String data) {
+        int errorCode = Integer.parseInt(data.substring(66, 70), 16);
+        Map<Integer,Boolean> systemFailure =new HashMap<>(7);
+        systemFailure.put(CH4_TEMPERATURE_OVER_PROOF, (errorCode & CH4_TEMPERATURE_OVER_PROOF) == CH4_TEMPERATURE_OVER_PROOF);
+        systemFailure.put(CH4_CONCENTRATION_OVER_PROOF, (errorCode & CH4_CONCENTRATION_OVER_PROOF) == CH4_CONCENTRATION_OVER_PROOF);
+        systemFailure.put(WATER_DEPTH_OVER_PROOF, (errorCode & WATER_DEPTH_OVER_PROOF) == WATER_DEPTH_OVER_PROOF);
+        systemFailure.put(WELL_LID_OPENED, (errorCode & WELL_LID_OPENED) == WELL_LID_OPENED);
+        systemFailure.put(WELL_LID_BAT_VOL_LOW, (errorCode & WELL_LID_BAT_VOL_LOW) == WELL_LID_BAT_VOL_LOW);
+        systemFailure.put(SENSOR_BAT_VOL_LOW, (errorCode & SENSOR_BAT_VOL_LOW) == SENSOR_BAT_VOL_LOW);
+        systemFailure.put(SYSTEM_UPLOAD_DATA, (errorCode & SYSTEM_UPLOAD_DATA) == SYSTEM_UPLOAD_DATA);
+
+        return systemFailure;
+    }
+
+    /**
+     * 获取信号值
+     */
+    public static Integer getRSSI(String data) {
+        return Integer.parseInt(data.substring(94, 96), 16);
     }
 }

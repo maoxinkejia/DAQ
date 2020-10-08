@@ -2,6 +2,7 @@ package com.qcxk.util;
 
 public class Constants {
 
+    /*===============================消息功能码/消息前后缀=========================================*/
     /**
      * 设置IP、端口、APN、DNS
      */
@@ -38,6 +39,17 @@ public class Constants {
      * 接收消息的后缀，必须以16结尾
      */
     public static final String SUFFIX_END = "16";
+
+    /*=================================故障/异常代码标志位============================================*/
+    public static final Integer CH4_SENSOR_FAILURE = 1;
+    public static final Integer WATER_HEIGHT_FAILURE = 2;
+    public static final Integer CH4_TEMPERATURE_OVER_PROOF = 1;
+    public static final Integer CH4_CONCENTRATION_OVER_PROOF = 2;
+    public static final Integer WATER_DEPTH_OVER_PROOF = 4;
+    public static final Integer WELL_LID_OPENED = 8;
+    public static final Integer WELL_LID_BAT_VOL_LOW = 10;
+    public static final Integer SENSOR_BAT_VOL_LOW = 20;
+    public static final Integer SYSTEM_UPLOAD_DATA = 40;
 
     public static final String IP_SEPARATOR = ".";
 }
