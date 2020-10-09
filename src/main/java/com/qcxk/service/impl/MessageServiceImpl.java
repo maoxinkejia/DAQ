@@ -1,6 +1,5 @@
 package com.qcxk.service.impl;
 
-import com.qcxk.dao.MessageDao;
 import com.qcxk.model.Message;
 import com.qcxk.model.TerminalDevice;
 import com.qcxk.service.MessageService;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.qcxk.util.BusinessUtil.*;
 import static com.qcxk.util.Constants.*;
@@ -20,14 +20,13 @@ import static com.qcxk.util.Constants.*;
 @Slf4j
 @Service
 public class MessageServiceImpl implements MessageService {
-
-    @Autowired
-    private MessageDao messageDao;
     @Autowired
     private TerminalDeviceService terminalDeviceService;
 
     @Override
-    public void processMsg(Message message) throws Exception {
+    public void processMsg(Message message) {
+        log.info("start process message, deviceNum: {}", message.getDeviceNum());
+
         TerminalDevice device = terminalDeviceService.findByDeviceNum(message.getDeviceNum());
         if (device == null) {
 //             todo 当前device为null，需要构建填充
@@ -37,8 +36,7 @@ public class MessageServiceImpl implements MessageService {
         String data = message.getData();
         switch (message.getFunctionNum()) {
             case DEVICE_LOGIN_CODE:
-                log.info("receive device login code: 85, terminalDevice onLine, deviceNum: {}, data: {}",
-                        message.getDeviceNum(), data);
+                log.info("receive device login code: 85, terminalDevice onLine, data: {}", data);
                 terminalDeviceService.updateBatVolAndRssi(getLoginBatVol(data), getLoginRSSI(data), device.getId());
                 break;
             case DEVICE_UPLOAD_DETAILS_CODE:
@@ -53,6 +51,9 @@ public class MessageServiceImpl implements MessageService {
                 break;
             case DEVICE_CALL_BACK_CODE:
 
+                break;
+            case DEVICE_RECEIVE_SERVER_CODE:
+                log.info("receive device code: A7");
                 break;
             default:
                 log.info("receive device message, but not resolve, functionNum: {}", message.getFunctionNum());
@@ -69,7 +70,11 @@ public class MessageServiceImpl implements MessageService {
         message.setDeviceNumHex(getDeviceNumHex(messageStr));
 
         int length = message.getDataLength() * 2;
-        message.setData(getDateString(messageStr, length));
+        if (Objects.equals(message.getFunctionNum(), DEVICE_RECEIVE_SERVER_CODE)) {
+            message.setData("");
+        } else {
+            message.setData(getDateString(messageStr, length));
+        }
         message.setVerifyCode(getVerifyCode(messageStr, length));
         message.setSuffix(getSuffix(messageStr, length));
         return message;
@@ -83,8 +88,15 @@ public class MessageServiceImpl implements MessageService {
             case DEVICE_LOGIN_CODE:
                 response.add(BusinessUtil.buildLoginResponseMessage(message));
                 break;
-
+            case DEVICE_UPLOAD_DETAILS_CODE:
+            case DEVICE_UPLOAD_FUNC_CODE:
+                response.add(BusinessUtil.buildReceiveRightDataMessage(message));
+                break;
+            case DEVICE_RECEIVE_SERVER_CODE:
+                // todo 将所有需要发送的消息查询出来统一进行编辑发送
+                break;
         }
+
         return response;
     }
 
@@ -146,21 +158,15 @@ public class MessageServiceImpl implements MessageService {
         device.setRssi(rssi);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String s1 = "68040310d6a1460000040310d6000f011e01140a64140912050f25322f6f1ba91ec6000000001f90000000001f90a9ce000a05a0050005370100000300000000000000000000000000000000007d16";
         String s2 = "68040310d685091409120510060eb1001416";
         String s3 = "68040310d6a23200000000000000010000000005000000030100010000000018b1ac44000000000000000000000000000000000000000000001616";
 
-        Integer a = 3;
-        boolean b1 = (a & 1) == 1;
-        boolean b2 = (a & 2) == 2;
-        System.out.println(b1);
-        System.out.println(b2);
-
         MessageServiceImpl messageService = new MessageServiceImpl();
         Message message = messageService.parse2Msg(s3);
-        messageService.processMsg(message);
+//        messageService.processMsg(message);
 
-
+        System.out.println(buildChangeIpPortMessage(message, "168.61.17.179", "7878"));
     }
 }

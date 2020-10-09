@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MessageService {
 
-    void processMsg(Message message) throws Exception;
+    void processMsg(Message message);
 
     Message parse2Msg(String message);
 

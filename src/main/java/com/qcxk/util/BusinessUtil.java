@@ -1,7 +1,7 @@
 package com.qcxk.util;
 
-import com.qcxk.exception.VerifyDataException;
 import com.qcxk.model.Message;
+import com.qcxk.model.TerminalDevice;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,19 +34,25 @@ public class BusinessUtil {
         return message.length() == totalLength;
     }
 
-    public static void verifyReceiveMsg(String message) {
+    public static boolean verifyReceiveMsg(String message) {
         if (StringUtils.isBlank(message)) {
-            throw new VerifyDataException("message is null!!!!!!!");
+            log.info("message verify failed................. error: message is null!!!!!!!");
+            return false;
         }
         if (!message.startsWith(PREFIX_START)) {
-            throw new VerifyDataException(String.format("message start word is not: %s, message: %s", PREFIX_START, message));
+            log.info(String.format("message verify failed................. error: message start word is not: %s, message: %s", PREFIX_START, message));
+            return false;
         }
         if (!message.endsWith(SUFFIX_END)) {
-            throw new VerifyDataException(String.format("message end word is not: %s, message: %s", SUFFIX_END, message));
+            log.info(String.format("message verify failed................. error: message end word is not: %s, message: %s", SUFFIX_END, message));
+            return false;
         }
         if (!verifyDataLength(message)) {
-            throw new VerifyDataException(String.format("message data length is not true, please check data, message: %s", message));
+            log.info(String.format("message verify failed................. error: message data length is not true, please check data, message: %s", message));
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -297,18 +303,22 @@ public class BusinessUtil {
         return Integer.parseInt(data.substring(46, 48), 16);
     }
 
-    public static Map<Integer,Boolean> getSystemErrorCode(String data) {
+    public static Map<Integer, Boolean> getSystemErrorCode(String data) {
         int errorCode = Integer.parseInt(data.substring(66, 70), 16);
-        Map<Integer,Boolean> systemFailure =new HashMap<>(7);
-        systemFailure.put(CH4_TEMPERATURE_OVER_PROOF, (errorCode & CH4_TEMPERATURE_OVER_PROOF) == CH4_TEMPERATURE_OVER_PROOF);
-        systemFailure.put(CH4_CONCENTRATION_OVER_PROOF, (errorCode & CH4_CONCENTRATION_OVER_PROOF) == CH4_CONCENTRATION_OVER_PROOF);
-        systemFailure.put(WATER_DEPTH_OVER_PROOF, (errorCode & WATER_DEPTH_OVER_PROOF) == WATER_DEPTH_OVER_PROOF);
-        systemFailure.put(WELL_LID_OPENED, (errorCode & WELL_LID_OPENED) == WELL_LID_OPENED);
-        systemFailure.put(WELL_LID_BAT_VOL_LOW, (errorCode & WELL_LID_BAT_VOL_LOW) == WELL_LID_BAT_VOL_LOW);
-        systemFailure.put(SENSOR_BAT_VOL_LOW, (errorCode & SENSOR_BAT_VOL_LOW) == SENSOR_BAT_VOL_LOW);
-        systemFailure.put(SYSTEM_UPLOAD_DATA, (errorCode & SYSTEM_UPLOAD_DATA) == SYSTEM_UPLOAD_DATA);
+        Map<Integer, Boolean> systemFailure = new HashMap<>(7);
+        putProperty(systemFailure,CH4_TEMPERATURE_OVER_PROOF,errorCode);
+        putProperty(systemFailure,CH4_CONCENTRATION_OVER_PROOF,errorCode);
+        putProperty(systemFailure, WATER_DEPTH_OVER_PROOF, errorCode);
+        putProperty(systemFailure, WELL_LID_OPENED, errorCode);
+        putProperty(systemFailure, WELL_LID_BAT_VOL_LOW, errorCode);
+        putProperty(systemFailure, SENSOR_BAT_VOL_LOW, errorCode);
+        putProperty(systemFailure, SYSTEM_UPLOAD_DATA, errorCode);
 
         return systemFailure;
+    }
+
+    private static void putProperty(Map<Integer, Boolean> map, Integer type, int errorCode) {
+        map.put(type, (errorCode & type) == type);
     }
 
     /**
@@ -316,5 +326,85 @@ public class BusinessUtil {
      */
     public static Integer getRSSI(String data) {
         return Integer.parseInt(data.substring(94, 96), 16);
+    }
+
+    /**
+     * 构建服务器响应消息，此消息标明此次数据正确有效
+     */
+    public static String buildReceiveRightDataMessage(Message message) {
+        return PREFIX_START
+                + message.getDeviceNumHex()
+                + SETTING_DEVICE_COMMAND_CODE
+                + "040404"
+                + message.getDataLength()
+                + message.getFunctionNum()
+                + message.getVerifyCode()
+                + SUFFIX_END;
+    }
+
+    /**
+     * 构建服务器发送给探测器功能配置的消息体
+     */
+    public static String buildServerSend2DeviceMessage(Message message, TerminalDevice device) {
+        StringBuffer buffer = new StringBuffer();
+
+
+        return PREFIX_START +
+                message.getDeviceNumHex() +
+                SETTING_DEVICE_FUNC_CODE +
+                "46" +
+                buffer.toString() +
+                message.getVerifyCode() +
+                SUFFIX_END;
+    }
+
+    /**
+     * 构建恢复出厂设置命令
+     */
+    public static String buildFactoryDataReset(Message message) {
+        return PREFIX_START
+                + message.getDeviceNumHex()
+                + SETTING_DEVICE_COMMAND_CODE
+                + "020101"
+                + message.getVerifyCode()
+                + SUFFIX_END;
+    }
+
+    /**
+     * 构建服务器无数据时发送的消息体
+     */
+    public static String buildNoDataMessage(Message message) {
+        return PREFIX_START
+                + message.getDeviceNumHex()
+                + DEVICE_RECEIVE_SERVER_CODE
+                + "00"
+                + message.getVerifyCode()
+                + SUFFIX_END;
+    }
+
+    /**
+     * 构建修改IP消息体
+     */
+    public static String buildChangeIpPortMessage(Message message, String ip, String port) {
+        StringBuilder builder = new StringBuilder("00");
+
+        for (String s1 : ip.split("\\.")) {
+            builder.append(Integer.toHexString(Integer.parseInt(s1)));
+        }
+        builder.append(Integer.toHexString(Integer.parseInt(port)));
+
+        int totalLength = Integer.parseInt("3d", 16) * 2;
+        int currLength = builder.toString().length();
+        for (int i = 0; i < totalLength - currLength; i++) {
+            builder.append("0");
+        }
+
+        return PREFIX_START
+                + message.getDeviceNumHex()
+                + SETTING_DEVICE_IP_CODE
+                + "3d"
+                + builder.toString()
+                + message.getVerifyCode()
+                + SUFFIX_END;
     }
 }

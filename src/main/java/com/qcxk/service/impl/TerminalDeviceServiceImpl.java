@@ -2,12 +2,14 @@ package com.qcxk.service.impl;
 
 import com.qcxk.dao.TerminalDeviceDao;
 import com.qcxk.model.TerminalDevice;
+import com.qcxk.model.TerminalDeviceConfig;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -33,5 +35,10 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     @Override
     public void updateDevice(TerminalDevice device) {
         dao.update(device);
+    }
+
+    @Override
+    public List<TerminalDeviceConfig> findConfigByDeviceNum(String deviceNum) {
+        return null;
     }
 }

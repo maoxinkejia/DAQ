@@ -1,7 +1,6 @@
 package com.qcxk.component.netty;
 
 
-import com.qcxk.exception.VerifyDataException;
 import com.qcxk.model.Message;
 import com.qcxk.service.MessageService;
 import com.qcxk.util.BusinessUtil;
@@ -32,7 +31,10 @@ public class DiscardServerHandler extends ChannelHandlerAdapter {
             String bodyStr = convertByteBufToString((ByteBuf) msg);
             log.info("receive message: {}", bodyStr);
 
-            BusinessUtil.verifyReceiveMsg(bodyStr);
+            if (!BusinessUtil.verifyReceiveMsg(bodyStr)) {
+                return;
+            }
+
             Message message = messageService.parse2Msg(bodyStr);
 
             messageService.processMsg(message);
@@ -40,8 +42,6 @@ public class DiscardServerHandler extends ChannelHandlerAdapter {
             List<String> responseList = messageService.responseMessage(message);
 
             callBack(context, responseList);
-        } catch (VerifyDataException e) {
-            log.info("message verify failed................. error: {}", e.getMessage());
         } catch (Exception e) {
             log.info("解析报文发生异常", e);
         } finally {

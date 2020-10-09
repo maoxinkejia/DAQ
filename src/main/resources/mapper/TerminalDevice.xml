@@ -131,9 +131,16 @@
         SELECT
           t.id,
           t.device_num AS deviceNum,
+          t.IOT_card_num AS IOTCardNum,
+          t.device_ip AS deviceIP,
           t.longitude,
           t.latitude,
           t.location,
+          t.ch4_gas_concentration AS ch4GasConcentration,
+          t.water_depth AS waterDepth,
+          t.bat_vol AS batVol,
+          t.temperature,
+          t.del_status AS delStatus,
           t.tube_well_description AS tubeWellDescription,
           t.control_status AS controlStatus,
           t.image_path AS imagePath,
@@ -143,7 +150,8 @@
           t.shutdown_time AS shutdownTime,
           t.update_time AS updateTime,
           t.create_user AS createUser,
-          t.update_user AS updateUser
+          t.update_user AS updateUser,
+          t.del_time AS delTime
         FROM
           terminal_device t
     </sql>

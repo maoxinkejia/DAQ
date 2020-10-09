@@ -16,6 +16,14 @@ public class TerminalDevice {
      */
     private String deviceNum;
     /**
+     * 物联网卡号
+     */
+    private String IOTCardNum;
+    /**
+     * 终端IP
+     */
+    private String deviceIP;
+    /**
      * 甲烷浓度
      */
     private Double ch4Concentration;
@@ -167,4 +175,12 @@ public class TerminalDevice {
      * 甲烷气体传感器状态   0：整除 10：预热中 1xx(>100)：低功耗 40：温度正常
      */
     private Integer ch4SensorEnum;
+    /**
+     * 标识 0：未删除 1：已删除
+     */
+    private Integer delStatus;
+    /**
+     * 删除时间
+     */
+    private Date delTime;
 }

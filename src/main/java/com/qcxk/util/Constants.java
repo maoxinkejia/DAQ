@@ -32,6 +32,10 @@ public class Constants {
      */
     public static final String DEVICE_CALL_BACK_CODE = "a6";
     /**
+     * 探测器主动收取服务器命令
+     */
+    public static final String DEVICE_RECEIVE_SERVER_CODE = "a7";
+    /**
      * 接收消息的前缀，必须以68开头
      */
     public static final String PREFIX_START = "68";
