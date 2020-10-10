@@ -36,10 +36,10 @@
         )
     </insert>
 
-    <update id="updateBatVolAndRssi">
+    <update id="updateBatVolAndBootTime">
         UPDATE terminal_device
-        SET boot_time = #{bootTmie}, bat_vol = #{batVol}, rssi = #{rssi}
-        WHERE id = #{terminalId}
+        SET boot_time = #{bootTmie}, bat_vol = #{batVol}
+        WHERE id = #{deviceNum}
     </update>
 
     <update id="update">
@@ -50,6 +50,18 @@
     <select id="findByDeviceNum" resultType="com.qcxk.model.TerminalDevice">
         <include refid="selectTerminalDevice"/>
         WHERE t.device_num = #{deviceNum}
+    </select>
+
+    <select id="findList" resultType="com.qcxk.model.TerminalDevice">
+        <include refid="selectTerminalDevice"/>
+        <where>
+            <if test="deviceNum != null and device != ''">
+                t.device_num = #{deviceNum} AND
+            </if>
+            <if test="location != null and location != ''">
+                t.location = #{location} AND
+            </if>
+        </where>
     </select>
 
     <sql id="updateTerminalDevice">

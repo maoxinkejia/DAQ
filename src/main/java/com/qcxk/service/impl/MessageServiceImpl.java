@@ -1,5 +1,6 @@
 package com.qcxk.service.impl;
 
+import com.qcxk.dao.MessageDao;
 import com.qcxk.model.Message;
 import com.qcxk.model.TerminalDevice;
 import com.qcxk.service.MessageService;
@@ -9,17 +10,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
+import static com.qcxk.common.Constants.*;
 import static com.qcxk.util.BusinessUtil.*;
-import static com.qcxk.util.Constants.*;
 
 @Slf4j
 @Service
 public class MessageServiceImpl implements MessageService {
+    @Autowired
+    private MessageDao dao;
     @Autowired
     private TerminalDeviceService terminalDeviceService;
 
@@ -29,15 +29,14 @@ public class MessageServiceImpl implements MessageService {
 
         TerminalDevice device = terminalDeviceService.findByDeviceNum(message.getDeviceNum());
         if (device == null) {
-//             todo 当前device为null，需要构建填充
-            device = terminalDeviceService.add(device);
+            device = terminalDeviceService.add(BusinessUtil.buildTerminalDevice(message));
         }
 
         String data = message.getData();
         switch (message.getFunctionNum()) {
             case DEVICE_LOGIN_CODE:
                 log.info("receive device login code: 85, terminalDevice onLine, data: {}", data);
-                terminalDeviceService.updateBatVolAndRssi(getLoginBatVol(data), getLoginRSSI(data), device.getId());
+                terminalDeviceService.updateBatVolAndBootTime(getLoginBatVol(data), device.getDeviceNum());
                 break;
             case DEVICE_UPLOAD_DETAILS_CODE:
                 log.info("receive device details code: A1, data: {}", data);
@@ -63,6 +62,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Message parse2Msg(String messageStr) {
         Message message = new Message();
+        message.setInitialData(messageStr);
         message.setPrefix(getPrefix(messageStr));
         message.setDeviceNum(getDeviceNum(messageStr));
         message.setFunctionNum(getFunctionNum(messageStr));
@@ -70,13 +70,19 @@ public class MessageServiceImpl implements MessageService {
         message.setDeviceNumHex(getDeviceNumHex(messageStr));
 
         int length = message.getDataLength() * 2;
+        message.setVerifyCode(getVerifyCode(messageStr, length));
+        message.setSuffix(getSuffix(messageStr, length));
+        message.setCreateTime(new Date());
+
         if (Objects.equals(message.getFunctionNum(), DEVICE_RECEIVE_SERVER_CODE)) {
             message.setData("");
         } else {
             message.setData(getDateString(messageStr, length));
         }
-        message.setVerifyCode(getVerifyCode(messageStr, length));
-        message.setSuffix(getSuffix(messageStr, length));
+
+        dao.add(message);
+        log.info("add message to db success, deviceNum: {}, message: {}", message.getDeviceNum(), message.getInitialData());
+
         return message;
     }
 

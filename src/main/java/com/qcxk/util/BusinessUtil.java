@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.qcxk.util.Constants.*;
+import static com.qcxk.common.Constants.*;
 
 @Slf4j
 public class BusinessUtil {
@@ -306,8 +306,8 @@ public class BusinessUtil {
     public static Map<Integer, Boolean> getSystemErrorCode(String data) {
         int errorCode = Integer.parseInt(data.substring(66, 70), 16);
         Map<Integer, Boolean> systemFailure = new HashMap<>(7);
-        putProperty(systemFailure,CH4_TEMPERATURE_OVER_PROOF,errorCode);
-        putProperty(systemFailure,CH4_CONCENTRATION_OVER_PROOF,errorCode);
+        putProperty(systemFailure, CH4_TEMPERATURE_OVER_PROOF, errorCode);
+        putProperty(systemFailure, CH4_CONCENTRATION_OVER_PROOF, errorCode);
         putProperty(systemFailure, WATER_DEPTH_OVER_PROOF, errorCode);
         putProperty(systemFailure, WELL_LID_OPENED, errorCode);
         putProperty(systemFailure, WELL_LID_BAT_VOL_LOW, errorCode);
@@ -406,5 +406,17 @@ public class BusinessUtil {
                 + builder.toString()
                 + message.getVerifyCode()
                 + SUFFIX_END;
+    }
+
+    /**
+     * 构建设备基础信息
+     */
+    public static TerminalDevice buildTerminalDevice(Message message) {
+        TerminalDevice device = new TerminalDevice();
+        device.setDeviceNum(message.getDeviceNum());
+        device.setCreateTime(new Date());
+        device.setCreateUser(SYSTEM_USER);
+        device.setDelStatus(NOT_DELETED);
+        return device;
     }
 }

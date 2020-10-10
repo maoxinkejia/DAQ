@@ -1,5 +1,6 @@
 package com.qcxk.service.impl;
 
+import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.TerminalDeviceDao;
 import com.qcxk.model.TerminalDevice;
 import com.qcxk.model.TerminalDeviceConfig;
@@ -28,8 +29,8 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     }
 
     @Override
-    public void updateBatVolAndRssi(Integer batVol, Integer rssi, Integer terminalId) {
-        dao.updateBatVolAndRssi(batVol, rssi, terminalId, new Date());
+    public void updateBatVolAndBootTime(Integer batVol, String deviceNum) {
+        dao.updateBatVolAndBootTime(batVol, deviceNum, new Date());
     }
 
     @Override
@@ -40,5 +41,10 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     @Override
     public List<TerminalDeviceConfig> findConfigByDeviceNum(String deviceNum) {
         return null;
+    }
+
+    @Override
+    public List<TerminalDevice> findList(TerminalDeviceDTO dto) {
+        return dao.findList(dto);
     }
 }

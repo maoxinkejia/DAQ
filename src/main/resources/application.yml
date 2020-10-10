@@ -26,7 +26,7 @@ spring:
       filters: stat
       driver-class-name: com.mysql.cj.jdbc.Driver
       #基本属性
-      url: jdbc:mysql://127.0.0.1:3306/haoyidatabase?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+      url: jdbc:mysql://47.111.22.169:3306/haoyidatabase??serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: qcxk!@#123QCXK
       #password: Haoyi0618@
@@ -53,8 +53,6 @@ mybatis-plus:
   type-aliases-package: com.qcxk.model
   #开启MyBatis的二级缓存
   configuration.cache-enabled: true
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 #pagehelper
 pagehelper:
@@ -62,7 +60,7 @@ pagehelper:
   reasonable: true
   params: count=countSql
   supportMethodsArguments: true
-  returnPageInfo: check
+
 logging:
   file: /etc/tomcat/log/thms.log
   pattern:
@@ -70,5 +68,3 @@ logging:
     file: '%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n'
   level:
     com.qcxk.dao: error
-#workLoadCron: 0 00 20 * * ?
-#workLoadCron: 0 59 23 * * ?

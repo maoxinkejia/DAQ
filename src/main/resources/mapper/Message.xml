@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcxk.dao.MessageDao">
 
+    <insert id="add" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO message(
+          device_num,
+          initial_data,
+          create_time
+        ) VALUES (
+          #{deviceNum},
+          #{initialData},
+          #{createTime}
+        )
+    </insert>
 </mapper>

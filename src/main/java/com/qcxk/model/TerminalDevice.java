@@ -1,14 +1,10 @@
 package com.qcxk.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.util.Date;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class TerminalDevice {
     private Integer id;
     /**

@@ -1,4 +1,4 @@
-package com.qcxk.util;
+package com.qcxk.common;
 
 public class Constants {
 
@@ -56,4 +56,13 @@ public class Constants {
     public static final Integer SYSTEM_UPLOAD_DATA = 40;
 
     public static final String IP_SEPARATOR = ".";
+
+    /*====================================状态常量=========================================*/
+    public static final String SYSTEM_USER = "system";
+    public static final Integer DELETED = 1;
+    public static final Integer NOT_DELETED = 0;
+    public static final Integer ENABLED = 1;
+    public static final Integer DISABLED = 0;
+
+
 }

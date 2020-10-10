@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MessageDao extends BaseMapper<Message> {
 
+    void add(Message message);
 }

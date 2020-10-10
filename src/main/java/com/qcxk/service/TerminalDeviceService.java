@@ -1,5 +1,6 @@
 package com.qcxk.service;
 
+import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.model.TerminalDevice;
 import com.qcxk.model.TerminalDeviceConfig;
 
@@ -10,9 +11,11 @@ public interface TerminalDeviceService {
 
     TerminalDevice add(TerminalDevice device);
 
-    void updateBatVolAndRssi(Integer batVol, Integer rssi, Integer terminalId);
+    void updateBatVolAndBootTime(Integer batVol, String deviceNum);
 
     void updateDevice(TerminalDevice device);
 
     List<TerminalDeviceConfig> findConfigByDeviceNum(String deviceNum);
+
+    List<TerminalDevice> findList(TerminalDeviceDTO dto);
 }

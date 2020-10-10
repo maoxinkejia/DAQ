@@ -1,12 +1,10 @@
 package com.qcxk.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+import java.util.Date;
+
+@Data
 public class Message {
     private Integer id;
     /**
@@ -41,4 +39,12 @@ public class Message {
      * 未经过转换的设备码 十六进制
      */
     private String deviceNumHex;
+    /**
+     * 原始数据
+     */
+    private String initialData;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 }
