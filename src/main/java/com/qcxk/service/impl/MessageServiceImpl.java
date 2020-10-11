@@ -32,11 +32,13 @@ public class MessageServiceImpl implements MessageService {
             device = terminalDeviceService.add(BusinessUtil.buildTerminalDevice(message));
         }
 
+        terminalDeviceService.updateBootTime(device);
+
         String data = message.getData();
         switch (message.getFunctionNum()) {
             case DEVICE_LOGIN_CODE:
                 log.info("receive device login code: 85, terminalDevice onLine, data: {}", data);
-                terminalDeviceService.updateBatVolAndBootTime(getLoginBatVol(data), device.getDeviceNum());
+                buildDeviceLoginCode(device, data);
                 break;
             case DEVICE_UPLOAD_DETAILS_CODE:
                 log.info("receive device details code: A1, data: {}", data);
@@ -46,7 +48,7 @@ public class MessageServiceImpl implements MessageService {
             case DEVICE_UPLOAD_FUNC_CODE:
                 log.info("receive device function code: A2, data: {}", data);
                 buildDeviceUploadFunction(device, data);
-                terminalDeviceService.updateDevice(device);
+
                 break;
             case DEVICE_CALL_BACK_CODE:
 
@@ -120,15 +122,9 @@ public class MessageServiceImpl implements MessageService {
         String serverPort = BusinessUtil.getServerPort(data);
         Integer batLeftWorkTime = BusinessUtil.getBatLeftWorkTime(data);
 
-        device.setWaterDepthStatus(waterDepthStatus);
-        device.setWaterDepthThreshold(waterDepthThreshold);
-        device.setGasSensorStatus(gasSensorStatus);
-        device.setGasConcentration(gasConcentration);
-        device.setGasConcentrationThreshold(gasConcentrationThreshold);
-        device.setBatVolThreshold(batVolThreshold);
-        device.setServerHost(serverHost);
-        device.setServerPort(serverPort);
-        device.setBatLeftWorkTime(batLeftWorkTime);
+
+
+
     }
 
     /**
@@ -143,25 +139,37 @@ public class MessageServiceImpl implements MessageService {
         Map<Integer, Boolean> hardwareFailure = BusinessUtil.getHardwareErrorCode(data);
         Integer waterSensorStatus = BusinessUtil.getWaterSensorStatus(data);
         Double waterDepth = BusinessUtil.getWaterDepth(data);
-        Integer ch4SensorStatus = BusinessUtil.getCH4SensorStatus(data);
+        Integer ch4GasSensorStatus = BusinessUtil.getCH4GasSensorStatus(data);
         Double ch4GasConcentration = BusinessUtil.getCH4GasConcentration(data);
         Double ch4GasVolumeConcentration = BusinessUtil.getCH4GasVolumeConcentration(data);
         Integer ch4SensorEnum = BusinessUtil.getCH4SensorEnum(data);
+        Integer ch4GasSensorTemperature = BusinessUtil.getCH4GasTemperature(data);
         Map<Integer, Boolean> systemFailure = BusinessUtil.getSystemErrorCode(data);
         Integer rssi = BusinessUtil.getRSSI(data);
 
-        device.setVersion(version);
-        device.setWellLidStatus(wellLidStatus);
-        device.setWellLidOpenStatus(wellLidOpenStatus);
-        device.setWellLidBatVol(wellLidBatVol);
-        device.setWellLidUploadTime(wellLidUploadTime);
-        device.setWaterSensorStatus(waterSensorStatus);
-        device.setWaterDepth(waterDepth);
-        device.setCh4SensorStatus(ch4SensorStatus);
-        device.setCh4GasConcentration(ch4GasConcentration);
-        device.setCh4GasVolumeConcentration(ch4GasVolumeConcentration);
-        device.setCh4SensorEnum(ch4SensorEnum);
-        device.setRssi(rssi);
+        if (Objects.equals(ENABLED, waterSensorStatus)) {
+            device.setWaterDepth(waterDepth);
+        }
+
+        if (Objects.equals(ENABLED, ch4GasSensorStatus)) {
+            device.setTemperature(ch4GasSensorTemperature);
+            device.setCh4GasConcentration(ch4GasConcentration);
+        }
+
+        device.setUpdateTime(new Date());
+        device.setUpdateUser(SYSTEM_USER);
+        terminalDeviceService.updateDevice(device);
+    }
+
+    /**
+     * 构建设备登录时数据
+     */
+    private void buildDeviceLoginCode(TerminalDevice device, String data) {
+        device.setBatVol(getLoginBatVol(data).doubleValue());
+        device.setUpdateTime(new Date());
+        device.setUpdateUser(SYSTEM_USER);
+
+        terminalDeviceService.updateDevice(device);
     }
 
     public static void main(String[] args) {

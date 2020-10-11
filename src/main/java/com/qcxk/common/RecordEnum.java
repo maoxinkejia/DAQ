@@ -15,7 +15,7 @@ public enum RecordEnum implements BaseEnum<RecordEnum, Integer> {
     CH4_GAS_VOLUME_THRESHOLD(10, "甲烷气体体积报警阈值(LEL)"),
     TEMPERATURE_THRESHOLD(11, "温度报警阈值"),
     BAT_VOL_THRESHOLD(12, "电池电量报警阈值"),
-    ;
+    UPLOAD_DATA_PERIOD(13, "数据上传周期");
 
 
     private final Integer type;

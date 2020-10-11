@@ -5,6 +5,8 @@
     <insert id="add" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO terminal_device(
           device_num,
+          IOT_card_num,
+          device_ip,
           longitude,
           latitude,
           location,
@@ -17,9 +19,13 @@
           shutdown_time,
           update_time,
           create_user,
-          update_user
+          update_user,
+          del_status,
+          del_time
         ) VALUES (
           #{deviceNum},
+          #{IOTCardNum},
+          #{deviceIp},
           #{longitude},
           #{latitude},
           #{location},
@@ -32,19 +38,43 @@
           #{shutdownTime},
           #{updateTime},
           #{createUser},
-          #{updateUser}
+          #{updateUser},
+          #{delStatus},
+          #{delTime}
         )
     </insert>
 
-    <update id="updateBatVolAndBootTime">
-        UPDATE terminal_device
-        SET boot_time = #{bootTmie}, bat_vol = #{batVol}
-        WHERE id = #{deviceNum}
-    </update>
+    <insert id="batchAddTerminalDeviceConfigs" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO terminal_device_config
+        (
+          device_num,
+          conf_name,
+          conf_val,
+          conf_type,
+          update_time,
+          update_user
+        ) VALUES
+        <foreach collection="list" item="model" separator=",">
+            (
+              #{model.deviceNum},
+              #{model.confName},
+              #{model.confVal},
+              #{model.confType},
+              #{model.updateTime},
+              #{model.updateUser}
+            )
+        </foreach>
+    </insert>
 
     <update id="update">
         <include refid="updateTerminalDevice"/>
         WHERE id = #{id}
+    </update>
+
+    <update id="updateBootTime">
+        UPDATE terminal_device
+        SET boot_time = #{bootTime}
+        WHERE device_num = #{deviceNum}
     </update>
 
     <select id="findByDeviceNum" resultType="com.qcxk.model.TerminalDevice">

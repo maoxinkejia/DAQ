@@ -276,7 +276,7 @@ public class BusinessUtil {
     /**
      * 获取甲烷气体传感器在线状态  1：连接  0：未连接
      */
-    public static Integer getCH4SensorStatus(String data) {
+    public static Integer getCH4GasSensorStatus(String data) {
         return Integer.parseInt(data.substring(38, 40), 16);
     }
 
@@ -301,6 +301,13 @@ public class BusinessUtil {
      */
     public static Integer getCH4SensorEnum(String data) {
         return Integer.parseInt(data.substring(46, 48), 16);
+    }
+
+    /**
+     * 获取甲烷气体传感器内部温度
+     */
+    public static Integer getCH4GasTemperature(String data) {
+        return Integer.parseInt(data.substring(48, 50), 16);
     }
 
     public static Map<Integer, Boolean> getSystemErrorCode(String data) {
@@ -414,9 +421,7 @@ public class BusinessUtil {
     public static TerminalDevice buildTerminalDevice(Message message) {
         TerminalDevice device = new TerminalDevice();
         device.setDeviceNum(message.getDeviceNum());
-        device.setCreateTime(new Date());
         device.setCreateUser(SYSTEM_USER);
-        device.setDelStatus(NOT_DELETED);
         return device;
     }
 }

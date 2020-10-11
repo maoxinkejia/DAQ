@@ -3,6 +3,7 @@ package com.qcxk.model;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class TerminalDevice {
@@ -20,25 +21,21 @@ public class TerminalDevice {
      */
     private String deviceIP;
     /**
-     * 甲烷浓度
+     * 水位深度
      */
-    private Double ch4Concentration;
-    /**
-     * 液位高度
-     */
-    private Double liquidHeight;
+    private Double waterDepth;
     /**
      * 设备温度
      */
-    private Double temperature;
+    private Integer temperature;
     /**
      * 电池电压
      */
     private Double batVol;
     /**
-     * 信号值
+     * 甲烷气体浓度(LEL%)
      */
-    private Integer rssi;
+    private Double ch4GasConcentration;
     /**
      * 经度
      */
@@ -55,42 +52,6 @@ public class TerminalDevice {
      * 管井状态（现场情景描述）
      */
     private String tubeWellDescription;
-    /**
-     * 水位开关状态 1：启动 0：不启动
-     */
-    private Integer waterDepthStatus;
-    /**
-     * 水位深度阈值(报警值) 单位：米
-     */
-    private Double waterDepthThreshold;
-    /**
-     * 气体传感器状态 1：已连接 0：未连接
-     */
-    private Integer gasSensorStatus;
-    /**
-     * 气体浓度阈值 单位：%
-     */
-    private Double gasConcentrationThreshold;
-    /**
-     * 气体体积浓度
-     */
-    private Double gasConcentration;
-    /**
-     * 电池电压阈值 单位：V
-     */
-    private Double batVolThreshold;
-    /**
-     * 服务器ip
-     */
-    private String serverHost;
-    /**
-     * 服务器端口号
-     */
-    private String serverPort;
-    /**
-     * 电池剩余工作时间 单位：小时
-     */
-    private Integer batLeftWorkTime;
     /**
      * 阀控状态 枚举开关
      */
@@ -128,6 +89,58 @@ public class TerminalDevice {
      */
     private String updateUser;
     /**
+     * 标识 0：未删除 1：已删除
+     */
+    private Integer delStatus;
+    /**
+     * 删除时间
+     */
+    private Date delTime;
+
+    private List<String> imagePaths;
+
+
+    /**
+     * 信号值
+     */
+    private Integer rssi;
+    /**
+     * 水位开关状态 1：启动 0：不启动
+     */
+    private Integer waterDepthStatus;
+    /**
+     * 水位深度阈值(报警值) 单位：米
+     */
+    private Double waterDepthThreshold;
+    /**
+     * 气体传感器状态 1：已连接 0：未连接
+     */
+    private Integer gasSensorStatus;
+    /**
+     * 气体浓度阈值 单位：%
+     */
+    private Double gasConcentrationThreshold;
+    /**
+     * 气体体积浓度
+     */
+    private Double gasConcentration;
+    /**
+     * 电池电压阈值 单位：V
+     */
+    private Double batVolThreshold;
+    /**
+     * 服务器ip
+     */
+    private String serverHost;
+    /**
+     * 服务器端口号
+     */
+    private String serverPort;
+    /**
+     * 电池剩余工作时间 单位：小时
+     */
+    private Integer batLeftWorkTime;
+    /**
      * 设备软件版本号
      */
     private String version;
@@ -152,17 +165,9 @@ public class TerminalDevice {
      */
     private Integer waterSensorStatus;
     /**
-     * 水位深度
-     */
-    private Double waterDepth;
-    /**
      * 甲烷传感器状态 1：连接 0：未连接
      */
     private Integer ch4SensorStatus;
-    /**
-     * 甲烷气体浓度
-     */
-    private Double ch4GasConcentration;
     /**
      * 甲烷气体体积浓度
      */
@@ -171,12 +176,4 @@ public class TerminalDevice {
      * 甲烷气体传感器状态   0：整除 10：预热中 1xx(>100)：低功耗 40：温度正常
      */
     private Integer ch4SensorEnum;
-    /**
-     * 标识 0：未删除 1：已删除
-     */
-    private Integer delStatus;
-    /**
-     * 删除时间
-     */
-    private Date delTime;
 }

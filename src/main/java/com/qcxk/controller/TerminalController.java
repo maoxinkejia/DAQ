@@ -8,10 +8,10 @@ import com.qcxk.model.TerminalDevice;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Slf4j
@@ -23,10 +23,17 @@ public class TerminalController {
     private TerminalDeviceService service;
 
     @GetMapping(value = "terminalList")
-    public Response getTerminalList(TerminalDeviceDTO dto) {
+    public Response getTerminalList(@RequestBody TerminalDeviceDTO dto) {
         List<TerminalDevice> list = service.findList(dto);
 
         Pagination pagination = Pagination.buildPagination(list, dto);
         return PageResponse.pageResponse(pagination, list).success();
+    }
+
+    @PostMapping(value = "add")
+    public Response addTerminalDevice(@RequestBody TerminalDevice device, @RequestBody MultipartFile[] files) {
+        service.uploadDeviceImages(files, device);
+        service.add(device);
+        return Response.build().success();
     }
 }

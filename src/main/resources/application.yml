@@ -13,10 +13,7 @@ spring:
   devtools:
     restart:
       enabled: false
-  mvc:
-    view:
-      prefix: /WEB-INF/jsp/
-      suffix: .jsp
+
   datasource:
     name: mysql_thmsdb
     type: com.alibaba.druid.pool.DruidDataSource
@@ -28,8 +25,7 @@ spring:
       #基本属性
       url: jdbc:mysql://47.111.22.169:3306/haoyidatabase??serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
       username: root
-      password: qcxk!@#123QCXK
-      #password: Haoyi0618@
+      password: qcxk@#123QCXK
       #配置初始化大小/最小/最大
       initial-size: 1
       min-idle: 1
