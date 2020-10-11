@@ -57,7 +57,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     public List<TerminalDeviceConfig> findConfigByDeviceNum(String deviceNum) {
-        return null;
+        return dao.findConfigByDeviceNum(deviceNum);
     }
 
     @Override

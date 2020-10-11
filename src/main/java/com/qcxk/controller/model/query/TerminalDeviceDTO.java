@@ -15,4 +15,12 @@ public class TerminalDeviceDTO extends PageAndPageSize {
      * 终端位置
      */
     private String location;
+    /**
+     * 管井状态
+     */
+    private String tubeWellDescription;
+    /**
+     * 阀控状态 1：开启  0：关闭
+     */
+    private Integer controlStatus;
 }

@@ -91,8 +91,32 @@
             <if test="location != null and location != ''">
                 t.location = #{location} AND
             </if>
+            <if test="tubeWellDescription != null and tubeWellDescription != ''">
+                t.tube_well_description = #{tubeWellDescription} AND
+            </if>
+            <if test="controlStatus != null">
+                t.control_status = #{controlStatus}
+            </if>
         </where>
     </select>
+
+    <select id="findConfigByDeviceNum" resultType="com.qcxk.model.TerminalDeviceConfig">
+        <include refid="selectTerminalDeviceConfig"/>
+        WHERE t.device_num = #{deviceNum}
+    </select>
+
+    <sql id="selectTerminalDeviceConfig">
+        SELECT
+          t.id,
+          t.device_num AS deviceNum,
+          t.conf_name AS confName,
+          t.conf_val AS confVal,
+          t.conf_type AS confType,
+          t.update_time AS updateTime,
+          t.update_user AS updateUser
+        FROM
+          terminal_device_config t
+    </sql>
 
     <sql id="updateTerminalDevice">
         UPDATE terminal_device
@@ -186,7 +210,7 @@
           t.tube_well_description AS tubeWellDescription,
           t.control_status AS controlStatus,
           t.image_path AS imagePath,
-          t.remarks，
+          t.remarks,
           t.create_time AS createTime,
           t.boot_time AS bootTime,
           t.shutdown_time AS shutdownTime,

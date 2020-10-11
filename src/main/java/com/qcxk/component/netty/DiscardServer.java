@@ -7,10 +7,12 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Slf4j
 public class DiscardServer {
     private ChildChannelHandler childChannelHandler = new ChildChannelHandler();
     private static ExecutorService threadPool = Executors.newFixedThreadPool(5);
@@ -35,7 +37,7 @@ public class DiscardServer {
      */
     public static void closeServer() {
         if (serverChannel != null) {
-            System.out.println("close server");
+            log.info("close server");
             serverChannel.close();
             serverChannel = null;
             discardServer = null;
@@ -45,7 +47,7 @@ public class DiscardServer {
     public void run(int port) throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
-        System.out.println("准备运行端口：" + port);
+        log.info("准备运行端口：{}", port);
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)

@@ -5,6 +5,7 @@ import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.controller.model.response.PageResponse;
 import com.qcxk.controller.model.response.Response;
 import com.qcxk.model.TerminalDevice;
+import com.qcxk.model.TerminalDeviceConfig;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,22 @@ public class TerminalController {
         return PageResponse.pageResponse(pagination, list).success();
     }
 
-    @PostMapping(value = "add")
+    @PostMapping(value = "addDevice")
     public Response addTerminalDevice(@RequestBody TerminalDevice device, @RequestBody MultipartFile[] files) {
         service.uploadDeviceImages(files, device);
         service.add(device);
         return Response.build().success();
+    }
+
+    @PutMapping(value = "updateDevice")
+    public Response updateTerminalDevice(@RequestBody TerminalDevice device, @RequestBody MultipartFile[] files) {
+        // TODO
+        return Response.build().success();
+    }
+
+    @GetMapping(value = "getDeviceDetail")
+    public Response getDeviceDetail(String deviceNum) {
+        List<TerminalDeviceConfig> details = service.findConfigByDeviceNum(deviceNum);
+        return Response.build(details).success();
     }
 }
