@@ -123,8 +123,6 @@ public class MessageServiceImpl implements MessageService {
         Integer batLeftWorkTime = BusinessUtil.getBatLeftWorkTime(data);
 
 
-
-
     }
 
     /**
@@ -172,7 +170,7 @@ public class MessageServiceImpl implements MessageService {
         terminalDeviceService.updateDevice(device);
     }
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
 //        String s1 = "68040310d6a1460000040310d6000f011e01140a64140912050f25322f6f1ba91ec6000000001f90000000001f90a9ce000a05a0050005370100000300000000000000000000000000000000007d16";
 //        String s2 = "68040310d685091409120510060eb1001416";
 //        String s3 = "68040310d6a23200000000000000010000000005000000030100010000000018b1ac44000000000000000000000000000000000000000000001616";
@@ -182,5 +180,5 @@ public class MessageServiceImpl implements MessageService {
 ////        messageService.processMsg(message);
 //
 //        System.out.println(buildChangeIpPortMessage(message, "168.61.17.179", "7878"));
-//    }
+    }
 }

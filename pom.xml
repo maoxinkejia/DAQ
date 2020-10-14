@@ -119,12 +119,13 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.5</version>
         </dependency>
-        <!-- alibaba的druid数据库连接池 -->
+        <!-- https://mvnrepository.com/artifact/hikari-cp/hikari-cp -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.9</version>
+            <groupId>hikari-cp</groupId>
+            <artifactId>hikari-cp</artifactId>
+            <version>2.6.0</version>
         </dependency>
+
 
         <!--servlet的支持-->
         <dependency>

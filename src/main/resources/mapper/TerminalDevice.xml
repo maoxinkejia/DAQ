@@ -82,20 +82,20 @@
         WHERE t.device_num = #{deviceNum}
     </select>
 
-    <select id="findList" resultType="com.qcxk.model.TerminalDevice">
+    <select id="findList" resultType="com.qcxk.model.TerminalDevice" parameterType="com.qcxk.controller.model.query.TerminalDeviceDTO">
         <include refid="selectTerminalDevice"/>
         <where>
-            <if test="deviceNum != null and device != ''">
-                t.device_num = #{deviceNum} AND
+            <if test="deviceNum != null and deviceNum != ''">
+                AND t.device_num LIKE CONCAT('%',CONCAT(#{deviceNum},'%'))
             </if>
             <if test="location != null and location != ''">
-                t.location = #{location} AND
+                AND t.location LIKE CONCAT('%',CONCAT(#{location},'%'))
             </if>
             <if test="tubeWellDescription != null and tubeWellDescription != ''">
-                t.tube_well_description = #{tubeWellDescription} AND
+                AND t.tube_well_description LIKE CONCAT('%',CONCAT(#{tubeWellDescription},'%'))
             </if>
             <if test="controlStatus != null">
-                t.control_status = #{controlStatus}
+                AND t.control_status LIKE CONCAT('%',CONCAT(#{controlStatus},'%'))
             </if>
         </where>
     </select>

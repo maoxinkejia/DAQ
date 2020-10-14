@@ -3,7 +3,7 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
     <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
-    <property name="LOG_DIR" value="/app/htbd/dts-dispatcher/log"/>
+    <property name="LOG_DIR" value="/home/daq/log"/>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
@@ -14,7 +14,7 @@
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/%d{yyyy-MM-dd}/DAQ-%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/%d{yyyy-MM-dd}/daq-%i.log</fileNamePattern>
             <maxHistory>90</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>200 MB</maxFileSize>
@@ -43,9 +43,8 @@
         <logger name="org.apache.ibatis" level="DEBUG"/>
         <logger name="org.apache.tomcat" level="INFO"/>
         <logger name="org.mybatis.spring" level="ERROR"/>
-        <logger name="com.ksyun.kbdp.dts" level="DEBUG"/>
-        <logger name="org.apache.kafka" level="INFO"/>
-        <logger name="com.htsc.octopus" level="INFO"/>
+        <logger name="com.qcxk" level="DEBUG"/>
+        <logger name="org.springframework" level="INFO"/>
     </springProfile>
 
     <!-- 生产环境 -->

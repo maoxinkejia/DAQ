@@ -50,7 +50,7 @@ mybatis-plus:
 
 #pagehelper
 pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  params: count=countSql
-  supportMethodsArguments: true
+  helper-dialect: mysql
+  reasonable: "true"
+  support-methods-arguments: "true"
+  params: parentCount=countSql
