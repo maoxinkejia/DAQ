@@ -37,6 +37,10 @@ public class TerminalDevice {
      */
     private Double ch4GasConcentration;
     /**
+     * 井盖是否掀开 1：掀开 0：为掀开
+     */
+    private Integer wellLidOpenStatus;
+    /**
      * 经度
      */
     private String longitude;
@@ -148,10 +152,6 @@ public class TerminalDevice {
      * 井盖状态 1：连接  0：未连接
      */
     private Integer wellLidStatus;
-    /**
-     * 井盖是否掀开 1：掀开 0：为掀开
-     */
-    private Integer wellLidOpenStatus;
     /**
      * 井盖电池电压
      */

@@ -2,6 +2,7 @@ package com.qcxk.util;
 
 import com.qcxk.model.Message;
 import com.qcxk.model.TerminalDevice;
+import com.qcxk.model.TerminalDeviceDetail;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -442,5 +443,34 @@ public class BusinessUtil {
         device.setDeviceNum(message.getDeviceNum());
         device.setCreateUser(SYSTEM_USER);
         return device;
+    }
+
+    public static TerminalDeviceDetail buildTerminalDeviceDetail(TerminalDevice device, Integer type) {
+        TerminalDeviceDetail detail = new TerminalDeviceDetail();
+        detail.setDeviceNum(device.getDeviceNum());
+        detail.setValueType(type);
+
+        Double value;
+        switch (type) {
+            case CH4_CONCENTRATION:
+                value = device.getCh4GasConcentration();
+                break;
+            case WATER_DEPTH:
+                value = device.getWaterDepth();
+                break;
+            case TEMPERATURE:
+                value = device.getTemperature().doubleValue();
+                break;
+            case BAT_VOL:
+                value = device.getBatVol();
+                break;
+            default:
+                throw new RuntimeException("类型异常");
+        }
+
+        detail.setValue(value);
+        detail.setCreateTime(new Date());
+
+        return detail;
     }
 }

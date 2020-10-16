@@ -65,4 +65,10 @@ public class Constants {
     public static final Integer DISABLED = 0;
 
 
+    /*====================================详情类型=======================================*/
+    public static final int CH4_CONCENTRATION = 1;
+    public static final int WATER_DEPTH = 2;
+    public static final int BAT_VOL = 3;
+    public static final int TEMPERATURE = 4;
+
 }

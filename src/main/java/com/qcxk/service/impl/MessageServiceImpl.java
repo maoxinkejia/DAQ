@@ -3,13 +3,16 @@ package com.qcxk.service.impl;
 import com.qcxk.dao.MessageDao;
 import com.qcxk.model.Message;
 import com.qcxk.model.TerminalDevice;
+import com.qcxk.model.TerminalDeviceDetail;
 import com.qcxk.service.MessageService;
+import com.qcxk.service.TerminalDeviceDetailService;
 import com.qcxk.service.TerminalDeviceService;
 import com.qcxk.util.BusinessUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -23,6 +26,8 @@ public class MessageServiceImpl implements MessageService {
     private MessageDao dao;
     @Autowired
     private TerminalDeviceService terminalDeviceService;
+    @Autowired
+    private TerminalDeviceDetailService terminalDeviceDetailService;
 
     @Override
     public void processMsg(List<Message> messages) {
@@ -159,18 +164,34 @@ public class MessageServiceImpl implements MessageService {
         Map<Integer, Boolean> systemFailure = BusinessUtil.getSystemErrorCode(data);
         Integer rssi = BusinessUtil.getRSSI(data);
 
+        List<TerminalDeviceDetail> list = new ArrayList<>();
+
         if (Objects.equals(ENABLED, waterSensorStatus)) {
             device.setWaterDepth(waterDepth);
+            list.add(buildTerminalDeviceDetail(device, WATER_DEPTH));
         }
 
         if (Objects.equals(ENABLED, ch4GasSensorStatus)) {
             device.setTemperature(ch4GasSensorTemperature);
             device.setCh4GasConcentration(ch4GasConcentration);
+
+            list.add(buildTerminalDeviceDetail(device, CH4_CONCENTRATION));
+            list.add(buildTerminalDeviceDetail(device, TEMPERATURE));
+        }
+
+        if (Objects.equals(ENABLED, wellLidStatus)) {
+            device.setWellLidOpenStatus(wellLidOpenStatus);
         }
 
         device.setUpdateTime(new Date());
         device.setUpdateUser(SYSTEM_USER);
         terminalDeviceService.updateDevice(device);
+
+        if (CollectionUtils.isEmpty(list)) {
+            return;
+        }
+
+        terminalDeviceDetailService.batchAddDetail(list);
     }
 
     /**
@@ -182,6 +203,7 @@ public class MessageServiceImpl implements MessageService {
         device.setUpdateUser(SYSTEM_USER);
 
         terminalDeviceService.updateDevice(device);
+        terminalDeviceDetailService.batchAddDetail(Collections.singletonList(buildTerminalDeviceDetail(device, BAT_VOL)));
     }
 
     public static void main(String[] args) {

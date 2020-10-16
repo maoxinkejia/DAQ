@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DateUtils {
@@ -52,6 +53,14 @@ public class DateUtils {
         String day = Integer.toHexString(cal.get(Calendar.DAY_OF_MONTH));
 
         return year + "0" + month + (day.length() == 1 ? "0" + day : day);
+    }
+
+    public static Date getNextDate(String dateStr) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern(YYYY_MM_DD);
+        LocalDate date = LocalDate.parse(dateStr, fmt);
+        LocalDate localDate = date.plusDays(1);
+        ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
+        return Date.from(zonedDateTime.toInstant());
     }
 
     /**

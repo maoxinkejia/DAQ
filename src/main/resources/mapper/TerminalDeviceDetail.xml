@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcxk.dao.TerminalDeviceDetailDao">
+
+    <insert id="batchAdd" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO message(
+          device_num,
+          value_type,
+          `value`,
+          create_time
+        ) VALUES
+        <foreach collection="list" item="model" separator=",">
+            (
+            #{model.deviceNum},
+            #{model.valueType},
+            #{model.value},
+            #{model.createTime}
+            )
+        </foreach>
+    </insert>
+
+    <select id="findList" resultType="com.qcxk.model.TerminalDeviceDetail">
+        <include refid="selectTerminalDeviceDetail"/>
+        WHERE t.create_time BETWEEN #{startTime} AND #{endTime}
+    </select>
+
+
+    <sql id="selectTerminalDeviceDetail">
+        SELECT
+          t.id,
+          t.device_num AS deviceNum,
+          t.value_type AS valueType,
+          t.value,
+          t.create_time AS createTime
+        FROM
+          terminal_device_detail t
+    </sql>
+</mapper>
