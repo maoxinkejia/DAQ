@@ -13,6 +13,7 @@ import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -35,11 +36,11 @@ public class DiscardServerHandler extends ChannelHandlerAdapter {
                 return;
             }
 
-            Message message = messageService.parse2Msg(bodyStr);
+            List<Message> messages = messageService.parse2Msg(bodyStr, new ArrayList<>());
 
-            messageService.processMsg(message);
+            messageService.processMsg(messages);
 
-            List<String> responseList = messageService.responseMessage(message);
+            List<String> responseList = messageService.responseMessage(messages);
 
             callBack(context, responseList);
         } catch (Exception e) {

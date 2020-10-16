@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.qcxk.common.Constants.*;
 
@@ -30,8 +31,20 @@ public class BusinessUtil {
      * 中间为实际的数据存储位
      */
     private static boolean verifyDataLength(String message) {
-        int totalLength = 18 + getDataLength(message) * 2;
-        return message.length() == totalLength;
+        String message2 = getNextMessage(message);
+        if (StringUtils.isBlank(message2)) {
+            return true;
+        }
+
+        return verifyReceiveMsg(message2);
+    }
+
+    public static String getNextMessage(String message) {
+        return message.substring(getTotalLength(message));
+    }
+
+    private static int getTotalLength(String message) {
+        return 18 + getDataLength(message) * 2;
     }
 
     public static boolean verifyReceiveMsg(String message) {
@@ -68,7 +81,13 @@ public class BusinessUtil {
     public static String getDeviceNum(String message) {
         String deviceNumHex = getDeviceNumHex(message);
         int prefix = Integer.parseInt(deviceNumHex.substring(0, 2), 16);
-        int suffix = Integer.parseInt(deviceNumHex.substring(2, 8), 16);
+
+        String suffixStr = deviceNumHex.substring(2, 8);
+        if (Objects.equals("000000", suffixStr)) {
+            return String.format("%02d-%s", prefix, suffixStr);
+        }
+
+        int suffix = Integer.parseInt(suffixStr, 16);
         return String.format("%02d-%d", prefix, suffix);
     }
 

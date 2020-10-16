@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface MessageService {
 
-    void processMsg(Message message);
+    void processMsg(List<Message> messages);
 
-    Message parse2Msg(String message);
+    List<Message> parse2Msg(String message, List<Message> messages);
 
-    List<String> responseMessage(Message message);
+    List<String> responseMessage(List<Message> messages);
 }

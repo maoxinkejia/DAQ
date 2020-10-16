@@ -7,6 +7,7 @@ import com.qcxk.service.MessageService;
 import com.qcxk.service.TerminalDeviceService;
 import com.qcxk.util.BusinessUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,45 +25,46 @@ public class MessageServiceImpl implements MessageService {
     private TerminalDeviceService terminalDeviceService;
 
     @Override
-    public void processMsg(Message message) {
-        log.info("start process message, deviceNum: {}", message.getDeviceNum());
+    public void processMsg(List<Message> messages) {
+        for (Message message : messages) {
+            log.info("start process message, deviceNum: {}", message.getDeviceNum());
 
-        TerminalDevice device = terminalDeviceService.findByDeviceNum(message.getDeviceNum());
-        if (device == null) {
-            device = terminalDeviceService.add(BusinessUtil.buildTerminalDevice(message));
-        }
+            TerminalDevice device = terminalDeviceService.findByDeviceNum(message.getDeviceNum());
+            if (device == null) {
+                device = terminalDeviceService.add(BusinessUtil.buildTerminalDevice(message));
+            }
 
-        terminalDeviceService.updateBootTime(device);
+            terminalDeviceService.updateBootTime(device);
 
-        String data = message.getData();
-        switch (message.getFunctionNum()) {
-            case DEVICE_LOGIN_CODE:
-                log.info("receive device login code: 85, terminalDevice onLine, data: {}", data);
-                buildDeviceLoginCode(device, data);
-                break;
-            case DEVICE_UPLOAD_DETAILS_CODE:
-                log.info("receive device details code: A1, data: {}", data);
-                buildDeviceUploadDetails(device, data);
-                terminalDeviceService.updateDevice(device);
-                break;
-            case DEVICE_UPLOAD_FUNC_CODE:
-                log.info("receive device function code: A2, data: {}", data);
-                buildDeviceUploadFunction(device, data);
+            String data = message.getData();
+            switch (message.getFunctionNum()) {
+                case DEVICE_LOGIN_CODE:
+                    log.info("receive device login code: 85, terminalDevice onLine, data: {}", data);
+                    buildDeviceLoginCode(device, data);
+                    break;
+                case DEVICE_UPLOAD_DETAILS_CODE:
+                    log.info("receive device details code: A1, data: {}", data);
+                    buildDeviceUploadDetails(device, data);
+                    terminalDeviceService.updateDevice(device);
+                    break;
+                case DEVICE_UPLOAD_FUNC_CODE:
+                    log.info("receive device function code: A2, data: {}", data);
+                    buildDeviceUploadFunction(device, data);
+                    break;
+                case DEVICE_CALL_BACK_CODE:
 
-                break;
-            case DEVICE_CALL_BACK_CODE:
-
-                break;
-            case DEVICE_RECEIVE_SERVER_CODE:
-                log.info("receive device code: A7");
-                break;
-            default:
-                log.info("receive device message, but not resolve, functionNum: {}", message.getFunctionNum());
+                    break;
+                case DEVICE_RECEIVE_SERVER_CODE:
+                    log.info("receive device code: A7");
+                    break;
+                default:
+                    log.info("receive device message, but not resolve, functionNum: {}", message.getFunctionNum());
+            }
         }
     }
 
     @Override
-    public Message parse2Msg(String messageStr) {
+    public List<Message> parse2Msg(String messageStr, List<Message> messages) {
         Message message = new Message();
         message.setInitialData(messageStr);
         message.setPrefix(getPrefix(messageStr));
@@ -82,27 +84,39 @@ public class MessageServiceImpl implements MessageService {
             message.setData(getDateString(messageStr, length));
         }
 
-        dao.add(message);
-        log.info("add message to db success, deviceNum: {}, message: {}", message.getDeviceNum(), message.getInitialData());
+        messages.add(message);
+        log.info("add message to list, deviceNum: {}, message: {}", message.getDeviceNum(), message.getInitialData());
 
-        return message;
+
+        String messageStr2 = getNextMessage(messageStr);
+        if (StringUtils.isBlank(messageStr2)) {
+            int num = dao.addBatch(messages);
+
+            log.info("batch add messages to db success, add num: {}", num);
+            return messages;
+        }
+
+        return parse2Msg(messageStr2, messages);
     }
 
     @Override
-    public List<String> responseMessage(Message message) {
+    public List<String> responseMessage(List<Message> messages) {
         List<String> response = new ArrayList<>(1);
 
-        switch (message.getFunctionNum()) {
-            case DEVICE_LOGIN_CODE:
-                response.add(BusinessUtil.buildLoginResponseMessage(message));
-                break;
-            case DEVICE_UPLOAD_DETAILS_CODE:
-            case DEVICE_UPLOAD_FUNC_CODE:
-                response.add(BusinessUtil.buildReceiveRightDataMessage(message));
-                break;
-            case DEVICE_RECEIVE_SERVER_CODE:
-                // todo 将所有需要发送的消息查询出来统一进行编辑发送
-                break;
+        for (Message message : messages) {
+            switch (message.getFunctionNum()) {
+                case DEVICE_LOGIN_CODE:
+                    response.add(BusinessUtil.buildLoginResponseMessage(message));
+                    break;
+                case DEVICE_UPLOAD_DETAILS_CODE:
+                case DEVICE_UPLOAD_FUNC_CODE:
+                    response.add(BusinessUtil.buildReceiveRightDataMessage(message));
+                    break;
+                case DEVICE_RECEIVE_SERVER_CODE:
+                    // todo 将所有需要发送的消息查询出来统一进行编辑发送
+                    break;
+            }
+
         }
 
         return response;
@@ -174,11 +188,11 @@ public class MessageServiceImpl implements MessageService {
 //        String s1 = "68040310d6a1460000040310d6000f011e01140a64140912050f25322f6f1ba91ec6000000001f90000000001f90a9ce000a05a0050005370100000300000000000000000000000000000000007d16";
 //        String s2 = "68040310d685091409120510060eb1001416";
 //        String s3 = "68040310d6a23200000000000000010000000005000000030100010000000018b1ac44000000000000000000000000000000000000000000001616";
-//
-//        MessageServiceImpl messageService = new MessageServiceImpl();
-//        Message message = messageService.parse2Msg(s3);
-////        messageService.processMsg(message);
-//
-//        System.out.println(buildChangeIpPortMessage(message, "168.61.17.179", "7878"));
+        String s4 = "6804000000a2320000000000000001000000000500000003010000000000000000001400000000000000000000000000000000000000000000a21668040000008509140a0e030a2e015e0040166804000000a146000004000000010f011e003c1e78140a0e030a2e02000000001f90000000001f90000000001f900014000a0003320005370100000300000000000000000000000000000000009f16";
+
+        MessageServiceImpl service = new MessageServiceImpl();
+        List<Message> messages = service.parse2Msg(s4, new ArrayList<>());
+        System.out.println(messages);
+
     }
 }
