@@ -31,7 +31,11 @@ public class TerminalController {
     private TerminalDeviceDetailService detailService;
 
     @GetMapping(value = "/terminalList")
-    public Response getTerminalList(@RequestBody TerminalDeviceDTO dto) {
+    public Response getTerminalList(Integer page, Integer pageSize,
+                                    String deviceNum, String tubeWellDescription, String location,
+                                    Integer controlStatus, Integer delStatus) {
+
+        TerminalDeviceDTO dto = buildRequestParam(page, pageSize, deviceNum, tubeWellDescription, location, controlStatus, delStatus);
         PageHelper.startPage(dto.getPage(), dto.getPageSize());
 
         List<TerminalDevice> list = service.findList(dto);
@@ -65,7 +69,8 @@ public class TerminalController {
     }
 
     @GetMapping(value = "/dataList")
-    public Response getDataList(@RequestBody TerminalDeviceDTO dto) {
+    public Response getDataList(String deviceNum, String location, Integer delStatus) {
+        TerminalDeviceDTO dto = buildRequestParam(null, null, deviceNum, null, location, null, delStatus);
         List<TerminalDataListVO> list = service.findDataList(dto);
         return Response.build(list).success();
     }
@@ -74,5 +79,19 @@ public class TerminalController {
     public Response getDataDetail(String startDate, String endDate, String deviceNum) throws ParseException {
         TerminalDataDetailVO vo = detailService.findList(startDate, endDate, deviceNum);
         return Response.build(vo).success();
+    }
+
+
+    private TerminalDeviceDTO buildRequestParam(Integer page, Integer pageSize, String deviceNum, String tubeWellDescription, String location, Integer controlStatus, Integer delStatus) {
+        TerminalDeviceDTO dto = new TerminalDeviceDTO();
+        dto.setPage(page);
+        dto.setPageSize(pageSize);
+        dto.setDeviceNum(deviceNum);
+        dto.setTubeWellDescription(tubeWellDescription);
+        dto.setLocation(location);
+        dto.setControlStatus(controlStatus);
+        dto.setDelStatus(delStatus);
+
+        return dto;
     }
 }
