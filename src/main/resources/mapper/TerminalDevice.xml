@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcxk.dao.TerminalDeviceDao">
 
-    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO terminal_device(
           device_num,
           IOT_card_num,
@@ -24,8 +24,8 @@
           del_time
         ) VALUES (
           #{deviceNum},
-          #{IOTCardNum},
-          #{deviceIp},
+          #{iotCardNum},
+          #{deviceIP},
           #{longitude},
           #{latitude},
           #{location},
@@ -85,6 +85,7 @@
     <select id="findList" resultType="com.qcxk.model.TerminalDevice" parameterType="com.qcxk.controller.model.query.TerminalDeviceDTO">
         <include refid="selectTerminalDevice"/>
         <where>
+            t.del_status = #{delStatus}
             <if test="deviceNum != null and deviceNum != ''">
                 AND t.device_num LIKE CONCAT('%',CONCAT(#{deviceNum},'%'))
             </if>
@@ -178,10 +179,10 @@
             <if test="controlStatus != null">
                 control_status = #{controlStatus},
             </if>
-            <if test="imagePath != null">
+            <if test="imagePath != null and imagePath != ''">
                 image_path = #{imagePath},
             </if>
-            <if test="remarks != null">
+            <if test="remarks != null and imagePath != ''">
                 remarks = #{remarks},
             </if>
             <if test="updateTime != null">

@@ -3,6 +3,7 @@ package com.qcxk.service;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.model.TerminalDevice;
 import com.qcxk.model.TerminalDeviceConfig;
+import com.qcxk.model.VO.TerminalDataListVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -20,5 +21,7 @@ public interface TerminalDeviceService {
 
     void updateBootTime(TerminalDevice device);
 
-    void uploadDeviceImages(MultipartFile[] files, TerminalDevice device);
+    String uploadDeviceImages(MultipartFile[] files);
+
+    List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto);
 }

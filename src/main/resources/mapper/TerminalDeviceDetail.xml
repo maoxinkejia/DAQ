@@ -21,7 +21,9 @@
 
     <select id="findList" resultType="com.qcxk.model.TerminalDeviceDetail">
         <include refid="selectTerminalDeviceDetail"/>
-        WHERE t.create_time BETWEEN #{startTime} AND #{endTime}
+        WHERE t.device_num = #{deviceNum}
+        AND t.value_type = #{type}
+        AND (t.create_time BETWEEN #{startTime} AND #{endTime})
     </select>
 
 

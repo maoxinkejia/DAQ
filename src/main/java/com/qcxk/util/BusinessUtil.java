@@ -1,16 +1,15 @@
 package com.qcxk.util;
 
+import com.qcxk.model.DeviceAlarmDetail;
 import com.qcxk.model.Message;
 import com.qcxk.model.TerminalDevice;
 import com.qcxk.model.TerminalDeviceDetail;
+import com.qcxk.model.VO.TerminalDataListVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static com.qcxk.common.Constants.*;
 
@@ -470,6 +469,35 @@ public class BusinessUtil {
 
         detail.setValue(value);
         detail.setCreateTime(new Date());
+
+        return detail;
+    }
+
+    /**
+     * 构建数据列表数据
+     */
+    public static TerminalDataListVO buildTerminalDataList(List<DeviceAlarmDetail> alarms, TerminalDevice device) {
+        TerminalDataListVO vo = new TerminalDataListVO();
+        vo.setDeviceNum(device.getDeviceNum());
+        vo.setCh4GasConcentration(device.getCh4GasConcentration());
+        vo.setWaterDepth(device.getWaterDepth());
+        vo.setTemperature(device.getTemperature());
+        vo.setBatVol(device.getBatVol());
+        vo.setLocation(device.getLocation());
+        vo.setAlarmList(alarms);
+
+        return vo;
+    }
+
+    public static DeviceAlarmDetail buildDeviceAlarmDetail(String deviceNum, int alarmType, String location, String alarmDescription) {
+        DeviceAlarmDetail detail = new DeviceAlarmDetail();
+        detail.setDeviceNum(deviceNum);
+        detail.setLocation(location);
+        detail.setAlarmType(alarmType);
+        detail.setAlarmDescription(alarmDescription);
+        detail.setAlarmDate(new Date());
+        detail.setApplyStatus(DISABLED);
+        detail.setApplyDate(null);
 
         return detail;
     }

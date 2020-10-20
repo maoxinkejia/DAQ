@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class Message {
-    private Integer id;
+    private Long id;
     /**
      * 设备号
      */

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class TerminalDevice {
-    private Integer id;
+    private Long id;
     /**
      * 终端序列号
      */
@@ -15,7 +15,7 @@ public class TerminalDevice {
     /**
      * 物联网卡号
      */
-    private String IOTCardNum;
+    private String iotCardNum;
     /**
      * 终端IP
      */
@@ -37,7 +37,7 @@ public class TerminalDevice {
      */
     private Double ch4GasConcentration;
     /**
-     * 井盖是否掀开 1：掀开 0：为掀开
+     * 井盖是否掀开 1：掀开 0：未掀开
      */
     private Integer wellLidOpenStatus;
     /**

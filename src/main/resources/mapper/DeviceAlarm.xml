@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcxk.dao.DeviceAlarmDao">
+
+    <insert id="addDeviceAlarmDetail" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO device_alarm_detail
+        (
+          device_num,
+          location,
+          alarm_type,
+          alarm_description,
+          alarm_date,
+          apply_status,
+          apply_date
+        ) VALUES (
+          #{deviceNum},
+          #{location},
+          #{alarmType},
+          #{alarmDescription}
+          #{alarmDate},
+          #{applyStatus},
+          #{applyDate}
+        )
+    </insert>
+
+    <select id="findAlarmListByDeviceNum" resultType="com.qcxk.model.DeviceAlarmDetail">
+        <include refid="selectDeviceAlarmDetail"/>
+        WHERE t.device_num = #{deviceNum}
+    </select>
+
+    <select id="findDeviceAlarmType" resultType="com.qcxk.model.DeviceAlarmType">
+        <include refid="selectDeviceAlarmType"/>
+        WHERE t.device_num = #{deviceNum}
+    </select>
+
+    <sql id="selectDeviceAlarmType">
+        SELECT
+          t.id,
+          t.device_num AS deviceNum,
+          t.ch4_gas_status AS ch4GasStatus,
+          t.bat_vol_status AS batVolStatus,
+          t.well_lid_status AS wellLidStatus,
+          t.temperature_status AS temperatureStatus,
+          t.water_depth_status AS waterDepthStatus
+    </sql>
+
+    <sql id="selectDeviceAlarmDetail">
+        SELECT
+          t.id,
+          t.device_num AS deviceNum,
+          t.location,
+          t.alarm_type AS t.alarmType,
+          t.alarm_description AS alarmDescription,
+          t.apply_status AS applyStatus,
+          t.apply_date AS applyDate,
+          t.alarm_date AS alarmDate
+        FROM
+          device_alarm t
+    </sql>
+</mapper>

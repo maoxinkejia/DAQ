@@ -23,4 +23,8 @@ public class TerminalDeviceDTO extends PageAndPageSize {
      * 阀控状态 1：开启  0：关闭
      */
     private Integer controlStatus;
+    /**
+     * 删除标识  1：删除 0：未删除
+     */
+    private Integer delStatus;
 }

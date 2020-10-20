@@ -71,4 +71,12 @@ public class Constants {
     public static final int BAT_VOL = 3;
     public static final int TEMPERATURE = 4;
 
+    /*====================================告警中文描述======================================*/
+    public static final String CH4_CONCENTRATION_ALARM_CN = "甲烷浓度过高";
+    public static final String BAT_VOL_ALARM_CN = "电池电量不足";
+    public static final String TEMPERATURE_ALARM_CN = "温度过高";
+    public static final String WATER_DEPTH_ALARM_CN = "水位过高";
+    public static final String WELL_LID_ALARM_CN = "井盖倾斜/移位";
+
+
 }

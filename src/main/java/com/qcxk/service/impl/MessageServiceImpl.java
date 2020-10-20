@@ -4,6 +4,7 @@ import com.qcxk.dao.MessageDao;
 import com.qcxk.model.Message;
 import com.qcxk.model.TerminalDevice;
 import com.qcxk.model.TerminalDeviceDetail;
+import com.qcxk.service.AlarmService;
 import com.qcxk.service.MessageService;
 import com.qcxk.service.TerminalDeviceDetailService;
 import com.qcxk.service.TerminalDeviceService;
@@ -24,6 +25,8 @@ import static com.qcxk.util.BusinessUtil.*;
 public class MessageServiceImpl implements MessageService {
     @Autowired
     private MessageDao dao;
+    @Autowired
+    private AlarmService alarmService;
     @Autowired
     private TerminalDeviceService terminalDeviceService;
     @Autowired
@@ -161,8 +164,11 @@ public class MessageServiceImpl implements MessageService {
         Double ch4GasVolumeConcentration = BusinessUtil.getCH4GasVolumeConcentration(data);
         Integer ch4SensorEnum = BusinessUtil.getCH4SensorEnum(data);
         Integer ch4GasSensorTemperature = BusinessUtil.getCH4GasTemperature(data);
-        Map<Integer, Boolean> systemFailure = BusinessUtil.getSystemErrorCode(data);
+        Map<Integer, Boolean> systemAlarm = BusinessUtil.getSystemErrorCode(data);
         Integer rssi = BusinessUtil.getRSSI(data);
+
+
+        alarmService.addDeviceAlarm(systemAlarm, device.getDeviceNum(), device.getLocation());
 
         List<TerminalDeviceDetail> list = new ArrayList<>();
 
@@ -206,15 +212,15 @@ public class MessageServiceImpl implements MessageService {
         terminalDeviceDetailService.batchAddDetail(Collections.singletonList(buildTerminalDeviceDetail(device, BAT_VOL)));
     }
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 //        String s1 = "68040310d6a1460000040310d6000f011e01140a64140912050f25322f6f1ba91ec6000000001f90000000001f90a9ce000a05a0050005370100000300000000000000000000000000000000007d16";
 //        String s2 = "68040310d685091409120510060eb1001416";
 //        String s3 = "68040310d6a23200000000000000010000000005000000030100010000000018b1ac44000000000000000000000000000000000000000000001616";
-        String s4 = "6804000000a2320000000000000001000000000500000003010000000000000000001400000000000000000000000000000000000000000000a21668040000008509140a0e030a2e015e0040166804000000a146000004000000010f011e003c1e78140a0e030a2e02000000001f90000000001f90000000001f900014000a0003320005370100000300000000000000000000000000000000009f16";
-
-        MessageServiceImpl service = new MessageServiceImpl();
-        List<Message> messages = service.parse2Msg(s4, new ArrayList<>());
-        System.out.println(messages);
-
-    }
+//        String s4 = "6804000000a2320000000000000001000000000500000003010000000000000000001400000000000000000000000000000000000000000000a21668040000008509140a0e030a2e015e0040166804000000a146000004000000010f011e003c1e78140a0e030a2e02000000001f90000000001f90000000001f900014000a0003320005370100000300000000000000000000000000000000009f16";
+//
+//        MessageServiceImpl service = new MessageServiceImpl();
+//        List<Message> messages = service.parse2Msg(s4, new ArrayList<>());
+//        System.out.println(messages);
+//
+//    }
 }

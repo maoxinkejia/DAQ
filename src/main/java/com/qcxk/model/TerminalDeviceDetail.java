@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class TerminalDeviceDetail {
-    private Integer id;
+    private Long id;
     private String deviceNum;
     private Integer valueType;
     private Double value;

@@ -13,5 +13,6 @@ public interface TerminalDeviceDetailDao extends BaseMapper<TerminalDeviceDetail
 
     int batchAdd(List<TerminalDeviceDetail> list);
 
-    List<TerminalDeviceDetail> findList(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+    List<TerminalDeviceDetail> findList(@Param("startTime") Date startTime, @Param("endTime") Date endTime,
+                                        @Param("deviceNum") String deviceNum, @Param("type") int valueType);
 }

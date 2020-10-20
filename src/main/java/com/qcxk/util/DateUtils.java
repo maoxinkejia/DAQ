@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DateUtils {
-    public static final String YYYY_MM_DD = "yyyy-MM-dd";
+    public static final String yyyy_MM_dd = "yyyy-MM-dd";
     public static final String yyyy_MM_dd_HH_mm_ss = "yyyy-MM-dd HH:mm:ss";
     public static final String yy = "yy";
     public static final String MM = "MM";
@@ -56,9 +56,8 @@ public class DateUtils {
     }
 
     public static Date getNextDate(String dateStr) {
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern(YYYY_MM_DD);
-        LocalDate date = LocalDate.parse(dateStr, fmt);
-        LocalDate localDate = date.plusDays(1);
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern(yyyy_MM_dd);
+        LocalDate localDate = LocalDate.parse(dateStr, fmt).plusDays(1);
         ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
         return Date.from(zonedDateTime.toInstant());
     }
@@ -100,16 +99,16 @@ public class DateUtils {
      * 获得当天日期
      */
     public static Date initDateByDay() throws ParseException {
-        String dateStr = format(new Date(), YYYY_MM_DD);
-        return parseDate(dateStr, YYYY_MM_DD);
+        String dateStr = format(new Date(), yyyy_MM_dd);
+        return parseDate(dateStr, yyyy_MM_dd);
     }
 
     /**
      * 日期转换为0点时刻
      */
     public static Date initDate(Date date) throws ParseException {
-        String dateStr = format(date, YYYY_MM_DD);
-        return parseDate(dateStr, YYYY_MM_DD);
+        String dateStr = format(date, yyyy_MM_dd);
+        return parseDate(dateStr, yyyy_MM_dd);
     }
 
     /**

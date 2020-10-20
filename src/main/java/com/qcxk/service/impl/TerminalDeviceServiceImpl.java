@@ -6,12 +6,18 @@ import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.TerminalDeviceDao;
 import com.qcxk.model.TerminalDevice;
 import com.qcxk.model.TerminalDeviceConfig;
+import com.qcxk.model.VO.TerminalDataListVO;
+import com.qcxk.service.AlarmService;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -22,11 +28,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.qcxk.util.BusinessUtil.buildTerminalDataList;
+
 @Slf4j
 @Service
 public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     @Value("${upload.image.url:/home/pictures}")
     private String imageUrl;
+
+    @Autowired
+    private AlarmService alarmService;
 
     @Autowired
     private TerminalDeviceDao dao;
@@ -37,6 +48,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public TerminalDevice add(TerminalDevice device) {
         initTerminalDeviceConfig(device);
 
@@ -47,7 +59,11 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         device.setUpdateUser(null);
         device.setUpdateTime(null);
         device.setDelTime(null);
-        return dao.add(device);
+
+        dao.insert(device);
+
+        log.info("add terminalDevice success, device: {}", device);
+        return device;
     }
 
     @Override
@@ -62,7 +78,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     public List<TerminalDevice> findList(TerminalDeviceDTO dto) {
-        List<TerminalDevice> list = dao.findList(dto);
+        List<TerminalDevice> list = findBaseList(dto);
         list.forEach(device -> {
             String[] split = device.getImagePath().split(";");
             device.setImagePaths(Arrays.asList(split));
@@ -82,9 +98,9 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     }
 
     @Override
-    public void uploadDeviceImages(MultipartFile[] files, TerminalDevice device) {
+    public String uploadDeviceImages(MultipartFile[] files) {
         if (files.length == 0) {
-            return;
+            return "";
         }
 
         Assert.hasLength(imageUrl, "imageUrl mast not be null!!!");
@@ -103,16 +119,30 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
             String fullPath = imageUrl + File.separator + pictureFile.getOriginalFilename();
             try {
-                pictureFile.transferTo(new File(fullPath));
+                FileUtils.copyInputStreamToFile(pictureFile.getInputStream(), new File(fullPath));
                 imagePathList.add(fullPath);
             } catch (IOException e) {
-                log.error("upload picture failed, picture: {}", pictureFile.getOriginalFilename());
+                log.error("upload picture failed, picture: {}, error: {}", pictureFile.getOriginalFilename(), e);
             }
         }
 
 
-        String imagePath = String.join(";", imagePathList);
-        device.setImagePath(imagePath);
+        if (CollectionUtils.isEmpty(imagePathList)) {
+            return "";
+        }
+
+        return String.join(";", imagePathList);
+    }
+
+    @Override
+    public List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto) {
+        return findBaseList(dto).stream()
+                .map(terminalDevice -> buildTerminalDataList(alarmService.findAlarmListByDeviceNum(dto.getDeviceNum()), terminalDevice))
+                .collect(Collectors.toList());
+    }
+
+    private List<TerminalDevice> findBaseList(TerminalDeviceDTO dto) {
+        return dao.findList(dto);
     }
 
     /**
@@ -125,7 +155,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
                 .collect(Collectors.toList());
 
         int num = dao.batchAddTerminalDeviceConfigs(configs);
-        log.info("batch add terminalDeviceConfigs success, num: {}", num);
+        log.info("init and batch add terminalDeviceConfigs success, num: {}", num);
     }
 
     private TerminalDeviceConfig buildConfig(RecordEnum recordEnum, TerminalDevice device) {

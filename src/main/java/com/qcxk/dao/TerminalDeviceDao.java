@@ -13,8 +13,6 @@ import java.util.List;
 public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
     TerminalDevice findByDeviceNum(String deviceNum);
 
-    TerminalDevice add(TerminalDevice device);
-
     void update(TerminalDevice device);
 
     List<TerminalDevice> findList(TerminalDeviceDTO dto);
