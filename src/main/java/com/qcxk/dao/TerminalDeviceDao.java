@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.model.TerminalDevice;
 import com.qcxk.model.TerminalDeviceConfig;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.qcxk.common.Constants.DELETED;
 import static com.qcxk.util.BusinessUtil.buildTerminalDataList;
 
 @Slf4j
@@ -51,6 +52,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     @Transactional(propagation = Propagation.REQUIRED)
     public TerminalDevice add(TerminalDevice device) {
         initTerminalDeviceConfig(device);
+        initAlarmType(device);
 
         device.setCreateTime(new Date());
         device.setDelStatus(Constants.NOT_DELETED);
@@ -141,6 +143,16 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void delete(String deviceNum) {
+        TerminalDevice device = dao.findByDeviceNum(deviceNum);
+        device.setDelStatus(DELETED);
+        device.setDelTime(new Date());
+        device.setUpdateTime(new Date());
+
+        dao.update(device);
+    }
+
     private List<TerminalDevice> findBaseList(TerminalDeviceDTO dto) {
         return dao.findList(dto);
     }
@@ -168,5 +180,12 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         config.setUpdateUser(device.getCreateUser());
 
         return config;
+    }
+
+    /**
+     * 添加设备时初始化设备告警类型
+     */
+    private void initAlarmType(TerminalDevice device) {
+        alarmService.addAlarmType(device.getDeviceNum());
     }
 }

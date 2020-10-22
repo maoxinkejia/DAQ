@@ -5,11 +5,11 @@ import com.qcxk.model.DeviceAlarmDetail;
 import com.qcxk.model.DeviceAlarmType;
 import com.qcxk.service.AlarmService;
 import com.qcxk.service.TerminalDeviceService;
-import com.qcxk.util.BusinessUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -63,5 +63,20 @@ public class AlarmServiceImpl implements AlarmService {
         if (Objects.equals(alarmType.getWaterDepthStatus(), ENABLED) && systemAlarm.get(WATER_DEPTH)) {
 
         }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void addAlarmType(String deviceNum) {
+        DeviceAlarmType alarmType = new DeviceAlarmType();
+        alarmType.setDeviceNum(deviceNum);
+        alarmType.setCh4GasStatus(DISABLED);
+        alarmType.setWaterDepthStatus(DISABLED);
+        alarmType.setBatVolStatus(DISABLED);
+        alarmType.setTemperatureStatus(DISABLED);
+        alarmType.setWellLidStatus(DISABLED);
+
+        int num = dao.addDeviceAlarmType(alarmType);
+        log.info("init device alarmType success, num: {}", num);
     }
 }

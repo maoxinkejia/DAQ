@@ -191,6 +191,12 @@
             <if test="updateUser != null">
                 update_user = #{updateUser},
             </if>
+            <if test="delStatus != null">
+                del_status = #{delStatus},
+            </if>
+            <if test="delTime != null">
+                del_time = #{delTime},
+            </if>
         </set>
     </sql>
 

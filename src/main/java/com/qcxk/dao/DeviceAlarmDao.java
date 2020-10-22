@@ -13,4 +13,6 @@ public interface DeviceAlarmDao {
     DeviceAlarmType findDeviceAlarmType(String deviceNum);
 
     int addDeviceAlarmDetail(DeviceAlarmDetail deviceAlarmDetail);
+
+    int addDeviceAlarmType(DeviceAlarmType alarmType);
 }

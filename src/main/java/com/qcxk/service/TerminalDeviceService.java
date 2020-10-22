@@ -24,4 +24,6 @@ public interface TerminalDeviceService {
     String uploadDeviceImages(MultipartFile[] files);
 
     List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto);
+
+    void delete(String deviceNum);
 }

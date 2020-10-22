@@ -23,6 +23,25 @@
         )
     </insert>
 
+    <insert id="addDeviceAlarmType">
+        INSERT INTO device_alarm_type
+        (
+          device_num,
+          ch4_gas_status,
+          bat_vol_status,
+          well_lid_status,
+          temperature_status,
+          water_depth_status
+        ) VALUES (
+          #{deviceNum},
+          #{ch4GasStatus},
+          #{batVolStatus},
+          #{wellLidStatus},
+          #{temperatureStatus},
+          #{waterDepthStatus}
+        )
+    </insert>
+
     <select id="findAlarmListByDeviceNum" resultType="com.qcxk.model.DeviceAlarmDetail">
         <include refid="selectDeviceAlarmDetail"/>
         WHERE t.device_num = #{deviceNum}
@@ -42,6 +61,8 @@
           t.well_lid_status AS wellLidStatus,
           t.temperature_status AS temperatureStatus,
           t.water_depth_status AS waterDepthStatus
+        FROM
+          device_alarm_type t
     </sql>
 
     <sql id="selectDeviceAlarmDetail">
@@ -55,6 +76,6 @@
           t.apply_date AS applyDate,
           t.alarm_date AS alarmDate
         FROM
-          device_alarm t
+          device_alarm_detail t
     </sql>
 </mapper>

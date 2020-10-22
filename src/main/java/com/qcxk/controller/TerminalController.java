@@ -5,11 +5,12 @@ import com.qcxk.controller.model.page.Pagination;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.controller.model.response.PageResponse;
 import com.qcxk.controller.model.response.Response;
+import com.qcxk.model.DeviceAlarmType;
 import com.qcxk.model.TerminalDevice;
 import com.qcxk.model.TerminalDeviceConfig;
-import com.qcxk.model.TerminalDeviceDetail;
 import com.qcxk.model.VO.TerminalDataDetailVO;
 import com.qcxk.model.VO.TerminalDataListVO;
+import com.qcxk.service.AlarmService;
 import com.qcxk.service.TerminalDeviceDetailService;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,16 +27,14 @@ import java.util.List;
 public class TerminalController {
 
     @Autowired
+    private AlarmService alarmService;
+    @Autowired
     private TerminalDeviceService service;
     @Autowired
     private TerminalDeviceDetailService detailService;
 
     @GetMapping(value = "/terminalList")
-    public Response getTerminalList(Integer page, Integer pageSize,
-                                    String deviceNum, String tubeWellDescription, String location,
-                                    Integer controlStatus, Integer delStatus) {
-
-        TerminalDeviceDTO dto = buildRequestParam(page, pageSize, deviceNum, tubeWellDescription, location, controlStatus, delStatus);
+    public Response getTerminalList(TerminalDeviceDTO dto) {
         PageHelper.startPage(dto.getPage(), dto.getPageSize());
 
         List<TerminalDevice> list = service.findList(dto);
@@ -57,8 +56,14 @@ public class TerminalController {
     }
 
     @PutMapping(value = "/updateDevice")
-    public Response updateTerminalDevice(@RequestBody TerminalDevice device, @RequestBody MultipartFile[] files) {
+    public Response updateTerminalDevice(@RequestBody TerminalDevice device) {
         // TODO
+        return Response.build().success();
+    }
+
+    @DeleteMapping(value = "/deleteDevice/{deviceNum}")
+    public Response deleteTerminalDevice(@PathVariable(value = "deviceNum") String deviceNum) {
+        service.delete(deviceNum);
         return Response.build().success();
     }
 
@@ -69,8 +74,7 @@ public class TerminalController {
     }
 
     @GetMapping(value = "/dataList")
-    public Response getDataList(String deviceNum, String location, Integer delStatus) {
-        TerminalDeviceDTO dto = buildRequestParam(null, null, deviceNum, null, location, null, delStatus);
+    public Response getDataList(TerminalDeviceDTO dto) {
         List<TerminalDataListVO> list = service.findDataList(dto);
         return Response.build(list).success();
     }
@@ -81,17 +85,9 @@ public class TerminalController {
         return Response.build(vo).success();
     }
 
-
-    private TerminalDeviceDTO buildRequestParam(Integer page, Integer pageSize, String deviceNum, String tubeWellDescription, String location, Integer controlStatus, Integer delStatus) {
-        TerminalDeviceDTO dto = new TerminalDeviceDTO();
-        dto.setPage(page);
-        dto.setPageSize(pageSize);
-        dto.setDeviceNum(deviceNum);
-        dto.setTubeWellDescription(tubeWellDescription);
-        dto.setLocation(location);
-        dto.setControlStatus(controlStatus);
-        dto.setDelStatus(delStatus);
-
-        return dto;
+    @GetMapping(value = "/alarmType")
+    public Response getAlarmType(String deviceNum) {
+        DeviceAlarmType alarmType = alarmService.findDeviceAlarmType(deviceNum);
+        return Response.build(alarmType).success();
     }
 }

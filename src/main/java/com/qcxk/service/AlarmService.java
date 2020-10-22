@@ -12,4 +12,6 @@ public interface AlarmService {
     DeviceAlarmType findDeviceAlarmType(String deviceNum);
 
     void addDeviceAlarm(Map<Integer, Boolean> systemAlarm, String deviceNum, String location);
+
+    void addAlarmType(String deviceNum);
 }
