@@ -1,7 +1,7 @@
 package com.qcxk.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.qcxk.model.TerminalDeviceDetail;
+import com.qcxk.model.device.TerminalDeviceDetail;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

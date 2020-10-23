@@ -19,7 +19,7 @@
         </foreach>
     </insert>
 
-    <select id="findList" resultType="com.qcxk.model.TerminalDeviceDetail">
+    <select id="findList" resultType="com.qcxk.model.device.TerminalDeviceDetail">
         <include refid="selectTerminalDeviceDetail"/>
         WHERE t.device_num = #{deviceNum}
         AND t.value_type = #{type}

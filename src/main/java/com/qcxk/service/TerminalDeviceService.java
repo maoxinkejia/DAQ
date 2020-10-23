@@ -1,9 +1,9 @@
 package com.qcxk.service;
 
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
-import com.qcxk.model.TerminalDevice;
-import com.qcxk.model.TerminalDeviceConfig;
 import com.qcxk.model.VO.TerminalDataListVO;
+import com.qcxk.model.device.TerminalDevice;
+import com.qcxk.model.device.TerminalDeviceConfig;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

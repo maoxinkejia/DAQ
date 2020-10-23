@@ -1,4 +1,4 @@
-package com.qcxk.model;
+package com.qcxk.model.device;
 
 import lombok.Data;
 

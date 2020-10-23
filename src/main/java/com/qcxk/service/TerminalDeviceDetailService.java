@@ -1,7 +1,7 @@
 package com.qcxk.service;
 
-import com.qcxk.model.TerminalDeviceDetail;
 import com.qcxk.model.VO.TerminalDataDetailVO;
+import com.qcxk.model.device.TerminalDeviceDetail;
 
 import java.text.ParseException;
 import java.util.List;

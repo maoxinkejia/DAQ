@@ -2,9 +2,9 @@ package com.qcxk.service.impl;
 
 import com.qcxk.dao.DeviceAlarmDao;
 import com.qcxk.dao.TerminalDeviceDetailDao;
-import com.qcxk.model.DeviceAlarmDetail;
-import com.qcxk.model.TerminalDeviceDetail;
 import com.qcxk.model.VO.TerminalDataDetailVO;
+import com.qcxk.model.alarm.DeviceAlarmDetail;
+import com.qcxk.model.device.TerminalDeviceDetail;
 import com.qcxk.service.TerminalDeviceDetailService;
 import com.qcxk.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;

@@ -77,12 +77,12 @@
         WHERE device_num = #{deviceNum}
     </update>
 
-    <select id="findByDeviceNum" resultType="com.qcxk.model.TerminalDevice">
+    <select id="findByDeviceNum" resultType="com.qcxk.model.device.TerminalDevice">
         <include refid="selectTerminalDevice"/>
         WHERE t.device_num = #{deviceNum}
     </select>
 
-    <select id="findList" resultType="com.qcxk.model.TerminalDevice" parameterType="com.qcxk.controller.model.query.TerminalDeviceDTO">
+    <select id="findList" resultType="com.qcxk.model.device.TerminalDevice" parameterType="com.qcxk.controller.model.query.TerminalDeviceDTO">
         <include refid="selectTerminalDevice"/>
         <where>
             t.del_status = #{delStatus}
@@ -101,7 +101,7 @@
         </where>
     </select>
 
-    <select id="findConfigByDeviceNum" resultType="com.qcxk.model.TerminalDeviceConfig">
+    <select id="findConfigByDeviceNum" resultType="com.qcxk.model.device.TerminalDeviceConfig">
         <include refid="selectTerminalDeviceConfig"/>
         WHERE t.device_num = #{deviceNum}
     </select>

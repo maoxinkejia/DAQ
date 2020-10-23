@@ -1,7 +1,7 @@
 package com.qcxk.model.VO;
 
-import com.qcxk.model.DeviceAlarmDetail;
-import com.qcxk.model.TerminalDeviceDetail;
+import com.qcxk.model.alarm.DeviceAlarmDetail;
+import com.qcxk.model.device.TerminalDeviceDetail;
 import lombok.Data;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.qcxk.model;
+package com.qcxk.model.user;
 
 import lombok.Getter;
 import lombok.Setter;
