@@ -1,10 +1,10 @@
 package com.qcxk.util;
 
-import com.qcxk.model.DeviceAlarmDetail;
-import com.qcxk.model.Message;
-import com.qcxk.model.TerminalDevice;
-import com.qcxk.model.TerminalDeviceDetail;
 import com.qcxk.model.VO.TerminalDataListVO;
+import com.qcxk.model.alarm.DeviceAlarmDetail;
+import com.qcxk.model.device.TerminalDevice;
+import com.qcxk.model.device.TerminalDeviceDetail;
+import com.qcxk.model.message.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

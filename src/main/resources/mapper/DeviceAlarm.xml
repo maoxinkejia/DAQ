@@ -42,15 +42,65 @@
         )
     </insert>
 
-    <select id="findAlarmListByDeviceNum" resultType="com.qcxk.model.DeviceAlarmDetail">
+    <update id="updateDeviceAlarmType" parameterType="com.qcxk.model.alarm.DeviceAlarmType">
+        <include refid="updateDeviceAlarmType"/>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateApplyAlarm">
+        UPDATE device_alarm_detail
+        SET apply_status = 1, apply_time = #{applyTime}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findAlarmListByDeviceNum" resultType="com.qcxk.model.alarm.DeviceAlarmDetail">
         <include refid="selectDeviceAlarmDetail"/>
         WHERE t.device_num = #{deviceNum}
     </select>
 
-    <select id="findDeviceAlarmType" resultType="com.qcxk.model.DeviceAlarmType">
+    <select id="findDeviceAlarmType" resultType="com.qcxk.model.alarm.DeviceAlarmType">
         <include refid="selectDeviceAlarmType"/>
         WHERE t.device_num = #{deviceNum}
     </select>
+
+    <select id="findAlarmList" resultType="com.qcxk.model.alarm.DeviceAlarmDetail" parameterType="com.qcxk.controller.model.query.AlarmDTO">
+        <include refid="selectDeviceAlarmDetail"/>
+        <where>
+            <if test="deviceNum != null and deviceNum != ''">
+                t.device_num = #{deviceNum} AND
+            </if>
+            <if test="location != null and location != ''">
+                t.location = #{location} AND
+            </if>
+            <if test="alarmType != null">
+                t.alarm_type = #{alarmType} AND
+            </if>
+            <if test="applyStatus != null">
+                t.apply_status = #{applyStatus} AND
+            </if>
+        </where>
+    </select>
+
+    <sql id="updateDeviceAlarmType">
+        UPDATE device_alarm_type
+        <set>
+            <if test="ch4GasStatus != null">
+                ch4_gas_status = #{ch4GasStatus},
+            </if>
+            <if test="batVolStatus != null">
+                bat_vol_status = #{batVolStatus},
+            </if>
+            <if test="wellLidStatus != null">
+                well_lid_status = #{wellLidStatus},
+            </if>
+            <if test="temperatureStatus != null">
+                temperature_status = #{temperatureStatus},
+            </if>
+            <if test="waterDepthStatus != null">
+                water_depth_status = #{waterDepthStatus},
+            </if>
+        </set>
+    </sql>
 
     <sql id="selectDeviceAlarmType">
         SELECT

@@ -2,18 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcxk.dao.MessageDao">
 
-    <insert id="addBatch" keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO message(
+    <insert id="addOriginalData" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO original_data (
           device_num,
-          initial_data,
+          original_data,
           create_time
-        ) VALUES
-        <foreach collection="list" item="model" separator=",">
-            (
-            #{model.deviceNum},
-            #{model.initialData},
-            #{model.createTime}
-            )
-        </foreach>
+        ) VALUES (
+          #{deviceNum},
+          #{originalData},
+          #{createTime}
+        )
     </insert>
+
+    <select id="findOriginalDataList" resultType="com.qcxk.model.message.OriginalData" parameterType="com.qcxk.controller.model.query.TerminalDeviceDTO">
+        <include refid="selectOriginalData"/>
+        <where>
+            <if test="deviceNum != null and deviceNum != ''">
+                t.device_num = #{deviceNum}
+            </if>
+        </where>
+    </select>
+
+    <sql id="selectOriginalData">
+        SELECT
+          t.id,
+          t.device_num AS deviceNum,
+          t.original_data AS originalData,
+          t.create_time AS createTime
+        FROM
+          original_data t
+    </sql>
+
 </mapper>

@@ -1,7 +1,8 @@
 package com.qcxk.dao;
 
-import com.qcxk.model.DeviceAlarmDetail;
-import com.qcxk.model.DeviceAlarmType;
+import com.qcxk.controller.model.query.AlarmDTO;
+import com.qcxk.model.alarm.DeviceAlarmDetail;
+import com.qcxk.model.alarm.DeviceAlarmType;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +16,10 @@ public interface DeviceAlarmDao {
     int addDeviceAlarmDetail(DeviceAlarmDetail deviceAlarmDetail);
 
     int addDeviceAlarmType(DeviceAlarmType alarmType);
+
+    int updateDeviceAlarmType(DeviceAlarmType alarmType);
+
+    List<DeviceAlarmDetail> findAlarmList(AlarmDTO dto);
+
+    int updateApplyAlarm(Long id);
 }

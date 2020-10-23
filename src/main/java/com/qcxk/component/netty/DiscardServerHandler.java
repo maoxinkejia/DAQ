@@ -1,7 +1,7 @@
 package com.qcxk.component.netty;
 
 
-import com.qcxk.model.Message;
+import com.qcxk.model.message.Message;
 import com.qcxk.service.MessageService;
 import com.qcxk.util.BusinessUtil;
 import io.netty.buffer.ByteBuf;
@@ -37,6 +37,7 @@ public class DiscardServerHandler extends ChannelHandlerAdapter {
             }
 
             List<Message> messages = messageService.parse2Msg(bodyStr, new ArrayList<>());
+            messageService.addOriginalData(bodyStr, messages.get(0).getDeviceNum());
 
             messageService.processMsg(messages);
 

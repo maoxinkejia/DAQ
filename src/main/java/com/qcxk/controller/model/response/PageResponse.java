@@ -3,9 +3,6 @@ package com.qcxk.controller.model.response;
 
 import com.qcxk.controller.model.page.Pagination;
 
-/**
- * Created by 安震 [a00377319] on 2016/9/7.
- */
 public class PageResponse extends Response {
 
     //分页信息

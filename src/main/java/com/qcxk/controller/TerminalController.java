@@ -5,11 +5,10 @@ import com.qcxk.controller.model.page.Pagination;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.controller.model.response.PageResponse;
 import com.qcxk.controller.model.response.Response;
-import com.qcxk.model.DeviceAlarmType;
-import com.qcxk.model.TerminalDevice;
-import com.qcxk.model.TerminalDeviceConfig;
 import com.qcxk.model.VO.TerminalDataDetailVO;
 import com.qcxk.model.VO.TerminalDataListVO;
+import com.qcxk.model.device.TerminalDevice;
+import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.service.AlarmService;
 import com.qcxk.service.TerminalDeviceDetailService;
 import com.qcxk.service.TerminalDeviceService;
@@ -57,7 +56,7 @@ public class TerminalController {
 
     @PutMapping(value = "/updateDevice")
     public Response updateTerminalDevice(@RequestBody TerminalDevice device) {
-        // TODO
+        service.updateDevice(device);
         return Response.build().success();
     }
 
@@ -83,11 +82,5 @@ public class TerminalController {
     public Response getDataDetail(String startDate, String endDate, String deviceNum) throws ParseException {
         TerminalDataDetailVO vo = detailService.findList(startDate, endDate, deviceNum);
         return Response.build(vo).success();
-    }
-
-    @GetMapping(value = "/alarmType")
-    public Response getAlarmType(String deviceNum) {
-        DeviceAlarmType alarmType = alarmService.findDeviceAlarmType(deviceNum);
-        return Response.build(alarmType).success();
     }
 }

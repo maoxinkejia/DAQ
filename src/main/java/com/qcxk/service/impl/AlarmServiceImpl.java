@@ -1,8 +1,9 @@
 package com.qcxk.service.impl;
 
+import com.qcxk.controller.model.query.AlarmDTO;
 import com.qcxk.dao.DeviceAlarmDao;
-import com.qcxk.model.DeviceAlarmDetail;
-import com.qcxk.model.DeviceAlarmType;
+import com.qcxk.model.alarm.DeviceAlarmDetail;
+import com.qcxk.model.alarm.DeviceAlarmType;
 import com.qcxk.service.AlarmService;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
@@ -78,5 +79,23 @@ public class AlarmServiceImpl implements AlarmService {
 
         int num = dao.addDeviceAlarmType(alarmType);
         log.info("init device alarmType success, num: {}", num);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateAlarmType(DeviceAlarmType alarmType) {
+        int num = dao.updateDeviceAlarmType(alarmType);
+        log.info("update alarm type success, num: {}, alarmType: {}", num, alarmType);
+    }
+
+    @Override
+    public List<DeviceAlarmDetail> findAlarmList(AlarmDTO dto) {
+        return dao.findAlarmList(dto);
+    }
+
+    @Override
+    public void applyAlarm(Long id) {
+        int num = dao.updateApplyAlarm(id);
+        log.info("deviceAlarm apply success, id: {}", id);
     }
 }

@@ -4,9 +4,9 @@ import com.qcxk.common.Constants;
 import com.qcxk.common.RecordEnum;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.TerminalDeviceDao;
-import com.qcxk.model.TerminalDevice;
-import com.qcxk.model.TerminalDeviceConfig;
 import com.qcxk.model.VO.TerminalDataListVO;
+import com.qcxk.model.device.TerminalDevice;
+import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.service.AlarmService;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
@@ -150,7 +150,9 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         device.setDelTime(new Date());
         device.setUpdateTime(new Date());
 
-        dao.update(device);
+        int num = dao.update(device);
+
+        log.info("delete terminalDevice success, num: {}", num);
     }
 
     private List<TerminalDevice> findBaseList(TerminalDeviceDTO dto) {

@@ -2,8 +2,8 @@ package com.qcxk.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
-import com.qcxk.model.TerminalDevice;
-import com.qcxk.model.TerminalDeviceConfig;
+import com.qcxk.model.device.TerminalDevice;
+import com.qcxk.model.device.TerminalDeviceConfig;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
     TerminalDevice findByDeviceNum(String deviceNum);
 
-    void update(TerminalDevice device);
+    int update(TerminalDevice device);
 
     List<TerminalDevice> findList(TerminalDeviceDTO dto);
 

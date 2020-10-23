@@ -1,9 +1,11 @@
 package com.qcxk.service.impl;
 
+import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.MessageDao;
-import com.qcxk.model.Message;
-import com.qcxk.model.TerminalDevice;
-import com.qcxk.model.TerminalDeviceDetail;
+import com.qcxk.model.device.TerminalDevice;
+import com.qcxk.model.device.TerminalDeviceDetail;
+import com.qcxk.model.message.Message;
+import com.qcxk.model.message.OriginalData;
 import com.qcxk.service.AlarmService;
 import com.qcxk.service.MessageService;
 import com.qcxk.service.TerminalDeviceDetailService;
@@ -98,9 +100,6 @@ public class MessageServiceImpl implements MessageService {
 
         String messageStr2 = getNextMessage(messageStr);
         if (StringUtils.isBlank(messageStr2)) {
-            int num = dao.addBatch(messages);
-
-            log.info("batch add messages to db success, add num: {}", num);
             return messages;
         }
 
@@ -128,6 +127,17 @@ public class MessageServiceImpl implements MessageService {
         }
 
         return response;
+    }
+
+    @Override
+    public void addOriginalData(String bodyStr, String deviceNum) {
+        int num = dao.addOriginalData(bodyStr, deviceNum, new Date());
+        log.info("add original data success, num: {}, deviceNum: {}", num, deviceNum);
+    }
+
+    @Override
+    public List<OriginalData> findOriginalDataList(TerminalDeviceDTO dto) {
+        return dao.findOriginalDataList(dto);
     }
 
     /**
