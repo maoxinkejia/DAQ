@@ -9,9 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import static com.qcxk.common.Constants.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 public class BusinessUtil {
@@ -500,5 +504,24 @@ public class BusinessUtil {
         detail.setApplyDate(null);
 
         return detail;
+    }
+
+    /**
+     * 密码进行MD5加密
+     */
+    public static String getMD5Str(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(password.getBytes(UTF_8));
+            return new BigInteger(1, md.digest()).toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            log.error("md5 password error, password: {}", password);
+            return password;
+        }
+    }
+
+    public static String getCookie() {
+        String s = "a59cf3b4-de8b-438f-9c74-264b6a1f3e21";
+        return getMD5Str(s);
     }
 }

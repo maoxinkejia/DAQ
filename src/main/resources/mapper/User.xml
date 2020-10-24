@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcxk.dao.UserDao">
+
+    <insert id="addUser">
+        INSERT INTO `user`
+        (
+          username,
+          password,
+          phone,
+          real_name,
+          del_status,
+          del_time,
+          create_time
+        ) VALUES (
+          #{username},
+          #{password},
+          #{phone},
+          #{realName},
+          #{delStatus},
+          #{delTime},
+          #{createTime}
+        )
+    </insert>
+
+    <select id="findByUsername" resultType="com.qcxk.model.user.User">
+        <include refid="selectUser"/>
+        WHERE t.username = #{username}
+    </select>
+
+    <sql id="selectUser">
+        SELECT
+          t.id,
+          t.username,
+          t.password,
+          t.phone,
+          t.real_name AS realName,
+          t.del_status AS delStatus,
+          t.del_time AS delTime,
+          t.create_time AS createTime
+        FROM
+          `user` t
+    </sql>
+</mapper>
