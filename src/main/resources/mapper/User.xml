@@ -78,7 +78,7 @@
             device_permission = #{devicePermission},
             data_list_permission = #{dataListPermission},
             alarm_permission = #{alarmPermission},
-            settimt_permission = #{settingPermission},
+            setting_permission = #{settingPermission},
             original_data_permission = #{originalDataPermission},
             user_permission = #{userPermission}
         </set>

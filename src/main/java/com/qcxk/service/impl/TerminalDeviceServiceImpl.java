@@ -39,7 +39,6 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Autowired
     private AlarmService alarmService;
-
     @Autowired
     private TerminalDeviceDao dao;
 
@@ -101,6 +100,8 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     public String uploadDeviceImages(MultipartFile[] files) {
+        log.info("upload files length: {}", files.length);
+
         if (files.length == 0) {
             return "";
         }

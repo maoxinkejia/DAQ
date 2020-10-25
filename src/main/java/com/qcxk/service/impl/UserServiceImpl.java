@@ -28,11 +28,11 @@ public class UserServiceImpl implements UserService {
             return USER_NOT_EXISTS;
         }
 
-        if (Objects.equals(getMD5Str(user.getPassword()), exists.getPassword())) {
-            log.info("user login success, username: {}", user.getUsername());
+        if (!Objects.equals(getMD5Str(user.getPassword()), exists.getPassword())) {
             return PASSWORD_ERROR;
         }
 
+        log.info("user login success, username: {}", user.getUsername());
         return LOGIN_SUCCESS;
     }
 
