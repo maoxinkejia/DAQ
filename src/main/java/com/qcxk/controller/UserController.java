@@ -1,5 +1,6 @@
 package com.qcxk.controller;
 
+import com.qcxk.common.Constants;
 import com.qcxk.controller.model.response.Response;
 import com.qcxk.model.user.User;
 import com.qcxk.service.UserService;
@@ -29,6 +30,22 @@ public class UserController {
     @DeleteMapping(value = "/delete/{id}")
     public Response deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
+        return Response.build().success();
+    }
+
+    @PostMapping(value = "/login")
+    public Response checkPassword(@RequestBody User user) {
+        boolean success = userService.findByPassword(user);
+        if (success) {
+            return Response.build().success();
+        }
+
+        return Response.build().fail(Constants.PASSWORD_ERROR);
+    }
+
+    @PutMapping(value = "/reset")
+    public Response resetPassword(@RequestBody User user) {
+        userService.resetPassword(user);
         return Response.build().success();
     }
 

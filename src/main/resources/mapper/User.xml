@@ -41,12 +41,21 @@
     </update>
 
     <update id="update2Deleted">
-      UPDATE
+      UPDATE `user`
+      SET del_status = #{delStatus}, del_time = #{delTime}, update_time = #{updateTime}
+      WHERE id = #{id}
+    </update>
+
+    <update id="resetPassword">
+      UPDATE `user`
+      SET password = #{password}, update_time = now()
+      WHERE username = #{username}
     </update>
 
     <select id="findByUsername" resultType="com.qcxk.model.user.User">
         <include refid="selectUser"/>
         WHERE t.username = #{username}
+        AND t.del_status = 0
     </select>
 
     <select id="findById" resultType="com.qcxk.model.user.User">

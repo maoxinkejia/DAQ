@@ -10,4 +10,8 @@ public interface UserService {
     void updateUser(User user);
 
     void deleteUser(Long id);
+
+    boolean findByPassword(User user);
+
+    void resetPassword(User user);
 }

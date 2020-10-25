@@ -14,4 +14,6 @@ public interface UserDao {
     User findById(Long id);
 
     int update2Deleted(User user);
+
+    int resetPassword(User user);
 }

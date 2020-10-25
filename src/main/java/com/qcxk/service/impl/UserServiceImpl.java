@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         user.setUpdateTime(new Date());
 
         int num = dao.updateUser(user);
-
+        log.info("update user success, num: {}", num);
     }
 
     @Override
@@ -54,6 +54,30 @@ public class UserServiceImpl implements UserService {
         user.setUpdateTime(new Date());
 
         int num = dao.update2Deleted(user);
+        log.info("delete user success, num: {}, username: {}", num, user.getUsername());
+    }
+
+    @Override
+    public boolean findByPassword(User user) {
+        User exists = dao.findByUsername(user.getUsername());
+        if (exists == null) {
+            log.warn("user not exists, username: {}", user.getUsername());
+            return false;
+        }
+
+        if (Objects.equals(user.getPassword(), getMD5Str(user.getPassword()))) {
+            log.warn("password not true, password: {}", user.getPassword());
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void resetPassword(User user) {
+        user.setPassword(getMD5Str(user.getPassword()));
+        int num = dao.resetPassword(user);
+        log.info("reset password success, num: {}, username: {}", num, user.getUsername());
     }
 
     @Override
