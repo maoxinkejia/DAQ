@@ -26,7 +26,8 @@ public class LoginController {
 
     @PostMapping(value = "/login")
     public Response login(@RequestBody User user, HttpServletResponse response) throws IOException {
-        String msg = userService.login(user);
+//        String msg = userService.login(user);
+        String msg = "";
 
         if (Objects.equals(LOGIN_SUCCESS, msg)) {
             response.addCookie(new Cookie("token", BusinessUtil.getCookie()));
@@ -34,8 +35,6 @@ public class LoginController {
         }
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("");
         return Response.build().fail(300, msg);
-//        return Response.build().fail(300, "");
     }
 }

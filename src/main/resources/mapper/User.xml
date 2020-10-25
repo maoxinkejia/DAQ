@@ -11,7 +11,13 @@
           real_name,
           del_status,
           del_time,
-          create_time
+          create_time,
+          device_permission,
+          data_list_permission,
+          alarm_permission,
+          setting_permission,
+          original_data_permission,
+          user_permission
         ) VALUES (
           #{username},
           #{password},
@@ -19,7 +25,13 @@
           #{realName},
           #{delStatus},
           #{delTime},
-          #{createTime}
+          #{createTime},
+          #{devicePermission},
+          #{dataListPermission},
+          #{alarmPermission},
+          #{settingPermission},
+          #{originalDataPermission},
+          #{userPermission}
         )
     </insert>
 

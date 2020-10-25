@@ -84,5 +84,4 @@ public class Constants {
     public static final String LOGIN_SUCCESS = "登陆成功";
     public static final String USER_NOT_EXISTS = "登陆失败，无此用户";
     public static final String PASSWORD_ERROR = "登陆失败，密码不正确";
-    public static final String LOGIN_FAILURE = "登陆失效，请重新登陆";
 }

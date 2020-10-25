@@ -35,4 +35,13 @@ public class User {
      * 创建时间
      */
     private Date createTime;
+
+
+    /*=======权限标识=======*/
+    private Integer devicePermission;
+    private Integer dataListPermission;
+    private Integer alarmPermission;
+    private Integer settingPermission;
+    private Integer originalDataPermission;
+    private Integer userPermission;
 }

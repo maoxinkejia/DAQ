@@ -1,10 +1,7 @@
 package com.qcxk.controller.interceptor;
 
-import com.qcxk.common.Constants;
-import com.qcxk.service.UserService;
 import com.qcxk.util.BusinessUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.Cookie;
@@ -16,13 +13,12 @@ import java.util.Objects;
 
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
-
-    @Autowired
-    private UserService userService;
+    private static final String LOGIN_FAILURE = "login invalid, please login again";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (Objects.equals("/login", request.getRequestURI())) {
+            log.info("user login....");
             return true;
         }
 
@@ -31,9 +27,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     private boolean checkLoginStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Cookie[] cookies = request.getCookies();
-        if (cookies.length == 0 || (!checkLoginCookie(cookies))) {
+        if (cookies == null || cookies.length == 0 || (!checkLoginCookie(cookies))) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write(Constants.LOGIN_FAILURE);
+            response.getWriter().write(LOGIN_FAILURE);
 
             log.warn("login failed, does not has cookie");
             return false;
