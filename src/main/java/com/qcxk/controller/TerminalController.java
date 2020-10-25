@@ -49,8 +49,8 @@ public class TerminalController {
     }
 
     @PostMapping(value = "/upload")
-    public Response uploadPicture(@RequestBody MultipartFile[] files) {
-        String imagePath = service.uploadDeviceImages(files);
+    public Response uploadPicture(@RequestBody MultipartFile[] file) {
+        String imagePath = service.uploadDeviceImages(file);
         return Response.build(imagePath).success();
     }
 
