@@ -38,6 +38,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
+    public void updateUser(User user) {
+        user.setUpdateTime(new Date());
+
+        int num = dao.updateUser(user);
+
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteUser(Long id) {
+        User user = dao.findById(id);
+        user.setDelStatus(DELETED);
+        user.setDelTime(new Date());
+        user.setUpdateTime(new Date());
+
+        int num = dao.update2Deleted(user);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void addUser(User user) {
         user.setPassword(getMD5Str(user.getPassword()));
         user.setCreateTime(new Date());

@@ -30,12 +30,15 @@ public class User {
     /**
      * 删除时间
      */
-    private Integer delTime;
+    private Date delTime;
     /**
      * 创建时间
      */
     private Date createTime;
-
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 
     /*=======权限标识=======*/
     private Integer devicePermission;

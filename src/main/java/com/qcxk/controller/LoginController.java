@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Objects;
 
 import static com.qcxk.common.Constants.LOGIN_SUCCESS;
@@ -25,9 +24,8 @@ public class LoginController {
     private UserService userService;
 
     @PostMapping(value = "/login")
-    public Response login(@RequestBody User user, HttpServletResponse response) throws IOException {
-//        String msg = userService.login(user);
-        String msg = "";
+    public Response login(@RequestBody User user, HttpServletResponse response) {
+        String msg = userService.login(user);
 
         if (Objects.equals(LOGIN_SUCCESS, msg)) {
             response.addCookie(new Cookie("token", BusinessUtil.getCookie()));

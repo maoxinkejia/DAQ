@@ -6,4 +6,8 @@ public interface UserService {
     void addUser(User user);
 
     String login(User user);
+
+    void updateUser(User user);
+
+    void deleteUser(Long id);
 }

@@ -35,10 +35,45 @@
         )
     </insert>
 
+    <update id="updateUser">
+        <include refid="updateUser"/>
+        WHERE id = #{id}
+    </update>
+
+    <update id="update2Deleted">
+      UPDATE
+    </update>
+
     <select id="findByUsername" resultType="com.qcxk.model.user.User">
         <include refid="selectUser"/>
         WHERE t.username = #{username}
     </select>
+
+    <select id="findById" resultType="com.qcxk.model.user.User">
+      <include refid="selectUser"/>
+      WHERE id = #{id}
+    </select>
+
+    <sql id="updateUser">
+        UPDATE `user`
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="realName != null and realName != ''">
+                real_name = #{realName},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            device_permission = #{devicePermission},
+            data_list_permission = #{dataListPermission},
+            alarm_permission = #{alarmPermission},
+            settimt_permission = #{settingPermission},
+            original_data_permission = #{originalDataPermission},
+            user_permission = #{userPermission}
+        </set>
+    </sql>
 
     <sql id="selectUser">
         SELECT
@@ -49,7 +84,13 @@
           t.real_name AS realName,
           t.del_status AS delStatus,
           t.del_time AS delTime,
-          t.create_time AS createTime
+          t.create_time AS createTime,
+          t.device_permission AS devicePermission,
+          t.data_list_permission AS dataListPermission,
+          t.alarm_permission AS alarmPermission,
+          t.setting_permission AS settingPermission,
+          t.original_data_permission AS originalDataPermission,
+          t.user_permission AS userPermission
         FROM
           `user` t
     </sql>
