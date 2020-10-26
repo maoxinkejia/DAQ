@@ -51,6 +51,7 @@
           conf_name,
           conf_val,
           conf_type,
+          notice_status,
           update_time,
           update_user
         ) VALUES
@@ -60,6 +61,7 @@
               #{model.confName},
               #{model.confVal},
               #{model.confType},
+              #{model.noticeStatus},
               #{model.updateTime},
               #{model.updateUser}
             )
@@ -75,6 +77,13 @@
         UPDATE terminal_device
         SET boot_time = #{bootTime}
         WHERE device_num = #{deviceNum}
+    </update>
+
+    <update id="updateDeviceConfig">
+        UPDATE terminal_device_config
+        SET conf_value = #{confValue}, update_time = #{updateTime}, notice_status = #{noticeStatus}
+        WHERE device_num = #{deviceNum}
+        AND conf_type = #{confType}
     </update>
 
     <select id="findByDeviceNum" resultType="com.qcxk.model.device.TerminalDevice">
@@ -116,6 +125,12 @@
                 t.location LIKE CONCAT('%',CONCAT(#{location},'%')) AND
             </if>
         </where>
+    </select>
+
+    <select id="findConfigByDeviceNumValueType" resultType="com.qcxk.model.device.TerminalDeviceConfig">
+        <include refid="selectTerminalDeviceConfig"/>
+        WHERE t.device_num = #{deviceNum}
+        AND t.conf_type = #{confType}
     </select>
 
     <sql id="selectTerminalDeviceConfig">

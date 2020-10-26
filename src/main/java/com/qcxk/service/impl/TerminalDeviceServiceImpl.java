@@ -2,6 +2,7 @@ package com.qcxk.service.impl;
 
 import com.qcxk.common.Constants;
 import com.qcxk.common.RecordEnum;
+import com.qcxk.controller.model.query.TerminalDeviceConfigDTO;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.TerminalDeviceDao;
 import com.qcxk.exception.ParamException;
@@ -31,6 +32,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.qcxk.common.Constants.DELETED;
+import static com.qcxk.common.Constants.DISABLED;
+import static com.qcxk.common.Constants.ENABLED;
 import static com.qcxk.util.BusinessUtil.buildTerminalDataList;
 
 @Slf4j
@@ -72,6 +75,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateDevice(TerminalDevice device) {
         checkTerminalDeviceParam(device);
 
@@ -96,6 +100,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateBootTime(TerminalDevice device) {
         if (device.getBootTime() != null) {
             return;
@@ -152,6 +157,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void delete(String deviceNum) {
         TerminalDevice device = dao.findByDeviceNum(deviceNum);
         device.setDelStatus(DELETED);
@@ -163,8 +169,29 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         log.info("delete terminalDevice success, num: {}", num);
     }
 
-    private List<TerminalDevice> findBaseList(TerminalDeviceDTO dto) {
+    @Override
+    public List<TerminalDevice> findBaseList(TerminalDeviceDTO dto) {
         return dao.findList(dto);
+    }
+
+    @Override
+    public List<TerminalDeviceConfig> findConfigList(TerminalDeviceDTO dto) {
+        return dao.findConfigByDeviceNum(dto.getDeviceNum());
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateConfigByDeviceNum(TerminalDeviceConfigDTO dto) {
+        TerminalDeviceConfig config = dao.findConfigByDeviceNumValueType(dto);
+        Assert.notNull(config, "设备标定对象为空");
+
+        config.setConfVal(dto.getConfValue());
+        config.setUpdateTime(new Date());
+        config.setNoticeStatus(DISABLED);
+
+        int num = dao.updateDeviceConfig(config);
+        log.info("update device config success, deviceNum: {}, confName, confType: {}, num: {}",
+                dto.getDeviceNum(), config.getConfName(), config.getConfType(), num);
     }
 
     /**
@@ -187,6 +214,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         config.setConfName(recordEnum.getName());
         config.setConfType(recordEnum.getType());
         config.setConfVal(null);
+        config.setNoticeStatus(ENABLED);
         config.setUpdateTime(null);
         config.setUpdateUser(device.getCreateUser());
 

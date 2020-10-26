@@ -509,14 +509,14 @@ public class BusinessUtil {
     /**
      * 密码进行MD5加密
      */
-    public static String getMD5Str(String password) {
+    public static String getMD5Str(String str) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(password.getBytes(UTF_8));
+            md.update(str.getBytes(UTF_8));
             return new BigInteger(1, md.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
-            log.error("md5 password error, password: {}", password);
-            return password;
+            log.error("md5 str error, str: {}", str);
+            return str;
         }
     }
 

@@ -22,7 +22,7 @@ public class TerminalDeviceConfig {
     /**
      * 参数值
      */
-    private Integer confVal;
+    private Double confVal;
     /**
      * 参数类型
      */

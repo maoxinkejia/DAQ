@@ -1,6 +1,7 @@
 package com.qcxk.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.qcxk.controller.model.query.TerminalDeviceConfigDTO;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.model.device.TerminalDevice;
 import com.qcxk.model.device.TerminalDeviceConfig;
@@ -23,4 +24,8 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
     List<TerminalDeviceConfig> findConfigByDeviceNum(String deviceNum);
 
     List<TerminalDeviceConfig> findConfigList(TerminalDeviceDTO dto);
+
+    TerminalDeviceConfig findConfigByDeviceNumValueType(TerminalDeviceConfigDTO dto);
+
+    int updateDeviceConfig(TerminalDeviceConfig config);
 }

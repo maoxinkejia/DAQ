@@ -1,5 +1,6 @@
 package com.qcxk.service;
 
+import com.qcxk.controller.model.query.TerminalDeviceConfigDTO;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.model.VO.TerminalDataListVO;
 import com.qcxk.model.device.TerminalDevice;
@@ -26,4 +27,10 @@ public interface TerminalDeviceService {
     List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto);
 
     void delete(String deviceNum);
+
+    List<TerminalDevice> findBaseList(TerminalDeviceDTO dto);
+
+    List<TerminalDeviceConfig> findConfigList(TerminalDeviceDTO dto);
+
+    void updateConfigByDeviceNum(TerminalDeviceConfigDTO dto);
 }
