@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -76,6 +77,7 @@ public class AlarmServiceImpl implements AlarmService {
         alarmType.setBatVolStatus(DISABLED);
         alarmType.setTemperatureStatus(DISABLED);
         alarmType.setWellLidStatus(DISABLED);
+        alarmType.setCreateTime(new Date());
 
         int num = dao.addDeviceAlarmType(alarmType);
         log.info("init device alarmType success, num: {}", num);
@@ -84,6 +86,7 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateAlarmType(DeviceAlarmType alarmType) {
+        alarmType.setUpdateTime(new Date());
         int num = dao.updateDeviceAlarmType(alarmType);
         log.info("update alarm type success, num: {}, alarmType: {}", num, alarmType);
     }
@@ -94,8 +97,9 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void applyAlarm(Long id) {
         int num = dao.updateApplyAlarm(id);
-        log.info("deviceAlarm apply success, id: {}", id);
+        log.info("deviceAlarm apply success, id: {}, num: {}", id, num);
     }
 }

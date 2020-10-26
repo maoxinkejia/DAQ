@@ -37,6 +37,7 @@ public class TerminalController {
         PageHelper.startPage(dto.getPage(), dto.getPageSize());
 
         List<TerminalDevice> list = service.findList(dto);
+        log.info("find terminalDevice list size: {}", list.size());
 
         Pagination pagination = Pagination.buildPagination(list, dto);
         return PageResponse.pageResponse(pagination, list).success();
@@ -49,8 +50,8 @@ public class TerminalController {
     }
 
     @PostMapping(value = "/upload")
-    public Response uploadPicture(@RequestBody MultipartFile[] file) {
-        String imagePath = service.uploadDeviceImages(file);
+    public Response uploadPicture(@RequestBody MultipartFile[] files) {
+        String imagePath = service.uploadDeviceImages(files);
         return Response.build(imagePath).success();
     }
 

@@ -1,6 +1,9 @@
 package com.qcxk.service;
 
+import com.qcxk.controller.model.query.UserDTO;
 import com.qcxk.model.user.User;
+
+import java.util.List;
 
 public interface UserService {
     void addUser(User user);
@@ -14,4 +17,6 @@ public interface UserService {
     boolean findByPassword(User user);
 
     void resetPassword(User user);
+
+    List<User> findList(UserDTO dto);
 }

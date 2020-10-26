@@ -9,17 +9,17 @@
           location,
           alarm_type,
           alarm_description,
-          alarm_date,
+          alarm_time,
           apply_status,
-          apply_date
+          apply_time
         ) VALUES (
           #{deviceNum},
           #{location},
           #{alarmType},
           #{alarmDescription}
-          #{alarmDate},
+          #{alarmTime},
           #{applyStatus},
-          #{applyDate}
+          #{applyTime}
         )
     </insert>
 
@@ -31,14 +31,16 @@
           bat_vol_status,
           well_lid_status,
           temperature_status,
-          water_depth_status
+          water_depth_status,
+          create_time
         ) VALUES (
           #{deviceNum},
           #{ch4GasStatus},
           #{batVolStatus},
           #{wellLidStatus},
           #{temperatureStatus},
-          #{waterDepthStatus}
+          #{waterDepthStatus},
+          #{createTime}
         )
     </insert>
 
@@ -67,10 +69,10 @@
         <include refid="selectDeviceAlarmDetail"/>
         <where>
             <if test="deviceNum != null and deviceNum != ''">
-                t.device_num = #{deviceNum} AND
+                t.device_num LIKE CONCAT('%',CONCAT(#{deviceNum},'%')) AND
             </if>
             <if test="location != null and location != ''">
-                t.location = #{location} AND
+                t.location LIKE CONCAT('%',CONCAT(#{location},'%')) AND
             </if>
             <if test="alarmType != null">
                 t.alarm_type = #{alarmType} AND
@@ -99,6 +101,7 @@
             <if test="waterDepthStatus != null">
                 water_depth_status = #{waterDepthStatus},
             </if>
+            update_time = #{updateTime}
         </set>
     </sql>
 
@@ -123,8 +126,8 @@
           t.alarm_type AS t.alarmType,
           t.alarm_description AS alarmDescription,
           t.apply_status AS applyStatus,
-          t.apply_date AS applyDate,
-          t.alarm_date AS alarmDate
+          t.apply_time AS applyTime,
+          t.alarm_time AS alarmTime
         FROM
           device_alarm_detail t
     </sql>

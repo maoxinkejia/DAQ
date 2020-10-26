@@ -106,6 +106,18 @@
         WHERE t.device_num = #{deviceNum}
     </select>
 
+    <select id="findConfigList" resultType="com.qcxk.model.device.TerminalDeviceConfig">
+        <include refid="selectTerminalDeviceConfig"/>
+        <where>
+            <if test="deviceNum != null and deviceNum != ''">
+                t.device_num LIKE CONCAT('%',CONCAT(#{deviceNum},'%')) AND
+            </if>
+            <if test="location != null and location != ''">
+                t.location LIKE CONCAT('%',CONCAT(#{location},'%')) AND
+            </if>
+        </where>
+    </select>
+
     <sql id="selectTerminalDeviceConfig">
         SELECT
           t.id,

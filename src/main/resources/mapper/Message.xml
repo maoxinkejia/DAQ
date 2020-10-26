@@ -18,7 +18,7 @@
         <include refid="selectOriginalData"/>
         <where>
             <if test="deviceNum != null and deviceNum != ''">
-                t.device_num = #{deviceNum}
+                t.device_num LIKE CONCAT('%',CONCAT(#{deviceNum},'%'))
             </if>
         </where>
     </select>

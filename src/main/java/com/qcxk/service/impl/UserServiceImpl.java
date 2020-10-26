@@ -1,5 +1,6 @@
 package com.qcxk.service.impl;
 
+import com.qcxk.controller.model.query.UserDTO;
 import com.qcxk.dao.UserDao;
 import com.qcxk.model.user.User;
 import com.qcxk.service.UserService;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static com.qcxk.common.Constants.*;
@@ -78,6 +80,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(getMD5Str(user.getPassword()));
         int num = dao.resetPassword(user);
         log.info("reset password success, num: {}, username: {}", num, user.getUsername());
+    }
+
+    @Override
+    public List<User> findList(UserDTO dto) {
+        return dao.findList(dto);
     }
 
     @Override

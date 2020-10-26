@@ -49,7 +49,7 @@
     <update id="resetPassword">
       UPDATE `user`
       SET password = #{password}, update_time = now()
-      WHERE username = #{username}
+      WHERE id = #{id}
     </update>
 
     <select id="findByUsername" resultType="com.qcxk.model.user.User">
@@ -60,7 +60,20 @@
 
     <select id="findById" resultType="com.qcxk.model.user.User">
       <include refid="selectUser"/>
-      WHERE id = #{id}
+      WHERE t.id = #{id}
+    </select>
+
+    <select id="findList" resultType="com.qcxk.model.user.User">
+      <include refid="selectUser"/>
+      <where>
+          t.del_status = 0 AND
+          <if test="username != null and username != ''">
+              t.username LIKE CONCAT('%',CONCAT(#{username},'%')) AND
+          </if>
+          <if test="realName != null and realName != ''">
+              t.real_name LIKE CONCAT('%',CONCAT(#{realName},'%')) AND
+          </if>
+      </where>
     </select>
 
     <sql id="updateUser">

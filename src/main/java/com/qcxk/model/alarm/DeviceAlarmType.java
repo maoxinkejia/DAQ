@@ -2,6 +2,8 @@ package com.qcxk.model.alarm;
 
 import lombok.Data;
 
+import java.util.Date;
+
 
 @Data
 public class DeviceAlarmType {
@@ -30,4 +32,12 @@ public class DeviceAlarmType {
      * 液位告警状态  1：选择  0：未选择
      */
     private Integer waterDepthStatus;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
 }

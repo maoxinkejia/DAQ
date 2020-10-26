@@ -4,6 +4,7 @@ import com.qcxk.common.Constants;
 import com.qcxk.common.RecordEnum;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.TerminalDeviceDao;
+import com.qcxk.exception.ParamException;
 import com.qcxk.model.VO.TerminalDataListVO;
 import com.qcxk.model.device.TerminalDevice;
 import com.qcxk.model.device.TerminalDeviceConfig;
@@ -11,6 +12,7 @@ import com.qcxk.service.AlarmService;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,8 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public TerminalDevice add(TerminalDevice device) {
+        checkTerminalDeviceParam(device);
+
         initTerminalDeviceConfig(device);
         initAlarmType(device);
 
@@ -69,6 +73,9 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     public void updateDevice(TerminalDevice device) {
+        checkTerminalDeviceParam(device);
+
+        device.setUpdateTime(new Date());
         dao.update(device);
     }
 
@@ -176,6 +183,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     private TerminalDeviceConfig buildConfig(RecordEnum recordEnum, TerminalDevice device) {
         TerminalDeviceConfig config = new TerminalDeviceConfig();
         config.setDeviceNum(device.getDeviceNum());
+        config.setLocation(device.getLocation());
         config.setConfName(recordEnum.getName());
         config.setConfType(recordEnum.getType());
         config.setConfVal(null);
@@ -190,5 +198,15 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
      */
     private void initAlarmType(TerminalDevice device) {
         alarmService.addAlarmType(device.getDeviceNum());
+    }
+
+    private void checkTerminalDeviceParam(TerminalDevice device) {
+        if (StringUtils.isBlank(device.getDeviceNum())) {
+            throw new ParamException("设备序列号不能为空");
+        }
+
+        if (StringUtils.isBlank(device.getLocation())) {
+            throw new ParamException("设备位置不能为空");
+        }
     }
 }

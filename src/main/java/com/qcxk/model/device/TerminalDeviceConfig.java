@@ -12,6 +12,10 @@ public class TerminalDeviceConfig {
      */
     private String deviceNum;
     /**
+     * 终端位置
+     */
+    private String location;
+    /**
      * 参数名称
      */
     private String confName;
@@ -23,6 +27,10 @@ public class TerminalDeviceConfig {
      * 参数类型
      */
     private Integer confType;
+    /**
+     * 通知状态 0：未通知 1：已通知
+     */
+    private Integer noticeStatus;
     /**
      * 更新时间
      */

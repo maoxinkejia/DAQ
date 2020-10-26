@@ -21,4 +21,6 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
     int batchAddTerminalDeviceConfigs(List<TerminalDeviceConfig> configs);
 
     List<TerminalDeviceConfig> findConfigByDeviceNum(String deviceNum);
+
+    List<TerminalDeviceConfig> findConfigList(TerminalDeviceDTO dto);
 }

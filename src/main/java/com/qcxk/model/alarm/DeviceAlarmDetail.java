@@ -30,9 +30,9 @@ public class DeviceAlarmDetail {
     /**
      * 报警时间
      */
-    private Date alarmDate;
+    private Date alarmTime;
     /**
      * 应答时间
      */
-    private Date applyDate;
+    private Date applyTime;
 }
