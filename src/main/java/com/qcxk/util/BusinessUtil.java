@@ -499,9 +499,9 @@ public class BusinessUtil {
         detail.setLocation(location);
         detail.setAlarmType(alarmType);
         detail.setAlarmDescription(alarmDescription);
-        detail.setAlarmDate(new Date());
+        detail.setAlarmTime(new Date());
         detail.setApplyStatus(DISABLED);
-        detail.setApplyDate(null);
+        detail.setApplyTime(null);
 
         return detail;
     }
