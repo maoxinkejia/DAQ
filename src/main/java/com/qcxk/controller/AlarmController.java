@@ -44,7 +44,7 @@ public class AlarmController {
     }
 
     @PutMapping(value = "/updateAlarmType")
-    public Response updateAlarmType(DeviceAlarmType alarmType) {
+    public Response updateAlarmType(@RequestBody DeviceAlarmType alarmType) {
         alarmService.updateAlarmType(alarmType);
         return Response.build().success();
     }

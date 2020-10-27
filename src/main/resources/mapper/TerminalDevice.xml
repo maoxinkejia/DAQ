@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcxk.dao.TerminalDeviceDao">
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <insert id="addTerminalDevice">
         INSERT INTO terminal_device(
           device_num,
           IOT_card_num,
@@ -44,7 +44,7 @@
         )
     </insert>
 
-    <insert id="batchAddTerminalDeviceConfigs" keyProperty="id" useGeneratedKeys="true">
+    <insert id="batchAddTerminalDeviceConfigs">
         INSERT INTO terminal_device_config
         (
           device_num,
@@ -149,12 +149,6 @@
     <sql id="updateTerminalDevice">
         UPDATE terminal_device
         <set>
-            <if test="ch4Concentration != null">
-                ch4_concentration = #{ch4Concentration},
-            </if>
-            <if test="liquidHeight != null">
-                liquid_height = #{liquidHeight},
-            </if>
             <if test="temperature != null">
                 temperature = #{temperature},
             </if>
@@ -178,9 +172,6 @@
             </if>
             <if test="waterDepthStatus != null">
                 water_depth_status = #{waterDepthStatus},
-            </if>
-            <if test="waterDepthThreshold != null">
-                water_depth_threshold = #{waterDepthThreshold},
             </if>
             <if test="gasSensorStatus != null">
                 gas_sensor_status = #{gasSensorStatus},

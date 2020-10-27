@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcxk.dao.DeviceAlarmDao">
 
-    <insert id="addDeviceAlarmDetail" useGeneratedKeys="true" keyProperty="id">
+    <insert id="addDeviceAlarmDetail">
         INSERT INTO device_alarm_detail
         (
           device_num,
@@ -113,7 +113,9 @@
           t.bat_vol_status AS batVolStatus,
           t.well_lid_status AS wellLidStatus,
           t.temperature_status AS temperatureStatus,
-          t.water_depth_status AS waterDepthStatus
+          t.water_depth_status AS waterDepthStatus,
+          t.create_time AS createTime,
+          t.update_time AS updateTime
         FROM
           device_alarm_type t
     </sql>
@@ -123,7 +125,7 @@
           t.id,
           t.device_num AS deviceNum,
           t.location,
-          t.alarm_type AS t.alarmType,
+          t.alarm_type AS alarmType,
           t.alarm_description AS alarmDescription,
           t.apply_status AS applyStatus,
           t.apply_time AS applyTime,

@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcxk.dao.TerminalDeviceDetailDao">
 
-    <insert id="batchAdd" keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO message(
+    <insert id="batchAdd">
+        INSERT INTO terminal_device_detail(
           device_num,
           value_type,
           `value`,

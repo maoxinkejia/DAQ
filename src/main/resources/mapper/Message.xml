@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcxk.dao.MessageDao">
 
-    <insert id="addOriginalData" keyProperty="id" useGeneratedKeys="true">
+    <insert id="addOriginalData">
         INSERT INTO original_data (
           device_num,
           original_data,

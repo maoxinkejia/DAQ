@@ -444,6 +444,7 @@ public class BusinessUtil {
     public static TerminalDevice buildTerminalDevice(Message message) {
         TerminalDevice device = new TerminalDevice();
         device.setDeviceNum(message.getDeviceNum());
+        device.setLocation("暂无");
         device.setCreateUser(SYSTEM_USER);
         return device;
     }

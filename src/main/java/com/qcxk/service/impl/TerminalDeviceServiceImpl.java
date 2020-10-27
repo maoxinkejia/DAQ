@@ -25,10 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.qcxk.common.Constants.DELETED;
@@ -68,9 +65,9 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         device.setUpdateTime(null);
         device.setDelTime(null);
 
-        dao.insert(device);
+        int num = dao.addTerminalDevice(device);
 
-        log.info("add terminalDevice success, device: {}", device);
+        log.info("add terminalDevice success, device: {}, num: {}", device, num);
         return device;
     }
 
@@ -92,7 +89,13 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     public List<TerminalDevice> findList(TerminalDeviceDTO dto) {
         List<TerminalDevice> list = findBaseList(dto);
         list.forEach(device -> {
-            String[] split = device.getImagePath().split(";");
+            String imagePath = device.getImagePath();
+            if (StringUtils.isBlank(imagePath)) {
+                device.setImagePaths(Collections.emptyList());
+                return;
+            }
+
+            String[] split = imagePath.split(";");
             device.setImagePaths(Arrays.asList(split));
         });
 

@@ -54,7 +54,10 @@ public class DiscardServerHandler extends ChannelHandlerAdapter {
     }
 
     private void callBack(ChannelHandlerContext ctx, List<String> responseList) {
+        log.info("response messages size: {}", responseList.size());
+
         for (String response : responseList) {
+            log.info("response message: {}", response);
             ByteBuf in3 = Unpooled.copiedBuffer(response.getBytes());
             ctx.writeAndFlush(in3);
         }
