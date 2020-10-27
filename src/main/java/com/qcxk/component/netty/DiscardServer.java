@@ -1,5 +1,6 @@
 package com.qcxk.component.netty;
 
+import com.qcxk.service.MessageService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -14,16 +15,23 @@ import java.util.concurrent.Executors;
 
 @Slf4j
 public class DiscardServer {
-    private ChildChannelHandler childChannelHandler = new ChildChannelHandler();
+    private ChildChannelHandler childChannelHandler;
     private static ExecutorService threadPool = Executors.newFixedThreadPool(5);
     private static DiscardServer discardServer;
 
     private static Channel serverChannel;
 
-    public static void startServer() {
+    public DiscardServer(MessageService messageService) {
+        childChannelHandler = new ChildChannelHandler(messageService);
+    }
+
+    public DiscardServer() {
+    }
+
+    public static void startServer(MessageService messageService) {
         threadPool.submit(() -> {
             try {
-                discardServer = new DiscardServer();
+                discardServer = new DiscardServer(messageService);
                 discardServer.run(7878);
 
             } catch (Exception e) {

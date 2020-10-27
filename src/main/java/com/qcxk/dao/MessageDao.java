@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface MessageDao extends BaseMapper<Message> {
 
-    int addOriginalData(@Param("message") String originalMessage, @Param("deviceNum") String deviceNum, @Param("date") Date date);
+    int addOriginalData(@Param("originalData") String originalMessage, @Param("deviceNum") String deviceNum, @Param("createTime") Date date);
 
     List<OriginalData> findOriginalDataList(TerminalDeviceDTO dto);
 }

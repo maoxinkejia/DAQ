@@ -11,7 +11,6 @@ import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +19,11 @@ import java.util.List;
 @ChannelHandler.Sharable
 public class DiscardServerHandler extends ChannelHandlerAdapter {
 
-    @Autowired
     private MessageService messageService;
+
+    public DiscardServerHandler(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext context, Object msg) {

@@ -31,5 +31,18 @@ CentOS 7.0以上版本参考官网：https://docs.docker.com/engine/install/cent
 
 #### 永远的HelloWord
 * 阿里云镜像
-	* 
+	* 登陆阿里云容器Hub服务控制台：https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors
+	* 按相关文档操作即可。
 * 网易云镜像
+	* 操作步骤同阿里云相同，镜像地址配置：{"registry-mirrors": ["https://hub-mirror.c.163.com"]}
+
+* docker run hello-world 
+
+
+#### 底层原理
+* Docker是如何工作的？
+	* Docker是一个Client-Server结构的系统，DOcker守护进程运行在主机上， 然后通过Socket连接从客户端访问，守护进程从客户端接受命令并管理运行在主机上的容器。容器，是一个运行时环境，就是我们前面说到的集装箱。
+
+* 为什么Docker比VM快？
+	* docker有着比虚拟机更少的抽象层。由于docker不需要Hypervisor实现硬件资源虚拟化，运行在docker容器上的程序直接使用的都是实际物理机的硬件资源。因此在CPU、内存利用率上会有明显优势。
+	* docker利用的是宿主机的内核，而不需要Guest OS。因此，当新建一个容器时，docker不需要和虚拟机一样重新加载一个操作系统内核。
