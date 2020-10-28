@@ -42,22 +42,8 @@
         <logger name="org.quartz" level="ERROR"/>
         <logger name="org.apache.ibatis" level="DEBUG"/>
         <logger name="org.apache.tomcat" level="INFO"/>
-        <logger name="org.mybatis.spring" level="ERROR"/>
-        <logger name="com.qcxk" level="DEBUG"/>
+        <logger name="org.mybatis.spring" level="DEBUG"/>
+        <logger name="com.qcxk.*" level="DEBUG"/>
         <logger name="org.springframework" level="INFO"/>
     </springProfile>
-
-    <!-- 生产环境 -->
-    <springProfile name="sit,sit0,sit1,uat,prd">
-        <logger name="com.zaxxer.hikari" level="ERROR"/>
-        <logger name="org.quartz" level="ERROR"/>
-        <logger name="org.apache" level="ERROR"/>
-        <logger name="org.mybatis.spring" level="ERROR"/>
-        <logger name="org.hibernate" level="ERROR"/>
-        <logger name="com.ksyun.kbdp.dts" level="INFO"/>
-        <logger name="org.springframework" level="INFO"/>
-        <logger name="org.apache.kafka" level="ERROR"/>
-        <logger name="com.htsc.octopus" level="ERROR"/>
-    </springProfile>
-
 </configuration>
