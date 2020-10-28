@@ -182,22 +182,9 @@ public class MessageServiceImpl implements MessageService {
 
         List<TerminalDeviceDetail> list = new ArrayList<>();
 
-        if (Objects.equals(ENABLED, waterSensorStatus)) {
-            device.setWaterDepth(waterDepth);
-            list.add(buildTerminalDeviceDetail(device, WATER_DEPTH));
-        }
-
-        if (Objects.equals(ENABLED, ch4GasSensorStatus)) {
-            device.setTemperature(ch4GasSensorTemperature);
-            device.setCh4GasConcentration(ch4GasConcentration);
-
-            list.add(buildTerminalDeviceDetail(device, CH4_CONCENTRATION));
-            list.add(buildTerminalDeviceDetail(device, TEMPERATURE));
-        }
-
-        if (Objects.equals(ENABLED, wellLidStatus)) {
-            device.setWellLidOpenStatus(wellLidOpenStatus);
-        }
+        resolveWaterDepthStatus(device, waterSensorStatus, waterDepth, list);
+        resolveCh4Status(device, ch4GasSensorStatus, ch4GasConcentration, ch4GasSensorTemperature, list);
+        resolveWellLidStatus(device, wellLidStatus, wellLidOpenStatus);
 
         device.setUpdateTime(new Date());
         device.setUpdateUser(SYSTEM_USER);
@@ -210,12 +197,45 @@ public class MessageServiceImpl implements MessageService {
         terminalDeviceDetailService.batchAddDetail(list);
     }
 
+    private void resolveWellLidStatus(TerminalDevice device, Integer wellLidStatus, Integer wellLidOpenStatus) {
+        if (Objects.equals(ENABLED, wellLidStatus)) {
+            device.setWellLidOpenStatus(wellLidOpenStatus);
+            log.info("wellLidStatus is Enabled, wellLidOpenStatus: {}, deviceNum: {}", wellLidOpenStatus, device.getDeviceNum());
+        }else{
+            log.info("wellLidStatus is Disabled, deviceNum: {}", device.getDeviceNum());
+        }
+    }
+
+    private void resolveCh4Status(TerminalDevice device, Integer ch4GasSensorStatus, Double ch4GasConcentration, Integer ch4GasSensorTemperature, List<TerminalDeviceDetail> list) {
+        if (Objects.equals(ENABLED, ch4GasSensorStatus)) {
+            device.setTemperature(ch4GasSensorTemperature);
+            device.setCh4GasConcentration(ch4GasConcentration);
+
+            list.add(buildTerminalDeviceDetail(device, CH4_CONCENTRATION));
+            list.add(buildTerminalDeviceDetail(device, TEMPERATURE));
+
+            log.info("ch4GasSensorStatus is Enabled, ch4GasConcentration: {}, temperature: {}, deviceNum: {}",
+                    ch4GasConcentration, ch4GasSensorTemperature, device.getDeviceNum());
+        } else {
+            log.info("ch4GasSensorStatus is Disabled, deviceNum: {}", device.getDeviceNum());
+        }
+    }
+
+    private void resolveWaterDepthStatus(TerminalDevice device, Integer waterSensorStatus, Double waterDepth, List<TerminalDeviceDetail> list) {
+        if (Objects.equals(ENABLED, waterSensorStatus)) {
+            device.setWaterDepth(waterDepth);
+            list.add(buildTerminalDeviceDetail(device, WATER_DEPTH));
+            log.info("waterSensorStatus is Enabled, waterDepth: {}, deviceNum: {}", waterDepth, device.getDeviceNum());
+        } else {
+            log.info("waterSensorStatus is Disabled, deviceNum: {}", device.getDeviceNum());
+        }
+    }
+
     /**
      * 构建设备登录时数据
      */
     private void buildDeviceLoginCode(TerminalDevice device, String data) {
         device.setBatVol(getLoginBatVol(data).doubleValue());
-        device.setUpdateTime(new Date());
         device.setUpdateUser(SYSTEM_USER);
 
         terminalDeviceService.updateDevice(device);

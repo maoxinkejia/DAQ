@@ -28,9 +28,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.qcxk.common.Constants.DELETED;
-import static com.qcxk.common.Constants.DISABLED;
-import static com.qcxk.common.Constants.ENABLED;
+import static com.qcxk.common.Constants.*;
 import static com.qcxk.util.BusinessUtil.buildTerminalDataList;
 
 @Slf4j
@@ -111,6 +109,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
         device.setBootTime(new Date());
         dao.updateBootTime(device);
+        log.info("device first online, bootTime: {}, deviceNum: {}", device.getBootTime(), device.getDeviceNum());
     }
 
     @Override
