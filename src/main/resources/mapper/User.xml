@@ -65,15 +65,14 @@
 
     <select id="findList" resultType="com.qcxk.model.user.User">
       <include refid="selectUser"/>
-      <where>
-          t.del_status = 0 AND
-          <if test="username != null and username != ''">
-              t.username LIKE CONCAT('%',CONCAT(#{username},'%')) AND
-          </if>
-          <if test="realName != null and realName != ''">
-              t.real_name LIKE CONCAT('%',CONCAT(#{realName},'%')) AND
-          </if>
-      </where>
+      WHERE
+        t.del_status = 0
+        <if test="username != null and username != ''">
+            AND t.username LIKE CONCAT('%',CONCAT(#{username},'%'))
+        </if>
+        <if test="realName != null and realName != ''">
+            AND t.real_name LIKE CONCAT('%',CONCAT(#{realName},'%'))
+        </if>
     </select>
 
     <sql id="updateUser">
