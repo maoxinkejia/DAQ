@@ -68,16 +68,18 @@ public class Constants {
     /*====================================详情类型 && 告警类型=======================================*/
     public static final int CH4_CONCENTRATION = 1;
     public static final int WATER_DEPTH = 2;
-    public static final int BAT_VOL = 3;
+    public static final int DEVICE_BAT_VOL = 3;
     public static final int TEMPERATURE = 4;
-    public static final int WELL_LID = 5;
+    public static final int WELL_LID_SLANT = 5;
+    public static final int WELL_LID_BAT_VOL = 6;
 
     /*====================================告警中文描述======================================*/
-    public static final String CH4_CONCENTRATION_ALARM_CN = "甲烷浓度过高";
-    public static final String BAT_VOL_ALARM_CN = "电池电量不足";
-    public static final String TEMPERATURE_ALARM_CN = "温度过高";
-    public static final String WATER_DEPTH_ALARM_CN = "水位过高";
-    public static final String WELL_LID_ALARM_CN = "井盖倾斜/移位";
+    public static final String CH4_CONCENTRATION_ALARM_CN = "甲烷浓度过高告警";
+    public static final String DEVICE_BAT_VOL_ALARM_CN = "设备电池电量不足告警";
+    public static final String TEMPERATURE_ALARM_CN = "温度过高告警";
+    public static final String WATER_DEPTH_ALARM_CN = "水位过高告警";
+    public static final String WELL_LID_SLANT_ALARM_CN = "井盖倾斜/移位告警";
+    public static final String WELL_LID_BAT_VOL_ALARM_CN = "井盖电池电量不足告警";
 
 
     /*=====================================登陆相关提示===============================================*/

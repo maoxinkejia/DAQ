@@ -259,7 +259,7 @@ public class BusinessUtil {
      */
     public static Double getWellLidBatVol(String data) {
         int batVol = Integer.parseInt(data.substring(22, 24), 16);
-        return new BigDecimal(batVol).divide(new BigDecimal(10), 1, BigDecimal.ROUND_DOWN).doubleValue();
+        return getDoubleValue(batVol);
     }
 
     /**
@@ -293,7 +293,7 @@ public class BusinessUtil {
      */
     public static Double getWaterDepth(String data) {
         int waterDepth = Integer.parseInt(data.substring(36, 38), 16);
-        return new BigDecimal(waterDepth).divide(new BigDecimal(10), 1, BigDecimal.ROUND_DOWN).doubleValue();
+        return getDoubleValue(waterDepth);
     }
 
     /**
@@ -308,7 +308,7 @@ public class BusinessUtil {
      */
     public static Double getCH4GasConcentration(String data) {
         int ch4Concentration = Integer.parseInt(data.substring(40, 44), 16);
-        return new BigDecimal(ch4Concentration).divide(new BigDecimal(10), 1, BigDecimal.ROUND_DOWN).doubleValue();
+        return getDoubleValue(ch4Concentration);
     }
 
     /**
@@ -316,7 +316,7 @@ public class BusinessUtil {
      */
     public static Double getCH4GasVolumeConcentration(String data) {
         int ch4VolumeConcentration = Integer.parseInt(data.substring(44, 46), 16);
-        return new BigDecimal(ch4VolumeConcentration).divide(new BigDecimal(10), 1, BigDecimal.ROUND_DOWN).doubleValue();
+        return getDoubleValue(ch4VolumeConcentration);
     }
 
     /**
@@ -331,6 +331,14 @@ public class BusinessUtil {
      */
     public static Integer getCH4GasTemperature(String data) {
         return Integer.parseInt(data.substring(48, 50), 16);
+    }
+
+    /**
+     * 获取A2功能码内的设备电池电量
+     */
+    public static Double getDeviceBatVol(String data) {
+        int deviceBatVol = Integer.parseInt(data.substring(50, 52), 16);
+        return getDoubleValue(deviceBatVol);
     }
 
     public static Map<Integer, Boolean> getSystemErrorCode(String data) {
@@ -465,8 +473,8 @@ public class BusinessUtil {
             case TEMPERATURE:
                 value = device.getTemperature().doubleValue();
                 break;
-            case BAT_VOL:
-                value = device.getBatVol();
+            case DEVICE_BAT_VOL:
+                value = device.getDeviceBatVol();
                 break;
             default:
                 throw new RuntimeException("类型异常");
@@ -487,7 +495,7 @@ public class BusinessUtil {
         vo.setCh4GasConcentration(device.getCh4GasConcentration());
         vo.setWaterDepth(device.getWaterDepth());
         vo.setTemperature(device.getTemperature());
-        vo.setBatVol(device.getBatVol());
+        vo.setDeviceBatVol(device.getDeviceBatVol());
         vo.setLocation(device.getLocation());
         vo.setAlarmList(alarms);
 
@@ -524,5 +532,12 @@ public class BusinessUtil {
     public static String getCookie() {
         String s = "a59cf3b4-de8b-438f-9c74-264b6a1f3e21";
         return getMD5Str(s);
+    }
+
+    /**
+     * 根据int值，除以10，取1位小数
+     */
+    private static double getDoubleValue(int intVal) {
+        return new BigDecimal(intVal).divide(new BigDecimal(10), 1, BigDecimal.ROUND_DOWN).doubleValue();
     }
 }

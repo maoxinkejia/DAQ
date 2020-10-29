@@ -30,8 +30,15 @@ public class TerminalDevice {
     private Integer temperature;
     /**
      * 电池电压
+     * 电池电压满电压是18.0V。 没有电压是10.0V。
+     * 展示时需要计算百分比
      */
-    private Double batVol;
+    private Double deviceBatVol;
+    /**
+     * 井盖电池电压
+     * 满电压是3.6V左右，停止放电电压是2.2V
+     */
+    private Double wellLidBatVol;
     /**
      * 甲烷气体浓度(LEL%)
      */
@@ -152,10 +159,6 @@ public class TerminalDevice {
      * 井盖状态 1：连接  0：未连接
      */
     private Integer wellLidStatus;
-    /**
-     * 井盖电池电压
-     */
-    private Double wellLidBatVol;
     /**
      * 井盖上传数据时间
      */

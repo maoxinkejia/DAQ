@@ -49,9 +49,9 @@ public class AlarmServiceImpl implements AlarmService {
             log.info("add device alarm success, alarm type: {}, deviceNum: {}, num: {}", CH4_CONCENTRATION_ALARM_CN, deviceNum, num);
         }
 
-        if (Objects.equals(alarmType.getBatVolStatus(), ENABLED) && systemAlarm.get(BAT_VOL)) {
-            int num = dao.addDeviceAlarmDetail(buildDeviceAlarmDetail(deviceNum, BAT_VOL, location, BAT_VOL_ALARM_CN));
-            log.info("add device alarm success, alarm type: {}, deviceNum: {}, num: {}", BAT_VOL_ALARM_CN, deviceNum, num);
+        if (Objects.equals(alarmType.getBatVolStatus(), ENABLED) && systemAlarm.get(DEVICE_BAT_VOL)) {
+            int num = dao.addDeviceAlarmDetail(buildDeviceAlarmDetail(deviceNum, DEVICE_BAT_VOL, location, DEVICE_BAT_VOL_ALARM_CN));
+            log.info("add device alarm success, alarm type: {}, deviceNum: {}, num: {}", DEVICE_BAT_VOL_ALARM_CN, deviceNum, num);
         }
 
         if (Objects.equals(alarmType.getWellLidStatus(), ENABLED) && systemAlarm.get(WELL_LID_OPENED)) {

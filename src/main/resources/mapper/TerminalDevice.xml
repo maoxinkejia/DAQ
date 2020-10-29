@@ -152,8 +152,8 @@
             <if test="temperature != null">
                 temperature = #{temperature},
             </if>
-            <if test="batVol != null">
-                bat_vol = #{batVol},
+            <if test="deviceBatVol != null">
+                device_bat_vol = #{deviceBatVol},
             </if>
             <if test="rssi != null">
                 rssi = #{rssi},
@@ -229,7 +229,8 @@
           t.location,
           t.ch4_gas_concentration AS ch4GasConcentration,
           t.water_depth AS waterDepth,
-          t.bat_vol AS batVol,
+          t.device_bat_vol AS deviceBatVol,
+          t.well_lid_bat_vol AS wellLidBatVol,
           t.temperature,
           t.del_status AS delStatus,
           t.tube_well_description AS tubeWellDescription,
