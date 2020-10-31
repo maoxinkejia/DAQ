@@ -200,12 +200,19 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         Assert.notNull(config, "设备标定对象为空");
 
         config.setConfVal(dto.getConfValue());
+        config.setChangeStatus(ENABLED);
         config.setUpdateTime(new Date());
 
         int num = dao.updateDeviceConfig(config);
         int num1 = dao.updateDeviceSendStatus(dto.getDeviceNum(), NOT_SEND);
         log.info("update device config success, deviceNum: {}, confName, confType: {}, num: {}, num1: {}",
                 dto.getDeviceNum(), config.getConfName(), config.getConfType(), num, num1);
+    }
+
+    @Override
+    public List<TerminalDeviceConfig> findChangedConfByDeviceNum(String deviceNum) {
+
+        return null;
     }
 
     /**
@@ -228,6 +235,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         config.setConfName(recordEnum.getName());
         config.setConfType(recordEnum.getType());
         config.setConfVal((Objects.equals(recordEnum, RecordEnum.WELL_LID_BAT_VOL_THRESHOLD) ? WELL_LID_BAT_VOL_THRESHOLD : null));
+        config.setChangeStatus(DISABLED);
         config.setUpdateTime(null);
         config.setUpdateUser(device.getCreateUser());
 

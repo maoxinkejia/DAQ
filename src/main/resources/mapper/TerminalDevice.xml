@@ -149,6 +149,7 @@
           t.conf_name AS confName,
           t.conf_val AS confVal,
           t.conf_type AS confType,
+          t.change_status AS changeStatus,
           t.update_time AS updateTime,
           t.update_user AS updateUser
         FROM

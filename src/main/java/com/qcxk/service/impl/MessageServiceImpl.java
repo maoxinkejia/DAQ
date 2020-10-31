@@ -3,6 +3,7 @@ package com.qcxk.service.impl;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.MessageDao;
 import com.qcxk.model.device.TerminalDevice;
+import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.model.device.TerminalDeviceDetail;
 import com.qcxk.model.message.Message;
 import com.qcxk.model.message.OriginalData;
@@ -120,13 +121,22 @@ public class MessageServiceImpl implements MessageService {
                     response.add(BusinessUtil.buildReceiveRightDataMessage(message));
                     break;
                 case DEVICE_RECEIVE_SERVER_CODE:
-                    // todo 将所有需要发送的消息查询出来统一进行编辑发送
+                    buildDeviceFuncNum2Message(message, response);
                     break;
             }
-
         }
 
         return response;
+    }
+
+    private void buildDeviceFuncNum2Message(Message message, List<String> response) {
+        TerminalDevice terminalDevice = terminalDeviceService.findByDeviceNum(message.getDeviceNum());
+        if (!Objects.equals(NOT_SEND, terminalDevice.getSendStatus())) {
+            log.info("there is no message to send, device sendStatus: {}, deviceNum: {}", terminalDevice.getSendStatus(), message.getDeviceNum());
+            return;
+        }
+
+        List<TerminalDeviceConfig> configs = terminalDeviceService.findChangedConfByDeviceNum(terminalDevice.getDeviceNum());
     }
 
     @Override
@@ -261,8 +271,4 @@ public class MessageServiceImpl implements MessageService {
         terminalDeviceService.updateDevice(device);
         terminalDeviceDetailService.batchAddDetail(Collections.singletonList(buildTerminalDeviceDetail(device, DEVICE_BAT_VOL)));
     }
-
-//    public static void main(String[] args) {
-//
-//    }
 }

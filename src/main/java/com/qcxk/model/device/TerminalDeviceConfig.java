@@ -28,6 +28,10 @@ public class TerminalDeviceConfig {
      */
     private Integer confType;
     /**
+     * 改变状态 0：未改变 1：以改变
+     */
+    private Integer changeStatus;
+    /**
      * 更新时间
      */
     private Date updateTime;

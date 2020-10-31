@@ -33,4 +33,6 @@ public interface TerminalDeviceService {
     List<TerminalDeviceConfig> findConfigList(TerminalDeviceDTO dto);
 
     void updateConfigByDeviceNum(TerminalDeviceConfigDTO dto);
+
+    List<TerminalDeviceConfig> findChangedConfByDeviceNum(String deviceNum);
 }
