@@ -250,7 +250,7 @@ public class BusinessUtil {
     }
 
     /**
-     * 获取井盖是否掀开状态 1：掀开 0：为掀开
+     * 获取井盖是否掀开状态 1：掀开 0：未掀开
      */
     public static Integer getWellLidOpenStatus(String data) {
         return Integer.parseInt(data.substring(20, 22), 16);
@@ -278,7 +278,7 @@ public class BusinessUtil {
         int errorCode = Integer.parseInt(data.substring(32, 34), 16);
         Map<Integer, Boolean> hardwareFailure = new HashMap<>(2);
         hardwareFailure.put(CH4_SENSOR_FAILURE, (errorCode & CH4_SENSOR_FAILURE) == CH4_SENSOR_FAILURE);
-        hardwareFailure.put(WATER_HEIGHT_FAILURE, (errorCode & WATER_HEIGHT_FAILURE) == WATER_HEIGHT_FAILURE);
+        hardwareFailure.put(WATER_DEPTH_FAILURE, (errorCode & WATER_DEPTH_FAILURE) == WATER_DEPTH_FAILURE);
 
         return hardwareFailure;
     }
@@ -351,7 +351,7 @@ public class BusinessUtil {
         putProperty(systemFailure, WATER_DEPTH_OVER_PROOF, errorCode);
         putProperty(systemFailure, WELL_LID_OPENED, errorCode);
         putProperty(systemFailure, WELL_LID_BAT_VOL_LOW, errorCode);
-        putProperty(systemFailure, SENSOR_BAT_VOL_LOW, errorCode);
+        putProperty(systemFailure, DEVICE_BAT_VOL_LOW, errorCode);
         putProperty(systemFailure, SYSTEM_UPLOAD_DATA, errorCode);
 
         return systemFailure;
@@ -497,11 +497,11 @@ public class BusinessUtil {
     public static TerminalDataListVO buildTerminalDataList(List<DeviceAlarmDetail> alarms, TerminalDevice device, List<TerminalDeviceConfig> configs) {
         TerminalDataListVO vo = new TerminalDataListVO();
         vo.setDeviceNum(device.getDeviceNum());
-        vo.setCh4GasConcentration(device.getCh4GasConcentration());
-        vo.setWaterDepth(device.getWaterDepth());
-        vo.setTemperature(device.getTemperature());
-        vo.setDeviceBatVol(device.getDeviceBatVol());
-        vo.setWellLidBatVol(device.getWellLidBatVol());
+        vo.setCh4GasConcentration(device.getCh4GasConcentration() == null ? 0.0d : device.getCh4GasConcentration());
+        vo.setWaterDepth(device.getWaterDepth() == null ? 0.0d : device.getWaterDepth());
+        vo.setTemperature(device.getTemperature() == null ? 0.0d : device.getTemperature());
+        vo.setDeviceBatVol(device.getDeviceBatVol() == null ? 0.0d : device.getDeviceBatVol());
+        vo.setWellLidBatVol(device.getWellLidBatVol() == null ? 0.0d : device.getWellLidBatVol());
         vo.setDeviceBatVolLeft(device.getDeviceBatVolLeft());
         vo.setWellLidBatVolLeft(device.getWellLidBatVolLeft());
         vo.setLocation(device.getLocation());

@@ -1,12 +1,8 @@
 package com.qcxk.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.qcxk.controller.model.page.Pagination;
 import com.qcxk.controller.model.query.TerminalDeviceConfigDTO;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
-import com.qcxk.controller.model.response.PageResponse;
 import com.qcxk.controller.model.response.Response;
-import com.qcxk.model.VO.TerminalDeviceConfigVO;
 import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +24,9 @@ public class SettingController {
 
     @GetMapping(value = "/list")
     public Response getList(TerminalDeviceDTO dto) {
-        PageHelper.startPage(dto.getPage(), dto.getPageSize());
         List<TerminalDeviceConfig> list = terminalDeviceService.findConfigList(dto);
 
-        Pagination pagination = Pagination.buildPagination(list, dto);
-        return PageResponse.pageResponse(pagination, list).success();
+        return Response.build(list).success();
     }
 
     @PutMapping(value = "/update")

@@ -76,6 +76,11 @@ public class TerminalDevice {
      */
     private String remarks;
     /**
+     * 标定/告警相关设置发送状态
+     * 0:初始未设置  1:设置未发送  2:已发送
+     */
+    private Integer sendStatus;
+    /**
      * 创建时间
      */
     private Date createTime;

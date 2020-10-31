@@ -5,17 +5,14 @@ import com.qcxk.dao.DeviceAlarmDao;
 import com.qcxk.model.alarm.DeviceAlarmDetail;
 import com.qcxk.model.alarm.DeviceAlarmType;
 import com.qcxk.service.AlarmService;
-import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static com.qcxk.common.Constants.*;
 import static com.qcxk.util.BusinessUtil.buildDeviceAlarmDetail;
@@ -26,8 +23,6 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Autowired
     private DeviceAlarmDao dao;
-    @Autowired
-    private TerminalDeviceService terminalDeviceService;
 
     @Override
     public List<DeviceAlarmDetail> findAlarmListByDeviceNum(String deviceNum) {
@@ -41,29 +36,59 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Override
     public void addDeviceAlarm(Map<Integer, Boolean> systemAlarm, String deviceNum, String location) {
-        DeviceAlarmType alarmType = findDeviceAlarmType(deviceNum);
+        log.info("step into add device alarm, deviceNum: {}", deviceNum);
 
-        if (Objects.equals(alarmType.getCh4GasStatus(), ENABLED) && systemAlarm.get(CH4_CONCENTRATION)) {
-            int num = dao.addDeviceAlarmDetail(buildDeviceAlarmDetail(deviceNum, CH4_CONCENTRATION, location, CH4_CONCENTRATION_ALARM_CN));
-            log.info("add device alarm success, alarm type: {}, deviceNum: {}, num: {}", CH4_CONCENTRATION_ALARM_CN, deviceNum, num);
+        for (Map.Entry<Integer, Boolean> entry : systemAlarm.entrySet()) {
+            log.info("deviceAlarm key: {}, value: {}", entry.getKey(), entry.getValue());
         }
 
-        if (Objects.equals(alarmType.getDeviceBatVolStatus(), ENABLED) && systemAlarm.get(DEVICE_BAT_VOL)) {
-            int num = dao.addDeviceAlarmDetail(buildDeviceAlarmDetail(deviceNum, DEVICE_BAT_VOL, location, DEVICE_BAT_VOL_ALARM_CN));
-            log.info("add device alarm success, alarm type: {}, deviceNum: {}, num: {}", DEVICE_BAT_VOL_ALARM_CN, deviceNum, num);
+        DeviceAlarmType alarmType = findDeviceAlarmType(deviceNum);
+
+        List<DeviceAlarmDetail> alarmList = new ArrayList<>(1);
+
+        if (Objects.equals(alarmType.getCh4GasStatus(), ENABLED) && systemAlarm.get(CH4_CONCENTRATION_OVER_PROOF)) {
+            alarmList.add(buildDeviceAlarmDetail(deviceNum, CH4_CONCENTRATION, location, CH4_CONCENTRATION_ALARM_CN));
+            log.info("build device alarm, alarm type: {}, deviceNum: {}", CH4_CONCENTRATION_ALARM_CN, deviceNum);
+        }
+
+        if (Objects.equals(alarmType.getDeviceBatVolStatus(), ENABLED) && systemAlarm.get(DEVICE_BAT_VOL_LOW)) {
+            alarmList.add(buildDeviceAlarmDetail(deviceNum, DEVICE_BAT_VOL, location, DEVICE_BAT_VOL_ALARM_CN));
+            log.info("build device alarm, alarm type: {}, deviceNum: {}", DEVICE_BAT_VOL_ALARM_CN, deviceNum);
         }
 
         if (Objects.equals(alarmType.getWellLidStatus(), ENABLED) && systemAlarm.get(WELL_LID_OPENED)) {
-
+            alarmList.add(buildDeviceAlarmDetail(deviceNum, WELL_LID_OPEN, location, WELL_LID_OPEN_ALARM_CN));
+            log.info("build device alarm, alarm type: {}, deviceNum: {}", WELL_LID_OPEN_ALARM_CN, deviceNum);
         }
 
-        if (Objects.equals(alarmType.getTemperatureStatus(), ENABLED) && systemAlarm.get(TEMPERATURE)) {
-
+        if (Objects.equals(alarmType.getTemperatureStatus(), ENABLED) && systemAlarm.get(CH4_TEMPERATURE_OVER_PROOF)) {
+            alarmList.add(buildDeviceAlarmDetail(deviceNum, TEMPERATURE, location, TEMPERATURE_ALARM_CN));
+            log.info("build device alarm, alarm type: {}, deviceNum: {}", TEMPERATURE_ALARM_CN, deviceNum);
         }
 
-        if (Objects.equals(alarmType.getWaterDepthStatus(), ENABLED) && systemAlarm.get(WATER_DEPTH)) {
-
+        if (Objects.equals(alarmType.getWaterDepthStatus(), ENABLED) && systemAlarm.get(WATER_DEPTH_OVER_PROOF)) {
+            alarmList.add(buildDeviceAlarmDetail(deviceNum, WATER_DEPTH, location, WATER_DEPTH_ALARM_CN));
+            log.info("build device alarm, alarm type: {}, deviceNum: {}", WATER_DEPTH_ALARM_CN, deviceNum);
         }
+
+        if (Objects.equals(alarmType.getWellLidBatVolStatus(), ENABLED) && systemAlarm.get(WELL_LID_BAT_VOL_LOW)) {
+            alarmList.add(buildDeviceAlarmDetail(deviceNum, WELL_LID_BAT_VOL, location, WELL_LID_BAT_VOL_ALARM_CN));
+            log.info("build device alarm, alarm type: {}, deviceNum: {}", WELL_LID_BAT_VOL_ALARM_CN, deviceNum);
+        }
+
+        batchAddAlarmDetails(alarmList);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void batchAddAlarmDetails(List<DeviceAlarmDetail> alarmDetails) {
+        if (CollectionUtils.isEmpty(alarmDetails)) {
+            log.info("there is no device alarm to add");
+            return;
+        }
+
+        int num = dao.batchAddAlarmDetails(alarmDetails);
+        log.info("batch add deviceAlarmDetail success, num: {}", num);
     }
 
     @Override

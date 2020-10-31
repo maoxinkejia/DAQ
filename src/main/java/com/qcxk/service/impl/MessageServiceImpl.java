@@ -169,11 +169,10 @@ public class MessageServiceImpl implements MessageService {
 
         Double ch4GasVolumeConcentration = BusinessUtil.getCH4GasVolumeConcentration(data);
         Integer ch4SensorEnum = BusinessUtil.getCH4SensorEnum(data);
-        Map<Integer, Boolean> systemAlarm = BusinessUtil.getSystemErrorCode(data);
         Integer rssi = BusinessUtil.getRSSI(data);
 
 
-        alarmService.addDeviceAlarm(systemAlarm, device.getDeviceNum(), device.getLocation());
+        alarmService.addDeviceAlarm(getSystemErrorCode(data), device.getDeviceNum(), device.getLocation());
 
         List<TerminalDeviceDetail> list = new ArrayList<>();
 

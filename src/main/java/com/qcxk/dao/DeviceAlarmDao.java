@@ -13,8 +13,6 @@ public interface DeviceAlarmDao {
 
     DeviceAlarmType findDeviceAlarmType(String deviceNum);
 
-    int addDeviceAlarmDetail(DeviceAlarmDetail deviceAlarmDetail);
-
     int addDeviceAlarmType(DeviceAlarmType alarmType);
 
     int updateDeviceAlarmType(DeviceAlarmType alarmType);
@@ -22,4 +20,6 @@ public interface DeviceAlarmDao {
     List<DeviceAlarmDetail> findAlarmList(AlarmDTO dto);
 
     int updateApplyAlarm(Long id);
+
+    int batchAddAlarmDetails(List<DeviceAlarmDetail> alarmList);
 }

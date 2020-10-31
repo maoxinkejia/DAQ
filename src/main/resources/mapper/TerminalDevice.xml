@@ -14,6 +14,7 @@
           control_status,
           image_path,
           remarks,
+          send_status,
           create_time,
           boot_time,
           shutdown_time,
@@ -33,6 +34,7 @@
           #{controlStatus},
           #{imagePath},
           #{remarks},
+          #{sendStatus},
           #{createTime},
           #{bootTime},
           #{shutdownTime},
@@ -84,6 +86,13 @@
         SET conf_value = #{confValue}, update_time = #{updateTime}, notice_status = #{noticeStatus}
         WHERE device_num = #{deviceNum}
         AND conf_type = #{confType}
+    </update>
+
+    <update id="updateDeviceSendStatus">
+      UPDATE terminal_device
+      SET send_status = #{sendStatus}
+      WHERE device_num = #{deviceNum}
+      AND update_time = now()
     </update>
 
     <select id="findByDeviceNum" resultType="com.qcxk.model.device.TerminalDevice">
@@ -152,11 +161,20 @@
             <if test="temperature != null">
                 temperature = #{temperature},
             </if>
+            <if test="ch4GasConcentration != null">
+                ch4_gas_concentration = #{ch4GasConcentration},
+            </if>
             <if test="deviceBatVol != null">
                 device_bat_vol = #{deviceBatVol},
             </if>
-            <if test="rssi != null">
-                rssi = #{rssi},
+            <if test="wellLidBatVol != null">
+                well_lid_bat_vol = #{wellLidBatVol},
+            </if>
+            <if test="wellLidOpenStatus != null">
+                well_lid_open_status = #{wellLidOpenStatus},
+            </if>
+            <if test="waterDepth != null">
+                water_depth = #{waterDepth},
             </if>
             <if test="longitude != null">
                 longitude = #{longitude},
@@ -169,30 +187,6 @@
             </if>
             <if test="tubeWellDescription != null">
                 tube_well_description = #{tubeWellDescription},
-            </if>
-            <if test="waterDepthStatus != null">
-                water_depth_status = #{waterDepthStatus},
-            </if>
-            <if test="gasSensorStatus != null">
-                gas_sensor_status = #{gasSensorStatus},
-            </if>
-            <if test="gasConcentrationThreshold != null">
-                gas_concentration_threshold = #{gasConcentrationThreshold},
-            </if>
-            <if test="gasConcentration != null">
-                gas_concentration = #{gasConcentration},
-            </if>
-            <if test="batVolThreshold != null">
-                bat_vol_threshold = #{batVolThreshold},
-            </if>
-            <if test="serverHost != null">
-                server_host = #{serverHost},
-            </if>
-            <if test="serverPort != null">
-                server_port = #{serverPort},
-            </if>
-            <if test="batLeftWorkTime != null">
-                bat_left_work_time = #{batLeftWorkTime},
             </if>
             <if test="controlStatus != null">
                 control_status = #{controlStatus},
@@ -237,6 +231,7 @@
           t.control_status AS controlStatus,
           t.image_path AS imagePath,
           t.remarks,
+          t.send_status AS sendStatus,
           t.create_time AS createTime,
           t.boot_time AS bootTime,
           t.shutdown_time AS shutdownTime,

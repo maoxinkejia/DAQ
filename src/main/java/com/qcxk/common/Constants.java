@@ -46,13 +46,13 @@ public class Constants {
 
     /*=================================故障/异常代码标志位============================================*/
     public static final Integer CH4_SENSOR_FAILURE = 1;
-    public static final Integer WATER_HEIGHT_FAILURE = 2;
+    public static final Integer WATER_DEPTH_FAILURE = 2;
     public static final Integer CH4_TEMPERATURE_OVER_PROOF = 1;
     public static final Integer CH4_CONCENTRATION_OVER_PROOF = 2;
     public static final Integer WATER_DEPTH_OVER_PROOF = 4;
     public static final Integer WELL_LID_OPENED = 8;
     public static final Integer WELL_LID_BAT_VOL_LOW = 10;
-    public static final Integer SENSOR_BAT_VOL_LOW = 20;
+    public static final Integer DEVICE_BAT_VOL_LOW = 20;
     public static final Integer SYSTEM_UPLOAD_DATA = 40;
 
     public static final String IP_SEPARATOR = ".";
@@ -72,7 +72,7 @@ public class Constants {
     public static final int WATER_DEPTH = 2;
     public static final int DEVICE_BAT_VOL = 3;
     public static final int TEMPERATURE = 4;
-    public static final int WELL_LID_SLANT = 5;
+    public static final int WELL_LID_OPEN = 5;
     public static final int WELL_LID_BAT_VOL = 6;
 
     /*====================================告警中文描述======================================*/
@@ -80,7 +80,7 @@ public class Constants {
     public static final String DEVICE_BAT_VOL_ALARM_CN = "设备电池电量不足告警";
     public static final String TEMPERATURE_ALARM_CN = "温度过高告警";
     public static final String WATER_DEPTH_ALARM_CN = "水位过高告警";
-    public static final String WELL_LID_SLANT_ALARM_CN = "井盖倾斜/移位告警";
+    public static final String WELL_LID_OPEN_ALARM_CN = "井盖倾斜/移位告警";
     public static final String WELL_LID_BAT_VOL_ALARM_CN = "井盖电池电量不足告警";
 
 
@@ -97,4 +97,9 @@ public class Constants {
     public static final Double WELL_LID_BAT_VOL_THRESHOLD = 2.3d;
     public static final Double WELL_LID_BAT_VOL_MIX = 2.2d;
     public static final Double WELL_LID_BAT_VOL_TOTAL = 1.4d;
+
+    /*====================================标定/告警值发送状态======================================*/
+    public static final Integer INIT_STATUS = 0;
+    public static final Integer NOT_SEND = 1;
+    public static final Integer SENT = 2;
 }

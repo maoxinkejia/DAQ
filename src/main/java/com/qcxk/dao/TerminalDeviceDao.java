@@ -5,6 +5,7 @@ import com.qcxk.controller.model.query.TerminalDeviceConfigDTO;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.model.device.TerminalDevice;
 import com.qcxk.model.device.TerminalDeviceConfig;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,4 +31,6 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
     int updateDeviceConfig(TerminalDeviceConfig config);
 
     int addTerminalDevice(TerminalDevice device);
+
+    int updateDeviceSendStatus(@Param("deviceNum") String deviceNum,@Param("sendStatus") Integer sendStatus);
 }

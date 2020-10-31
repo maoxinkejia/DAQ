@@ -2,27 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qcxk.dao.DeviceAlarmDao">
 
-    <insert id="addDeviceAlarmDetail">
-        INSERT INTO device_alarm_detail
-        (
-          device_num,
-          location,
-          alarm_type,
-          alarm_description,
-          alarm_time,
-          apply_status,
-          apply_time
-        ) VALUES (
-          #{deviceNum},
-          #{location},
-          #{alarmType},
-          #{alarmDescription}
-          #{alarmTime},
-          #{applyStatus},
-          #{applyTime}
-        )
-    </insert>
-
     <insert id="addDeviceAlarmType">
         INSERT INTO device_alarm_type
         (
@@ -44,6 +23,30 @@
           #{waterDepthStatus},
           #{createTime}
         )
+    </insert>
+
+    <insert id="batchAddAlarmDetails">
+         INSERT INTO device_alarm_detail
+        (
+          device_num,
+          location,
+          alarm_type,
+          alarm_description,
+          alarm_time,
+          apply_status,
+          apply_time
+        ) VALUES
+        <foreach collection="list" separator="," item="model">
+            (
+              #{model.deviceNum},
+              #{model.location},
+              #{model.alarmType},
+              #{model.alarmDescription}
+              #{model.alarmTime},
+              #{model.applyStatus},
+              #{model.applyTime}
+            )
+        </foreach>
     </insert>
 
     <update id="updateDeviceAlarmType" parameterType="com.qcxk.model.alarm.DeviceAlarmType">

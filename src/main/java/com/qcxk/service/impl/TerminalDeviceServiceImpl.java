@@ -1,6 +1,5 @@
 package com.qcxk.service.impl;
 
-import com.qcxk.common.Constants;
 import com.qcxk.common.RecordEnum;
 import com.qcxk.controller.model.query.TerminalDeviceConfigDTO;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
@@ -56,8 +55,10 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         initTerminalDeviceConfig(device);
         initAlarmType(device);
 
+        device.setSendStatus(INIT_STATUS);
+        device.setWellLidOpenStatus(DISABLED);
         device.setCreateTime(new Date());
-        device.setDelStatus(Constants.NOT_DELETED);
+        device.setDelStatus(NOT_DELETED);
         device.setBootTime(null);
         device.setShutdownTime(null);
         device.setUpdateUser(null);
@@ -200,11 +201,11 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
         config.setConfVal(dto.getConfValue());
         config.setUpdateTime(new Date());
-        config.setNoticeStatus(DISABLED);
 
         int num = dao.updateDeviceConfig(config);
-        log.info("update device config success, deviceNum: {}, confName, confType: {}, num: {}",
-                dto.getDeviceNum(), config.getConfName(), config.getConfType(), num);
+        int num1 = dao.updateDeviceSendStatus(dto.getDeviceNum(), NOT_SEND);
+        log.info("update device config success, deviceNum: {}, confName, confType: {}, num: {}, num1: {}",
+                dto.getDeviceNum(), config.getConfName(), config.getConfType(), num, num1);
     }
 
     /**
@@ -227,7 +228,6 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         config.setConfName(recordEnum.getName());
         config.setConfType(recordEnum.getType());
         config.setConfVal((Objects.equals(recordEnum, RecordEnum.WELL_LID_BAT_VOL_THRESHOLD) ? WELL_LID_BAT_VOL_THRESHOLD : null));
-        config.setNoticeStatus(ENABLED);
         config.setUpdateTime(null);
         config.setUpdateUser(device.getCreateUser());
 

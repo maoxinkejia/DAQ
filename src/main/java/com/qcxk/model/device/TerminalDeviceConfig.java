@@ -28,10 +28,6 @@ public class TerminalDeviceConfig {
      */
     private Integer confType;
     /**
-     * 通知状态 0：未通知 1：已通知
-     */
-    private Integer noticeStatus;
-    /**
      * 更新时间
      */
     private Date updateTime;

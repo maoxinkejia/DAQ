@@ -14,6 +14,8 @@ public interface AlarmService {
 
     void addDeviceAlarm(Map<Integer, Boolean> systemAlarm, String deviceNum, String location);
 
+    void batchAddAlarmDetails(List<DeviceAlarmDetail> alarmDetails);
+
     void addAlarmType(String deviceNum);
 
     void updateAlarmType(DeviceAlarmType alarmType);
