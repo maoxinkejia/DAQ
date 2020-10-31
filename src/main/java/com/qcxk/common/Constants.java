@@ -63,6 +63,8 @@ public class Constants {
     public static final Integer NOT_DELETED = 0;
     public static final Integer ENABLED = 1;
     public static final Integer DISABLED = 0;
+    public static final Integer ALARM = 1;
+    public static final Integer NOT_ALARM = 0;
 
 
     /*====================================详情类型 && 告警类型=======================================*/
@@ -86,4 +88,13 @@ public class Constants {
     public static final String LOGIN_SUCCESS = "登陆成功";
     public static final String USER_NOT_EXISTS = "登陆失败，无此用户";
     public static final String PASSWORD_ERROR = "登陆失败，密码不正确";
+
+    /*=====================================电池电量计算相关常量==================================================*/
+    public static final Double DEVICE_BAT_VOL_MAX = 18.0d;
+    public static final Double DEVICE_BAT_VOL_MIX = 10d;
+    public static final Double DEVICE_BAT_VOL_TOTAL = 8.0d;
+    public static final Double WELL_LID_BAT_VOL_MAX = 3.6d;
+    public static final Double WELL_LID_BAT_VOL_THRESHOLD = 2.3d;
+    public static final Double WELL_LID_BAT_VOL_MIX = 2.2d;
+    public static final Double WELL_LID_BAT_VOL_TOTAL = 1.4d;
 }

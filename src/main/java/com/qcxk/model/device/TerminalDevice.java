@@ -27,7 +27,7 @@ public class TerminalDevice {
     /**
      * 设备温度
      */
-    private Integer temperature;
+    private Double temperature;
     /**
      * 电池电压
      * 电池电压满电压是18.0V。 没有电压是10.0V。
@@ -108,75 +108,17 @@ public class TerminalDevice {
      */
     private Date delTime;
 
+    /*==========================以下为设备/数据详情列表展示VO字段===============================*/
+    /**
+     * 图片地址列表
+     */
     private List<String> imagePaths;
-
-
     /**
-     * 信号值
+     * 设备剩余电池电量，单位%
      */
-    private Integer rssi;
+    private Double deviceBatVolLeft;
     /**
-     * 水位开关状态 1：启动 0：不启动
+     * 井盖剩余电池电量，单位%
      */
-    private Integer waterDepthStatus;
-    /**
-     * 水位深度阈值(报警值) 单位：米
-     */
-    private Double waterDepthThreshold;
-    /**
-     * 气体传感器状态 1：已连接 0：未连接
-     */
-    private Integer gasSensorStatus;
-    /**
-     * 气体浓度阈值 单位：%
-     */
-    private Double gasConcentrationThreshold;
-    /**
-     * 气体体积浓度
-     */
-    private Double gasConcentration;
-    /**
-     * 电池电压阈值 单位：V
-     */
-    private Double batVolThreshold;
-    /**
-     * 服务器ip
-     */
-    private String serverHost;
-    /**
-     * 服务器端口号
-     */
-    private String serverPort;
-    /**
-     * 电池剩余工作时间 单位：小时
-     */
-    private Integer batLeftWorkTime;
-    /**
-     * 设备软件版本号
-     */
-    private String version;
-    /**
-     * 井盖状态 1：连接  0：未连接
-     */
-    private Integer wellLidStatus;
-    /**
-     * 井盖上传数据时间
-     */
-    private Integer wellLidUploadTime;
-    /**
-     * 水位传感器状态 1：连接 0：未连接
-     */
-    private Integer waterSensorStatus;
-    /**
-     * 甲烷传感器状态 1：连接 0：未连接
-     */
-    private Integer ch4SensorStatus;
-    /**
-     * 甲烷气体体积浓度
-     */
-    private Double ch4GasVolumeConcentration;
-    /**
-     * 甲烷气体传感器状态   0：整除 10：预热中 1xx(>100)：低功耗 40：温度正常
-     */
-    private Integer ch4SensorEnum;
+    private Double WellLidBatVolLeft;
 }

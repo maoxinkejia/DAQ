@@ -29,7 +29,6 @@ public class AlarmServiceImpl implements AlarmService {
     @Autowired
     private TerminalDeviceService terminalDeviceService;
 
-
     @Override
     public List<DeviceAlarmDetail> findAlarmListByDeviceNum(String deviceNum) {
         return dao.findAlarmListByDeviceNum(deviceNum);
@@ -49,7 +48,7 @@ public class AlarmServiceImpl implements AlarmService {
             log.info("add device alarm success, alarm type: {}, deviceNum: {}, num: {}", CH4_CONCENTRATION_ALARM_CN, deviceNum, num);
         }
 
-        if (Objects.equals(alarmType.getBatVolStatus(), ENABLED) && systemAlarm.get(DEVICE_BAT_VOL)) {
+        if (Objects.equals(alarmType.getDeviceBatVolStatus(), ENABLED) && systemAlarm.get(DEVICE_BAT_VOL)) {
             int num = dao.addDeviceAlarmDetail(buildDeviceAlarmDetail(deviceNum, DEVICE_BAT_VOL, location, DEVICE_BAT_VOL_ALARM_CN));
             log.info("add device alarm success, alarm type: {}, deviceNum: {}, num: {}", DEVICE_BAT_VOL_ALARM_CN, deviceNum, num);
         }
@@ -74,7 +73,8 @@ public class AlarmServiceImpl implements AlarmService {
         alarmType.setDeviceNum(deviceNum);
         alarmType.setCh4GasStatus(DISABLED);
         alarmType.setWaterDepthStatus(DISABLED);
-        alarmType.setBatVolStatus(DISABLED);
+        alarmType.setDeviceBatVolStatus(DISABLED);
+        alarmType.setWellLidBatVolStatus(DISABLED);
         alarmType.setTemperatureStatus(DISABLED);
         alarmType.setWellLidStatus(DISABLED);
         alarmType.setCreateTime(new Date());

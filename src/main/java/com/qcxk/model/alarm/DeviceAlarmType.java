@@ -17,9 +17,13 @@ public class DeviceAlarmType {
      */
     private Integer ch4GasStatus;
     /**
-     * 电池电量告警状态  1：选择  0：未选择
+     * 设备电池电量告警状态  1：选择  0：未选择
      */
-    private Integer batVolStatus;
+    private Integer deviceBatVolStatus;
+    /**
+     * 井盖电池电量告警状态   1：选择  0：未选择
+     */
+    private Integer wellLidBatVolStatus;
     /**
      * 井盖倾斜/移位告警状态  1：选择  0：未选择
      */

@@ -28,7 +28,8 @@
         (
           device_num,
           ch4_gas_status,
-          bat_vol_status,
+          device_bat_vol_status,
+          well_lid_bat_vol_status,
           well_lid_status,
           temperature_status,
           water_depth_status,
@@ -36,7 +37,8 @@
         ) VALUES (
           #{deviceNum},
           #{ch4GasStatus},
-          #{batVolStatus},
+          #{deviceBatVolStatus},
+          #{wellLidBatVolStatus},
           #{wellLidStatus},
           #{temperatureStatus},
           #{waterDepthStatus},
@@ -89,8 +91,11 @@
             <if test="ch4GasStatus != null">
                 ch4_gas_status = #{ch4GasStatus},
             </if>
-            <if test="batVolStatus != null">
-                bat_vol_status = #{batVolStatus},
+            <if test="deviceBatVolStatus != null">
+                device_bat_vol_status = #{deviceBatVolStatus},
+            </if>
+            <if test="wellLidBatVolStatus != null">
+                well_lid_bat_vol_status = #{wellLidBatVolStatus},
             </if>
             <if test="wellLidStatus != null">
                 well_lid_status = #{wellLidStatus},
@@ -110,7 +115,8 @@
           t.id,
           t.device_num AS deviceNum,
           t.ch4_gas_status AS ch4GasStatus,
-          t.bat_vol_status AS batVolStatus,
+          t.device_bat_vol_status AS deviceBatVolStatus,
+          t.well_lid_bat_vol_status AS wellLidBatVolStatus,
           t.well_lid_status AS wellLidStatus,
           t.temperature_status AS temperatureStatus,
           t.water_depth_status AS waterDepthStatus,

@@ -11,6 +11,7 @@ public class TerminalDataDetailVO {
     private List<TerminalDeviceDetail> ch4GasConcentrationList;
     private List<TerminalDeviceDetail> waterDepthList;
     private List<TerminalDeviceDetail> temperatureList;
-    private List<TerminalDeviceDetail> batVolList;
+    private List<TerminalDeviceDetail> deviceBatVolList;
+    private List<TerminalDeviceDetail> wellLidBatVolList;
     private List<DeviceAlarmDetail> alarmList;
 }

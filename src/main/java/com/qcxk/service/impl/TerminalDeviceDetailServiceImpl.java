@@ -40,15 +40,17 @@ public class TerminalDeviceDetailServiceImpl implements TerminalDeviceDetailServ
 
         List<TerminalDeviceDetail> ch4ConcentrationList = dao.findList(start, end, deviceNum, CH4_CONCENTRATION);
         List<TerminalDeviceDetail> waterDepthList = dao.findList(start, end, deviceNum, WATER_DEPTH);
-        List<TerminalDeviceDetail> batVolList = dao.findList(start, end, deviceNum, DEVICE_BAT_VOL);
+        List<TerminalDeviceDetail> deviceBatVolList = dao.findList(start, end, deviceNum, DEVICE_BAT_VOL);
         List<TerminalDeviceDetail> temperatureList = dao.findList(start, end, deviceNum, TEMPERATURE);
+        List<TerminalDeviceDetail> wellLidBatVolList = dao.findList(start, end, deviceNum, WELL_LID_BAT_VOL);
         List<DeviceAlarmDetail> alarmList = deviceAlarmDao.findAlarmListByDeviceNum(deviceNum);
 
         TerminalDataDetailVO vo = new TerminalDataDetailVO();
         vo.setCh4GasConcentrationList(ch4ConcentrationList);
         vo.setWaterDepthList(waterDepthList);
         vo.setTemperatureList(temperatureList);
-        vo.setBatVolList(batVolList);
+        vo.setDeviceBatVolList(deviceBatVolList);
+        vo.setWellLidBatVolList(wellLidBatVolList);
         vo.setAlarmList(alarmList);
 
         return vo;

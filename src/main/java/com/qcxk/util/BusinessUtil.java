@@ -1,8 +1,10 @@
 package com.qcxk.util;
 
+import com.qcxk.common.RecordEnum;
 import com.qcxk.model.VO.TerminalDataListVO;
 import com.qcxk.model.alarm.DeviceAlarmDetail;
 import com.qcxk.model.device.TerminalDevice;
+import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.model.device.TerminalDeviceDetail;
 import com.qcxk.model.message.Message;
 import lombok.extern.slf4j.Slf4j;
@@ -329,8 +331,8 @@ public class BusinessUtil {
     /**
      * 获取甲烷气体传感器内部温度
      */
-    public static Integer getCH4GasTemperature(String data) {
-        return Integer.parseInt(data.substring(48, 50), 16);
+    public static Double getCH4GasTemperature(String data) {
+        return Integer.valueOf(data.substring(48, 50), 16).doubleValue();
     }
 
     /**
@@ -471,10 +473,13 @@ public class BusinessUtil {
                 value = device.getWaterDepth();
                 break;
             case TEMPERATURE:
-                value = device.getTemperature().doubleValue();
+                value = device.getTemperature();
                 break;
             case DEVICE_BAT_VOL:
                 value = device.getDeviceBatVol();
+                break;
+            case WELL_LID_BAT_VOL:
+                value = device.getWellLidBatVol();
                 break;
             default:
                 throw new RuntimeException("类型异常");
@@ -489,17 +494,67 @@ public class BusinessUtil {
     /**
      * 构建数据列表数据
      */
-    public static TerminalDataListVO buildTerminalDataList(List<DeviceAlarmDetail> alarms, TerminalDevice device) {
+    public static TerminalDataListVO buildTerminalDataList(List<DeviceAlarmDetail> alarms, TerminalDevice device, List<TerminalDeviceConfig> configs) {
         TerminalDataListVO vo = new TerminalDataListVO();
         vo.setDeviceNum(device.getDeviceNum());
         vo.setCh4GasConcentration(device.getCh4GasConcentration());
         vo.setWaterDepth(device.getWaterDepth());
         vo.setTemperature(device.getTemperature());
         vo.setDeviceBatVol(device.getDeviceBatVol());
+        vo.setWellLidBatVol(device.getWellLidBatVol());
+        vo.setDeviceBatVolLeft(device.getDeviceBatVolLeft());
+        vo.setWellLidBatVolLeft(device.getWellLidBatVolLeft());
         vo.setLocation(device.getLocation());
         vo.setAlarmList(alarms);
 
+        buildDataListAlarmStatus(vo, configs);
+
         return vo;
+    }
+
+    private static void buildDataListAlarmStatus(TerminalDataListVO vo, List<TerminalDeviceConfig> configs) {
+        for (TerminalDeviceConfig conf : configs) {
+            Double val = conf.getConfVal();
+            switch (Objects.requireNonNull(RecordEnum.of(conf.getConfType()))) {
+                case CH4_GAS_THRESHOLD:
+                    if (val == null || val <= 0) {
+                        vo.setCh4GasConcentrationStatus(NOT_ALARM);
+                    } else {
+                        vo.setCh4GasConcentrationStatus((vo.getCh4GasConcentration() < val ? NOT_ALARM : ALARM));
+                    }
+                    break;
+                case WATER_DEPTH_ALARM_THRESHOLD:
+                    if (val == null || val <= 0) {
+                        vo.setWaterDepthStatus(NOT_ALARM);
+                    } else {
+                        vo.setWaterDepthStatus((vo.getWaterDepth() < val ? NOT_ALARM : ALARM));
+                    }
+                    break;
+                case TEMPERATURE_THRESHOLD:
+                    if (val == null || val <= 0) {
+                        vo.setTemperatureStatus(NOT_ALARM);
+                    } else {
+                        vo.setTemperatureStatus((vo.getTemperature() < val ? NOT_ALARM : ALARM));
+                    }
+                    break;
+                case DEVICE_BAT_VOL_THRESHOLD:
+                    if (val == null || val <= 0) {
+                        vo.setDeviceBatVolStatus(NOT_ALARM);
+                    } else {
+                        vo.setDeviceBatVolStatus((vo.getDeviceBatVol() < val ? NOT_ALARM : ALARM));
+                    }
+                    break;
+                case WELL_LID_BAT_VOL_THRESHOLD:
+                    if (val == null || val <= 0) {
+                        vo.setWellLidBatVolStatus(NOT_ALARM);
+                    } else {
+                        vo.setWellLidOpenStatus((vo.getWellLidBatVol() < val ? NOT_ALARM : ALARM));
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     public static DeviceAlarmDetail buildDeviceAlarmDetail(String deviceNum, int alarmType, String location, String alarmDescription) {
@@ -539,5 +594,45 @@ public class BusinessUtil {
      */
     private static double getDoubleValue(int intVal) {
         return new BigDecimal(intVal).divide(new BigDecimal(10), 1, BigDecimal.ROUND_DOWN).doubleValue();
+    }
+
+    /**
+     * 计算设备剩余电池电量
+     */
+    public static void calculateDeviceBatVolLeft(TerminalDevice device) {
+        Double batVol = device.getDeviceBatVol();
+        if (batVol == null || batVol <= 0) {
+            device.setDeviceBatVolLeft(0d);
+            return;
+        }
+
+        double left = batVol - DEVICE_BAT_VOL_MIX;
+        if (left <= 0) {
+            device.setDeviceBatVolLeft(0d);
+            return;
+        }
+
+        double num = (left / DEVICE_BAT_VOL_TOTAL) * 100;
+        device.setDeviceBatVolLeft(Double.parseDouble(String.valueOf(num).substring(0, 2)));
+    }
+
+    /**
+     * 计算井盖剩余电池电量
+     */
+    public static void calculateWellLidBatVolLeft(TerminalDevice device) {
+        Double batVol = device.getWellLidBatVol();
+        if (batVol == null || batVol <= 0) {
+            device.setWellLidBatVolLeft(0d);
+            return;
+        }
+
+        double left = batVol - WELL_LID_BAT_VOL_MIX;
+        if (left <= 0) {
+            device.setWellLidBatVolLeft(0d);
+            return;
+        }
+
+        double num = (left / WELL_LID_BAT_VOL_TOTAL) * 100;
+        device.setWellLidBatVolLeft(Double.parseDouble(String.valueOf(num).substring(0, 2)));
     }
 }

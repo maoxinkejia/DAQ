@@ -26,7 +26,7 @@ public class TerminalDataListVO {
     /**
      * 设备温度
      */
-    private Integer temperature;
+    private Double temperature;
     /**
      * 是否到达阈值
      */
@@ -35,6 +35,10 @@ public class TerminalDataListVO {
      * 电池电压
      */
     private Double deviceBatVol;
+    /**
+     * 设备剩余电池电量  单位：%
+     */
+    private Double deviceBatVolLeft;
     /**
      * 是否达到阈值
      */
@@ -55,6 +59,10 @@ public class TerminalDataListVO {
      * 井盖电池电量
      */
     private Double wellLidBatVol;
+    /**
+     * 井盖剩余电池电量 单位：%
+     */
+    private Double WellLidBatVolLeft;
     /**
      * 是否达到阈值
      */

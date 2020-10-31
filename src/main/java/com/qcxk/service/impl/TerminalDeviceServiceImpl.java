@@ -7,6 +7,7 @@ import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.TerminalDeviceDao;
 import com.qcxk.exception.ParamException;
 import com.qcxk.model.VO.TerminalDataListVO;
+import com.qcxk.model.alarm.DeviceAlarmDetail;
 import com.qcxk.model.device.TerminalDevice;
 import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.service.AlarmService;
@@ -29,7 +30,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.qcxk.common.Constants.*;
-import static com.qcxk.util.BusinessUtil.buildTerminalDataList;
+import static com.qcxk.util.BusinessUtil.*;
 
 @Slf4j
 @Service
@@ -154,7 +155,11 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     @Override
     public List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto) {
         return findBaseList(dto).stream()
-                .map(terminalDevice -> buildTerminalDataList(alarmService.findAlarmListByDeviceNum(dto.getDeviceNum()), terminalDevice))
+                .map(terminalDevice -> {
+                    List<DeviceAlarmDetail> alarmList = alarmService.findAlarmListByDeviceNum(terminalDevice.getDeviceNum());
+                    List<TerminalDeviceConfig> configList = findConfigByDeviceNum(terminalDevice.getDeviceNum());
+                    return buildTerminalDataList(alarmList, terminalDevice, configList);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -173,7 +178,13 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     public List<TerminalDevice> findBaseList(TerminalDeviceDTO dto) {
-        return dao.findList(dto);
+        List<TerminalDevice> list = dao.findList(dto);
+        list.forEach(device -> {
+            calculateDeviceBatVolLeft(device);
+            calculateWellLidBatVolLeft(device);
+        });
+
+        return list;
     }
 
     @Override
@@ -215,7 +226,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         config.setLocation(device.getLocation());
         config.setConfName(recordEnum.getName());
         config.setConfType(recordEnum.getType());
-        config.setConfVal(null);
+        config.setConfVal((Objects.equals(recordEnum, RecordEnum.WELL_LID_BAT_VOL_THRESHOLD) ? WELL_LID_BAT_VOL_THRESHOLD : null));
         config.setNoticeStatus(ENABLED);
         config.setUpdateTime(null);
         config.setUpdateUser(device.getCreateUser());

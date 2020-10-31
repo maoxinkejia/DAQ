@@ -179,7 +179,7 @@ public class MessageServiceImpl implements MessageService {
 
         resolveWaterDepthStatus(device, data, list);
         resolveCh4Status(device, data, list);
-        resolveWellLidStatus(device, data);
+        resolveWellLidStatus(device, data, list);
         resolveDeviceBatVol(device, data, list);
 
         device.setUpdateTime(new Date());
@@ -194,12 +194,18 @@ public class MessageServiceImpl implements MessageService {
         terminalDeviceDetailService.batchAddDetail(list);
     }
 
+    /**
+     * 解析并保存设备电池电量
+     */
     private void resolveDeviceBatVol(TerminalDevice device, String data, List<TerminalDeviceDetail> list) {
         device.setDeviceBatVol(getDeviceBatVol(data));
         list.add(buildTerminalDeviceDetail(device, WELL_LID_BAT_VOL));
     }
 
-    private void resolveWellLidStatus(TerminalDevice device, String data) {
+    /**
+     * 解析并保存井盖倾斜状态及井盖电池电量
+     */
+    private void resolveWellLidStatus(TerminalDevice device, String data, List<TerminalDeviceDetail> list) {
         if (!Objects.equals(ENABLED, getWellLidStatus(data))) {
             log.info("wellLidStatus is Disabled, deviceNum: {}", device.getDeviceNum());
             return;
@@ -207,10 +213,15 @@ public class MessageServiceImpl implements MessageService {
 
         device.setWellLidOpenStatus(getWellLidOpenStatus(data));
         device.setWellLidBatVol(getWellLidBatVol(data));
+
+        list.add(buildTerminalDeviceDetail(device, WELL_LID_BAT_VOL));
         log.info("wellLidStatus is Enabled, wellLidOpenStatus: {}, wellLidBatVol: {}, deviceNum: {}",
                 device.getWellLidOpenStatus(), device.getWellLidBatVol(), device.getDeviceNum());
     }
 
+    /**
+     * 解析并保存甲烷气体浓度及甲烷传感器内温度
+     */
     private void resolveCh4Status(TerminalDevice device, String data, List<TerminalDeviceDetail> list) {
         if (!Objects.equals(ENABLED, getCH4GasSensorStatus(data))) {
             log.info("ch4GasSensorStatus is Disabled, deviceNum: {}", device.getDeviceNum());
@@ -224,9 +235,12 @@ public class MessageServiceImpl implements MessageService {
         list.add(buildTerminalDeviceDetail(device, TEMPERATURE));
 
         log.info("ch4GasSensorStatus is Enabled, ch4GasConcentration: {}, temperature: {}, deviceNum: {}",
-                device.getGasConcentration(), device.getTemperature(), device.getDeviceNum());
+                device.getCh4GasConcentration(), device.getTemperature(), device.getDeviceNum());
     }
 
+    /**
+     * 解析并保存液位深度
+     */
     private void resolveWaterDepthStatus(TerminalDevice device, String data, List<TerminalDeviceDetail> list) {
         if (!Objects.equals(ENABLED, getWaterSensorStatus(data))) {
             log.info("waterSensorStatus is Disabled, deviceNum: {}", device.getDeviceNum());
