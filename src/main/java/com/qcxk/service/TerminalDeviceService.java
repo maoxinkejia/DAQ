@@ -35,4 +35,6 @@ public interface TerminalDeviceService {
     void updateConfigByDeviceNum(List<TerminalDeviceConfigDTO> dto);
 
     List<TerminalDeviceConfig> findChangedConfByDeviceNum(String deviceNum);
+
+    int updateApplyTime(String deviceNum);
 }

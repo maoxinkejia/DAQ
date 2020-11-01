@@ -88,6 +88,19 @@
         </where>
     </select>
 
+    <select id="findById" resultType="com.qcxk.model.alarm.DeviceAlarmDetail">
+        <include refid="selectDeviceAlarmDetail"/>
+        WHERE t.id = #{id}
+    </select>
+
+    <select id="findWellLidOpenAlarm" resultType="com.qcxk.model.alarm.DeviceAlarmDetail">
+        <include refid="selectDeviceAlarmDetail"/>
+        WHERE t.device_num = #{deviceNum}
+        AND t.alarm_type = #{alarmType}
+        ORDER BY t.id DESC
+        LIMIT 1
+    </select>
+
     <sql id="updateDeviceAlarmType">
         UPDATE device_alarm_type
         <set>

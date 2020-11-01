@@ -15,6 +15,7 @@
           image_path,
           remarks,
           send_status,
+          apply_time,
           create_time,
           boot_time,
           shutdown_time,
@@ -35,6 +36,7 @@
           #{imagePath},
           #{remarks},
           #{sendStatus},
+          #{applyTime},
           #{createTime},
           #{bootTime},
           #{shutdownTime},
@@ -95,6 +97,12 @@
       AND update_time = now()
     </update>
 
+    <update id="updateApplyTime">
+        UPDATE terminal_device
+        SET apply_time = now(), update_time = now()
+        WHERE device_num = #{deviceNum}
+    </update>
+
     <select id="findByDeviceNum" resultType="com.qcxk.model.device.TerminalDevice">
         <include refid="selectTerminalDevice"/>
         WHERE t.device_num = #{deviceNum}
@@ -140,6 +148,12 @@
         <include refid="selectTerminalDeviceConfig"/>
         WHERE t.device_num = #{deviceNum}
         AND t.conf_type = #{confType}
+    </select>
+
+    <select id="findChangedConfByDeviceNum" resultType="com.qcxk.model.device.TerminalDeviceConfig">
+        <include refid="selectTerminalDeviceConfig"/>
+        WHERE t.device_num = #{deviceNum}
+        AND t.change_status = 0
     </select>
 
     <sql id="selectTerminalDeviceConfig">
@@ -198,6 +212,9 @@
             <if test="remarks != null and imagePath != ''">
                 remarks = #{remarks},
             </if>
+            <if test="applyTime != null">
+                apply_time = #{applyTime},
+            </if>
             <if test="updateTime != null">
                 update_time = #{updateTime},
             </if>
@@ -233,6 +250,7 @@
           t.image_path AS imagePath,
           t.remarks,
           t.send_status AS sendStatus,
+          t.apply_time AS applyTime,
           t.create_time AS createTime,
           t.boot_time AS bootTime,
           t.shutdown_time AS shutdownTime,

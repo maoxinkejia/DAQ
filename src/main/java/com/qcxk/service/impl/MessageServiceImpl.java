@@ -137,6 +137,14 @@ public class MessageServiceImpl implements MessageService {
         }
 
         List<TerminalDeviceConfig> configs = terminalDeviceService.findChangedConfByDeviceNum(terminalDevice.getDeviceNum());
+        if (CollectionUtils.isEmpty(configs)) {
+            log.info("there is no configs to sendBack to terminalDevice, deviceNum: {}", terminalDevice.getDeviceNum());
+            return;
+        }
+
+        for (TerminalDeviceConfig config : configs) {
+            response.add(buildServerSend2DeviceMessage(message, terminalDevice, config));
+        }
     }
 
     @Override

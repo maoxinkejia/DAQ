@@ -5,6 +5,7 @@ import com.qcxk.dao.DeviceAlarmDao;
 import com.qcxk.model.alarm.DeviceAlarmDetail;
 import com.qcxk.model.alarm.DeviceAlarmType;
 import com.qcxk.service.AlarmService;
+import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Autowired
     private DeviceAlarmDao dao;
+    @Autowired
+    private TerminalDeviceService terminalDeviceService;
 
     @Override
     public List<DeviceAlarmDetail> findAlarmListByDeviceNum(String deviceNum) {
@@ -124,7 +127,24 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void applyAlarm(Long id) {
+        DeviceAlarmDetail alarm = dao.findById(id);
+        Objects.requireNonNull(alarm, "告警对象为空");
+
         int num = dao.updateApplyAlarm(id);
-        log.info("deviceAlarm apply success, id: {}, num: {}", id, num);
+        int num1 = terminalDeviceService.updateApplyTime(alarm.getDeviceNum());
+        log.info("deviceAlarm apply success, deviceNum: {}, id: {}, num: {}, num1: {}", alarm.getDeviceNum(), id, num, num1);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void applyByDeviceNum(String deviceNum) {
+        DeviceAlarmDetail alarm = dao.findWellLidOpenAlarm(deviceNum, WELL_LID_OPEN);
+        if (alarm != null) {
+            applyAlarm(alarm.getId());
+            return;
+        }
+
+        int num = terminalDeviceService.updateApplyTime(deviceNum);
+        log.info("deviceAlarm apply success, deviceNum: {}, num: {}", deviceNum, num);
     }
 }

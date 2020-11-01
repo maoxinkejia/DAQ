@@ -385,7 +385,7 @@ public class BusinessUtil {
     /**
      * 构建服务器发送给探测器功能配置的消息体
      */
-    public static String buildServerSend2DeviceMessage(Message message, TerminalDevice device) {
+    public static String buildServerSend2DeviceMessage(Message message, TerminalDevice device, TerminalDeviceConfig config) {
         StringBuffer buffer = new StringBuffer();
 
 
@@ -494,7 +494,7 @@ public class BusinessUtil {
     /**
      * 构建数据列表数据
      */
-    public static TerminalDataListVO buildTerminalDataList(List<DeviceAlarmDetail> alarms, TerminalDevice device, List<TerminalDeviceConfig> configs) {
+    public static TerminalDataListVO buildTerminalDataList(TerminalDevice device, List<TerminalDeviceConfig> configs) {
         TerminalDataListVO vo = new TerminalDataListVO();
         vo.setDeviceNum(device.getDeviceNum());
         vo.setCh4GasConcentration(device.getCh4GasConcentration() == null ? 0.0d : device.getCh4GasConcentration());
@@ -505,7 +505,6 @@ public class BusinessUtil {
         vo.setDeviceBatVolLeft(device.getDeviceBatVolLeft());
         vo.setWellLidBatVolLeft(device.getWellLidBatVolLeft());
         vo.setLocation(device.getLocation());
-        vo.setAlarmList(alarms);
 
         buildDataListAlarmStatus(vo, configs);
 

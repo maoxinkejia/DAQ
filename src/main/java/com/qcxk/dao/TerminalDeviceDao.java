@@ -33,4 +33,8 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
     int addTerminalDevice(TerminalDevice device);
 
     int updateDeviceSendStatus(@Param("deviceNum") String deviceNum,@Param("sendStatus") Integer sendStatus);
+
+    List<TerminalDeviceConfig> findChangedConfByDeviceNum(String deviceNum);
+
+    int updateApplyTime(String deviceNum);
 }

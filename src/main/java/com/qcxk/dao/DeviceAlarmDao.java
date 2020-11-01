@@ -3,6 +3,7 @@ package com.qcxk.dao;
 import com.qcxk.controller.model.query.AlarmDTO;
 import com.qcxk.model.alarm.DeviceAlarmDetail;
 import com.qcxk.model.alarm.DeviceAlarmType;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,4 +23,8 @@ public interface DeviceAlarmDao {
     int updateApplyAlarm(Long id);
 
     int batchAddAlarmDetails(List<DeviceAlarmDetail> alarmList);
+
+    DeviceAlarmDetail findById(Long id);
+
+    DeviceAlarmDetail findWellLidOpenAlarm(@Param("deviceNum") String deviceNum, @Param("alarmType") int alarmType);
 }

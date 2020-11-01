@@ -166,11 +166,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     @Override
     public List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto) {
         return findBaseList(dto).stream()
-                .map(terminalDevice -> {
-                    List<DeviceAlarmDetail> alarmList = alarmService.findAlarmListByDeviceNum(terminalDevice.getDeviceNum());
-                    List<TerminalDeviceConfig> configList = findConfigByDeviceNum(terminalDevice.getDeviceNum());
-                    return buildTerminalDataList(alarmList, terminalDevice, configList);
-                })
+                .map(terminalDevice -> buildTerminalDataList(terminalDevice, findConfigByDeviceNum(terminalDevice.getDeviceNum())))
                 .collect(Collectors.toList());
     }
 
@@ -229,8 +225,13 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     public List<TerminalDeviceConfig> findChangedConfByDeviceNum(String deviceNum) {
+        return dao.findChangedConfByDeviceNum(deviceNum);
+    }
 
-        return null;
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int updateApplyTime(String deviceNum) {
+        return dao.updateApplyTime(deviceNum);
     }
 
     /**

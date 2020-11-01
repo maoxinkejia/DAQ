@@ -23,4 +23,6 @@ public interface AlarmService {
     List<DeviceAlarmDetail> findAlarmList(AlarmDTO dto);
 
     void applyAlarm(Long id);
+
+    void applyByDeviceNum(String deviceNum);
 }

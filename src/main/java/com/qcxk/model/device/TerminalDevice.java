@@ -81,6 +81,10 @@ public class TerminalDevice {
      */
     private Integer sendStatus;
     /**
+     * 井盖应答时间
+     */
+    private Date applyTime;
+    /**
      * 创建时间
      */
     private Date createTime;
