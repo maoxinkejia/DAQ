@@ -4,6 +4,7 @@ import com.qcxk.common.RecordEnum;
 import com.qcxk.controller.model.query.TerminalDeviceConfigDTO;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.TerminalDeviceDao;
+import com.qcxk.exception.BusinessException;
 import com.qcxk.exception.ParamException;
 import com.qcxk.model.VO.TerminalDataListVO;
 import com.qcxk.model.alarm.DeviceAlarmDetail;
@@ -52,6 +53,8 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     public TerminalDevice add(TerminalDevice device) {
         checkTerminalDeviceParam(device);
 
+        checkExistsTerminalDevice(device.getDeviceNum());
+
         initTerminalDeviceConfig(device);
         initAlarmType(device);
 
@@ -69,6 +72,13 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
         log.info("add terminalDevice success, device: {}, num: {}", device, num);
         return device;
+    }
+
+    private void checkExistsTerminalDevice(String deviceNum) {
+        TerminalDevice device = findByDeviceNum(deviceNum);
+        if (device != null) {
+            throw new BusinessException(String.format("此设备号【%s】已经存在，请检查设备号后重新添加", deviceNum));
+        }
     }
 
     @Override
@@ -195,18 +205,26 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateConfigByDeviceNum(TerminalDeviceConfigDTO dto) {
-        TerminalDeviceConfig config = dao.findConfigByDeviceNumValueType(dto);
+    public void updateConfigByDeviceNum(List<TerminalDeviceConfigDTO> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            log.info("update list is empty");
+            return;
+        }
+
+        TerminalDeviceConfig config = dao.findConfigByDeviceNumValueType(list.get(0));
         Assert.notNull(config, "设备标定对象为空");
 
-        config.setConfVal(dto.getConfValue());
-        config.setChangeStatus(ENABLED);
-        config.setUpdateTime(new Date());
+        for (TerminalDeviceConfigDTO dto : list) {
 
-        int num = dao.updateDeviceConfig(config);
-        int num1 = dao.updateDeviceSendStatus(dto.getDeviceNum(), NOT_SEND);
-        log.info("update device config success, deviceNum: {}, confName, confType: {}, num: {}, num1: {}",
-                dto.getDeviceNum(), config.getConfName(), config.getConfType(), num, num1);
+            config.setConfVal(dto.getConfVal());
+            config.setChangeStatus(ENABLED);
+            config.setUpdateTime(new Date());
+
+            int num = dao.updateDeviceConfig(config);
+            int num1 = dao.updateDeviceSendStatus(dto.getDeviceNum(), NOT_SEND);
+            log.info("update device config success, deviceNum: {}, confName, confType: {}, num: {}, num1: {}",
+                    dto.getDeviceNum(), config.getConfName(), config.getConfType(), num, num1);
+        }
     }
 
     @Override

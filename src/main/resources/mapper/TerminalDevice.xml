@@ -83,7 +83,7 @@
 
     <update id="updateDeviceConfig">
         UPDATE terminal_device_config
-        SET conf_value = #{confValue}, update_time = #{updateTime}, notice_status = #{noticeStatus}
+        SET conf_val = #{confVal}, update_time = #{updateTime}, change_status = #{changeStatus}
         WHERE device_num = #{deviceNum}
         AND conf_type = #{confType}
     </update>
