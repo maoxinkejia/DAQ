@@ -61,6 +61,7 @@ public class AlarmServiceImpl implements AlarmService {
 
         if (Objects.equals(alarmType.getWellLidStatus(), ENABLED) && systemAlarm.get(WELL_LID_OPENED)) {
             alarmList.add(buildDeviceAlarmDetail(deviceNum, WELL_LID_OPEN, location, WELL_LID_OPEN_ALARM_CN));
+            terminalDeviceService.updateAlarmTime(deviceNum);
             log.info("build device alarm, alarm type: {}, deviceNum: {}", WELL_LID_OPEN_ALARM_CN, deviceNum);
         }
 

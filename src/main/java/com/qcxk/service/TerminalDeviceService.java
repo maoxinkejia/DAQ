@@ -37,4 +37,6 @@ public interface TerminalDeviceService {
     List<TerminalDeviceConfig> findChangedConfByDeviceNum(String deviceNum);
 
     int updateApplyTime(String deviceNum);
+
+    void updateAlarmTime(String deviceNum);
 }

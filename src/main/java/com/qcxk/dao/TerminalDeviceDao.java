@@ -37,4 +37,6 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
     List<TerminalDeviceConfig> findChangedConfByDeviceNum(String deviceNum);
 
     int updateApplyTime(String deviceNum);
+
+    int updateAlarmTime(String deviceNum);
 }

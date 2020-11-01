@@ -234,6 +234,12 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         return dao.updateApplyTime(deviceNum);
     }
 
+    @Override
+    public void updateAlarmTime(String deviceNum) {
+        int num = dao.updateAlarmTime(deviceNum);
+        log.info("update alarmTime success, deviceNum: {}, num: {}", deviceNum, num);
+    }
+
     /**
      * 初始化设备对应的告警参数详情
      */

@@ -85,6 +85,10 @@ public class TerminalDevice {
      */
     private Date applyTime;
     /**
+     * 井盖移位告警时间
+     */
+    private Date alarmTime;
+    /**
      * 创建时间
      */
     private Date createTime;

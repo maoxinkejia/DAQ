@@ -16,6 +16,7 @@
           remarks,
           send_status,
           apply_time,
+          alarm_time,
           create_time,
           boot_time,
           shutdown_time,
@@ -37,6 +38,7 @@
           #{remarks},
           #{sendStatus},
           #{applyTime},
+          #{alarmTime},
           #{createTime},
           #{bootTime},
           #{shutdownTime},
@@ -100,6 +102,12 @@
     <update id="updateApplyTime">
         UPDATE terminal_device
         SET apply_time = now(), update_time = now()
+        WHERE device_num = #{deviceNum}
+    </update>
+
+    <update id="updateAlarmTime">
+        UPDATE terminal_device
+        SET alarm_time = now(), update_time = now(), apply_time = null
         WHERE device_num = #{deviceNum}
     </update>
 
@@ -251,6 +259,7 @@
           t.remarks,
           t.send_status AS sendStatus,
           t.apply_time AS applyTime,
+          t.alarm_time AS alarmTime,
           t.create_time AS createTime,
           t.boot_time AS bootTime,
           t.shutdown_time AS shutdownTime,
