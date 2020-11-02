@@ -216,7 +216,8 @@ public class MessageServiceImpl implements MessageService {
      */
     private void resolveDeviceBatVol(TerminalDevice device, String data, List<TerminalDeviceDetail> list) {
         device.setDeviceBatVol(getDeviceBatVol(data));
-        list.add(buildTerminalDeviceDetail(device, WELL_LID_BAT_VOL));
+        list.add(buildTerminalDeviceDetail(device, DEVICE_BAT_VOL));
+        log.info("get deviceBatVol: {}, deviceNum: {}", device.getDeviceBatVol(), device.getDeviceNum());
     }
 
     /**

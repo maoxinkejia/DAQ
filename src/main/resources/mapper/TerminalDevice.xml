@@ -57,7 +57,7 @@
           conf_name,
           conf_val,
           conf_type,
-          notice_status,
+          change_status,
           update_time,
           update_user
         ) VALUES
@@ -67,7 +67,7 @@
               #{model.confName},
               #{model.confVal},
               #{model.confType},
-              #{model.noticeStatus},
+              #{model.changeStatus},
               #{model.updateTime},
               #{model.updateUser}
             )
