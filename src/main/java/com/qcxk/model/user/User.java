@@ -4,6 +4,8 @@ import lombok.Data;
 
 import java.util.Date;
 
+import static com.qcxk.common.Constants.DISABLED;
+
 @Data
 public class User {
     private Long id;
@@ -41,10 +43,11 @@ public class User {
     private Date updateTime;
 
     /*=======权限标识=======*/
-    private Integer devicePermission;
-    private Integer dataListPermission;
-    private Integer alarmPermission;
-    private Integer settingPermission;
-    private Integer originalDataPermission;
-    private Integer userPermission;
+    private Integer devicePermission = DISABLED;
+    private Integer delDevicePermission = DISABLED;
+    private Integer dataListPermission = DISABLED;
+    private Integer alarmPermission = DISABLED;
+    private Integer settingPermission = DISABLED;
+    private Integer originalDataPermission = DISABLED;
+    private Integer userPermission = DISABLED;
 }
