@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.qcxk.common.Constants.*;
+import static com.qcxk.util.BusinessUtil.buildTerminalDeviceDetailListVO;
 
 @Slf4j
 @Service
@@ -46,11 +47,11 @@ public class TerminalDeviceDetailServiceImpl implements TerminalDeviceDetailServ
         List<DeviceAlarmDetail> alarmList = deviceAlarmDao.findAlarmListByDeviceNum(deviceNum);
 
         TerminalDataDetailVO vo = new TerminalDataDetailVO();
-        vo.setCh4GasConcentrationList(ch4ConcentrationList);
-        vo.setWaterDepthList(waterDepthList);
-        vo.setTemperatureList(temperatureList);
-        vo.setDeviceBatVolList(deviceBatVolList);
-        vo.setWellLidBatVolList(wellLidBatVolList);
+        vo.setCh4GasConcentrationList(buildTerminalDeviceDetailListVO(ch4ConcentrationList));
+        vo.setWaterDepthList(buildTerminalDeviceDetailListVO(waterDepthList));
+        vo.setTemperatureList(buildTerminalDeviceDetailListVO(temperatureList));
+        vo.setDeviceBatVolList(buildTerminalDeviceDetailListVO(deviceBatVolList));
+        vo.setWellLidBatVolList(buildTerminalDeviceDetailListVO(wellLidBatVolList));
         vo.setAlarmList(alarmList);
 
         return vo;

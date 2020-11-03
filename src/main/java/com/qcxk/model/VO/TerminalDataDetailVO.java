@@ -1,17 +1,23 @@
 package com.qcxk.model.VO;
 
 import com.qcxk.model.alarm.DeviceAlarmDetail;
-import com.qcxk.model.device.TerminalDeviceDetail;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class TerminalDataDetailVO {
-    private List<TerminalDeviceDetail> ch4GasConcentrationList;
-    private List<TerminalDeviceDetail> waterDepthList;
-    private List<TerminalDeviceDetail> temperatureList;
-    private List<TerminalDeviceDetail> deviceBatVolList;
-    private List<TerminalDeviceDetail> wellLidBatVolList;
+    private TerminalDataDetailListVO ch4GasConcentrationList;
+    private TerminalDataDetailListVO waterDepthList;
+    private TerminalDataDetailListVO temperatureList;
+    private TerminalDataDetailListVO deviceBatVolList;
+    private TerminalDataDetailListVO wellLidBatVolList;
     private List<DeviceAlarmDetail> alarmList;
+
+    @Data
+    public static class TerminalDataDetailListVO {
+        private List<String> date = new ArrayList<>(3);
+        private List<Double> value = new ArrayList<>(3);
+    }
 }

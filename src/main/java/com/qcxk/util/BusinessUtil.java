@@ -1,6 +1,7 @@
 package com.qcxk.util;
 
 import com.qcxk.common.RecordEnum;
+import com.qcxk.model.VO.TerminalDataDetailVO;
 import com.qcxk.model.VO.TerminalDataListVO;
 import com.qcxk.model.alarm.DeviceAlarmDetail;
 import com.qcxk.model.device.TerminalDevice;
@@ -504,6 +505,7 @@ public class BusinessUtil {
         vo.setWellLidBatVol(device.getWellLidBatVol() == null ? 0.0d : device.getWellLidBatVol());
         vo.setDeviceBatVolLeft(device.getDeviceBatVolLeft());
         vo.setWellLidBatVolLeft(device.getWellLidBatVolLeft());
+        vo.setWellLidOpenStatus(device.getWellLidOpenStatus());
         vo.setLocation(device.getLocation());
 
         buildDataListAlarmStatus(vo, configs);
@@ -547,7 +549,7 @@ public class BusinessUtil {
                     if (val == null || val <= 0) {
                         vo.setWellLidBatVolStatus(NOT_ALARM);
                     } else {
-                        vo.setWellLidOpenStatus((vo.getWellLidBatVol() < val ? NOT_ALARM : ALARM));
+                        vo.setWellLidBatVolStatus((vo.getWellLidBatVol() < val ? NOT_ALARM : ALARM));
                     }
                     break;
                 default:
@@ -633,5 +635,15 @@ public class BusinessUtil {
 
         double num = (left / WELL_LID_BAT_VOL_TOTAL) * 100;
         device.setWellLidBatVolLeft(Double.parseDouble(String.valueOf(num).substring(0, 2)));
+    }
+
+    public static TerminalDataDetailVO.TerminalDataDetailListVO buildTerminalDeviceDetailListVO(List<TerminalDeviceDetail> list) {
+        TerminalDataDetailVO.TerminalDataDetailListVO vo = new TerminalDataDetailVO.TerminalDataDetailListVO();
+        for (TerminalDeviceDetail detail : list) {
+            vo.getDate().add(DateUtils.format(detail.getCreateTime(), DateUtils.yyyy_MM_dd));
+            vo.getValue().add(detail.getValue());
+        }
+
+        return vo;
     }
 }

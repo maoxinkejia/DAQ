@@ -43,7 +43,7 @@ public class AlarmController {
         return Response.build().success();
     }
 
-    @PutMapping(value = "/apply/{deviceNum}")
+    @PutMapping(value = "/apply2/{deviceNum}")
     public Response applyByDeviceNum(@PathVariable(value = "deviceNum") String deviceNum) {
         alarmService.applyByDeviceNum(deviceNum);
         return Response.build().success();

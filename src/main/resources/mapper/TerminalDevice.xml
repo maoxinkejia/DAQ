@@ -101,7 +101,7 @@
 
     <update id="updateApplyTime">
         UPDATE terminal_device
-        SET apply_time = now(), update_time = now()
+        SET apply_time = now(), update_time = now(), well_lid_open_status = 0
         WHERE device_num = #{deviceNum}
     </update>
 
