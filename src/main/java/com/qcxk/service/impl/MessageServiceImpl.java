@@ -42,7 +42,7 @@ public class MessageServiceImpl implements MessageService {
 
             TerminalDevice device = terminalDeviceService.findByDeviceNum(message.getDeviceNum());
             if (device == null) {
-                device = terminalDeviceService.add(BusinessUtil.buildTerminalDevice(message));
+                device = terminalDeviceService.add(buildNewTerminalDevice(message));
             }
 
             terminalDeviceService.updateBootTime(device);

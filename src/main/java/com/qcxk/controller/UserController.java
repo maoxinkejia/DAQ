@@ -65,5 +65,4 @@ public class UserController {
         userService.resetPassword(user);
         return Response.build().success();
     }
-
 }

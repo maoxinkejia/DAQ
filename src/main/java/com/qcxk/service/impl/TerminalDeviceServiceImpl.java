@@ -7,7 +7,6 @@ import com.qcxk.dao.TerminalDeviceDao;
 import com.qcxk.exception.BusinessException;
 import com.qcxk.exception.ParamException;
 import com.qcxk.model.VO.TerminalDataListVO;
-import com.qcxk.model.alarm.DeviceAlarmDetail;
 import com.qcxk.model.device.TerminalDevice;
 import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.service.AlarmService;
@@ -60,6 +59,11 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
         device.setSendStatus(INIT_STATUS);
         device.setWellLidOpenStatus(DISABLED);
+        device.setCh4GasConcentration(0.0d);
+        device.setWaterDepth(0.0d);
+        device.setTemperature(0.0d);
+        device.setDeviceBatVol(0.0d);
+        device.setWellLidBatVol(0.0d);
         device.setCreateTime(new Date());
         device.setDelStatus(NOT_DELETED);
         device.setBootTime(null);
@@ -98,16 +102,18 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     @Override
     public List<TerminalDevice> findList(TerminalDeviceDTO dto) {
         List<TerminalDevice> list = findBaseList(dto);
-        list.forEach(device -> {
+        for (TerminalDevice device : list) {
+            List<TerminalDeviceConfig> configs = dao.findConfigByDeviceNum(device.getDeviceNum());
+            buildTerminalDeviceStatus(device, configs);
+
             String imagePath = device.getImagePath();
             if (StringUtils.isBlank(imagePath)) {
                 device.setImagePaths(Collections.emptyList());
-                return;
+                continue;
             }
 
-            String[] split = imagePath.split(";");
-            device.setImagePaths(Arrays.asList(split));
-        });
+            device.setImagePaths(Arrays.asList(imagePath.split(";")));
+        }
 
         return list;
     }

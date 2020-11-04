@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        if (Objects.equals(user.getPassword(), getMD5Str(user.getPassword()))) {
+        if (Objects.equals(exists.getPassword(), getMD5Str(user.getPassword()))) {
             log.warn("password not true, password: {}", user.getPassword());
             return false;
         }

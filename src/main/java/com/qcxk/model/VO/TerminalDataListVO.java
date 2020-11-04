@@ -3,6 +3,7 @@ package com.qcxk.model.VO;
 import com.qcxk.model.alarm.DeviceAlarmDetail;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -67,6 +68,11 @@ public class TerminalDataListVO {
      * 是否达到阈值
      */
     private Integer wellLidBatVolStatus;
+    /**
+     * 井盖移位状态告警时间/应答时间
+     */
+    private Date wellLidOpenStatusAlarmTime;
+    private Date wellLidOpenStatusApplyTime;
     /**
      * 告警列表信息
      */

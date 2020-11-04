@@ -252,6 +252,7 @@
           t.device_bat_vol AS deviceBatVol,
           t.well_lid_bat_vol AS wellLidBatVol,
           t.temperature,
+          t.well_lid_open_status AS wellLidOpenStatus,
           t.del_status AS delStatus,
           t.tube_well_description AS tubeWellDescription,
           t.control_status AS controlStatus,

@@ -134,4 +134,9 @@ public class TerminalDevice {
      * 井盖剩余电池电量，单位%
      */
     private Double WellLidBatVolLeft;
+    /**
+     * GIS地图展示设备状态，若都为正常无告警时为0
+     * 剩下告警状态参考#Constants类告警常量
+     */
+    private String status = "正常";
 }

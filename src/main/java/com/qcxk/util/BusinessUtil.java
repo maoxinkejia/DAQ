@@ -452,7 +452,7 @@ public class BusinessUtil {
     /**
      * 构建设备基础信息
      */
-    public static TerminalDevice buildTerminalDevice(Message message) {
+    public static TerminalDevice buildNewTerminalDevice(Message message) {
         TerminalDevice device = new TerminalDevice();
         device.setDeviceNum(message.getDeviceNum());
         device.setLocation("暂无");
@@ -507,6 +507,8 @@ public class BusinessUtil {
         vo.setWellLidBatVolLeft(device.getWellLidBatVolLeft());
         vo.setWellLidOpenStatus(device.getWellLidOpenStatus());
         vo.setLocation(device.getLocation());
+        vo.setWellLidOpenStatusAlarmTime(device.getAlarmTime());
+        vo.setWellLidOpenStatusApplyTime(device.getApplyTime());
 
         buildDataListAlarmStatus(vo, configs);
 
@@ -645,5 +647,50 @@ public class BusinessUtil {
         }
 
         return vo;
+    }
+
+    public static void buildTerminalDeviceStatus(TerminalDevice device, List<TerminalDeviceConfig> configs) {
+        if (Objects.equals(device.getWellLidOpenStatus(), ALARM)) {
+            device.setStatus(WELL_LID_OPEN_ALARM_CN);
+            return;
+        }
+
+        for (TerminalDeviceConfig conf : configs) {
+            Double val = conf.getConfVal();
+            switch (Objects.requireNonNull(RecordEnum.of(conf.getConfType()))) {
+                case WATER_DEPTH_ALARM_THRESHOLD:
+                    if (val != null && device.getWaterDepth() >= val) {
+                        device.setStatus(WATER_DEPTH_ALARM_CN);
+                        return;
+                    }
+                    break;
+                case CH4_GAS_THRESHOLD:
+                    if (val != null && device.getCh4GasConcentration() >= val) {
+                        device.setStatus(CH4_CONCENTRATION_ALARM_CN);
+                        return;
+                    }
+                    break;
+                case TEMPERATURE_THRESHOLD:
+                    if (val != null && device.getTemperature() >= val) {
+                        device.setStatus(TEMPERATURE_ALARM_CN);
+                        return;
+                    }
+                    break;
+                case DEVICE_BAT_VOL_THRESHOLD:
+                    if (val != null && device.getDeviceBatVol() >= val) {
+                        device.setStatus(DEVICE_BAT_VOL_ALARM_CN);
+                        return;
+                    }
+                    break;
+                case WELL_LID_BAT_VOL_THRESHOLD:
+                    if (val != null && device.getWellLidBatVol() >= val) {
+                        device.setStatus(WELL_LID_BAT_VOL_ALARM_CN);
+                        return;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
