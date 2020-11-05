@@ -58,10 +58,22 @@ public class DiscardServerHandler extends ChannelHandlerAdapter {
 
         for (String response : responseList) {
             log.info("response message: {}", response);
-            ByteBuf in3 = Unpooled.copiedBuffer(response.getBytes());
+            ByteBuf in3 = Unpooled.copiedBuffer(convertString2Int(response));
             ctx.writeAndFlush(in3);
         }
     }
+
+    private byte[] convertString2Int(String str) {
+        int len = (str.length() + 1) / 2;
+        byte[] b = new byte[len];
+        for (int i = 0; i < len; i++) {
+            //把十六进制转为十进制整型
+            int dec_num = Integer.parseInt(str.substring(2 * i, 2 * i + 2), 16);
+            b[i] = (byte) dec_num;
+        }
+        return b;
+    }
+
 
     private String convertByteBufToString(ByteBuf buf) {
         byte[] bytes = new byte[buf.readableBytes()];
