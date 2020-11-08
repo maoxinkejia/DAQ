@@ -2,6 +2,7 @@ package com.qcxk.service.impl;
 
 import com.qcxk.controller.model.query.UserDTO;
 import com.qcxk.dao.UserDao;
+import com.qcxk.exception.BusinessException;
 import com.qcxk.model.user.User;
 import com.qcxk.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -90,6 +91,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void addUser(User user) {
+        User exists = dao.findByUsername(user.getUsername());
+        if (exists != null) {
+            throw new BusinessException("当前用户已经存在");
+        }
+
         user.setPassword(getMD5Str(user.getPassword()));
         user.setCreateTime(new Date());
         user.setDelStatus(NOT_DELETED);

@@ -22,7 +22,7 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
 
     int batchAddTerminalDeviceConfigs(List<TerminalDeviceConfig> configs);
 
-    List<TerminalDeviceConfig> findConfigByDeviceNum(String deviceNum);
+    List<TerminalDeviceConfig> findConfigByDeviceNum(@Param("deviceNum") String deviceNum, @Param("settingType") Integer settingType);
 
     List<TerminalDeviceConfig> findConfigList(TerminalDeviceDTO dto);
 
@@ -32,7 +32,7 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
 
     int addTerminalDevice(TerminalDevice device);
 
-    int updateDeviceSendStatus(@Param("deviceNum") String deviceNum,@Param("sendStatus") Integer sendStatus);
+    int updateDeviceSendStatus(@Param("deviceNum") String deviceNum, @Param("sendStatus") Integer sendStatus);
 
     List<TerminalDeviceConfig> findChangedConfByDeviceNum(String deviceNum);
 

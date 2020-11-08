@@ -75,8 +75,11 @@ public class TerminalController {
 
     @GetMapping(value = "/dataList")
     public Response getDataList(TerminalDeviceDTO dto) {
+        PageHelper.startPage(dto.getPage(), dto.getPageSize());
         List<TerminalDataListVO> list = service.findDataList(dto);
-        return Response.build(list).success();
+
+        Pagination pagination = Pagination.buildPagination(list, dto);
+        return PageResponse.pageResponse(pagination, list).success();
     }
 
     @GetMapping(value = "/data/details")

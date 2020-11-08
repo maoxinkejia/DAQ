@@ -26,6 +26,20 @@
         AND (t.create_time BETWEEN #{startTime} AND #{endTime})
     </select>
 
+    <select id="findOriginalDataList" resultType="com.qcxk.model.device.TerminalDeviceDetail">
+        <include refid="selectTerminalDeviceDetail"/>
+        <where>
+            <if test="deviceNum != null and deviceNum != ''">
+                t.device_num = #{deviceNum} AND
+            </if>
+            <if test="start != null">
+                t.create_time &gt;= #{start} AND
+            </if>
+            <if test="end != null">
+                t.create_time &lt;= #{end}
+            </if>
+        </where>
+    </select>
 
     <sql id="selectTerminalDeviceDetail">
         SELECT

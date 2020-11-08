@@ -386,15 +386,12 @@ public class BusinessUtil {
     /**
      * 构建服务器发送给探测器功能配置的消息体
      */
-    public static String buildServerSend2DeviceMessage(Message message, TerminalDevice device, TerminalDeviceConfig config) {
-        StringBuffer buffer = new StringBuffer();
-
-
+    public static String buildServerSend2DeviceMessage(Message message, StringBuilder builder) {
         return PREFIX_START +
                 message.getDeviceNumHex() +
                 SETTING_DEVICE_FUNC_CODE +
                 "46" +
-                buffer.toString() +
+                builder.toString() +
                 message.getVerifyCode() +
                 SUFFIX_END;
     }
@@ -498,6 +495,8 @@ public class BusinessUtil {
     public static TerminalDataListVO buildTerminalDataList(TerminalDevice device, List<TerminalDeviceConfig> configs) {
         TerminalDataListVO vo = new TerminalDataListVO();
         vo.setDeviceNum(device.getDeviceNum());
+        vo.setLatitude(device.getLatitude());
+        vo.setLongitude(device.getLongitude());
         vo.setCh4GasConcentration(device.getCh4GasConcentration() == null ? 0.0d : device.getCh4GasConcentration());
         vo.setWaterDepth(device.getWaterDepth() == null ? 0.0d : device.getWaterDepth());
         vo.setTemperature(device.getTemperature() == null ? 0.0d : device.getTemperature());
@@ -509,6 +508,8 @@ public class BusinessUtil {
         vo.setLocation(device.getLocation());
         vo.setWellLidOpenStatusAlarmTime(device.getAlarmTime());
         vo.setWellLidOpenStatusApplyTime(device.getApplyTime());
+        vo.setUpdateTime(device.getUpdateTime());
+        vo.setImagePaths(device.getImagePaths());
 
         buildDataListAlarmStatus(vo, configs);
 
@@ -519,7 +520,7 @@ public class BusinessUtil {
         for (TerminalDeviceConfig conf : configs) {
             Double val = conf.getConfVal();
             switch (Objects.requireNonNull(RecordEnum.of(conf.getConfType()))) {
-                case CH4_GAS_THRESHOLD:
+                case CH4_GAS_VOLUME_THRESHOLD:
                     if (val == null || val <= 0) {
                         vo.setCh4GasConcentrationStatus(NOT_ALARM);
                     } else {
@@ -558,6 +559,12 @@ public class BusinessUtil {
                     break;
             }
         }
+
+        Integer deviceStatus = (Objects.equals(vo.getTemperatureStatus(), NOT_ALARM) && Objects.equals(vo.getWaterDepthStatus(), NOT_ALARM) &&
+                Objects.equals(vo.getDeviceBatVolStatus(), NOT_ALARM) && Objects.equals(vo.getWellLidOpenStatus(), NOT_ALARM) &&
+                Objects.equals(vo.getCh4GasConcentrationStatus(), NOT_ALARM) && Objects.equals(vo.getWellLidBatVolStatus(), NOT_ALARM))
+                ? NOT_ALARM : ALARM;
+        vo.setDeviceStatus(deviceStatus);
     }
 
     public static DeviceAlarmDetail buildDeviceAlarmDetail(String deviceNum, int alarmType, String location, String alarmDescription) {
@@ -664,7 +671,7 @@ public class BusinessUtil {
                         return;
                     }
                     break;
-                case CH4_GAS_THRESHOLD:
+                case CH4_GAS_VOLUME_THRESHOLD:
                     if (val != null && device.getCh4GasConcentration() >= val) {
                         device.setStatus(CH4_CONCENTRATION_ALARM_CN);
                         return;

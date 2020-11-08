@@ -17,6 +17,14 @@ public class TerminalDataListVO {
      */
     private String location;
     /**
+     * 经度
+     */
+    private String longitude;
+    /**
+     * 纬度
+     */
+    private String latitude;
+    /**
      * 水位深度
      */
     private Double waterDepth;
@@ -68,6 +76,19 @@ public class TerminalDataListVO {
      * 是否达到阈值
      */
     private Integer wellLidBatVolStatus;
+    /**
+     * 设备状态
+     * 只有所有状态都是正常时，此状态才是正常，任一状态为异常，此状态都是异常
+     */
+    private Integer deviceStatus;
+    /**
+     * 图片列表信息
+     */
+    private List<String> imagePaths;
+    /**
+     * 设备更新时间
+     */
+    private Date updateTime;
     /**
      * 井盖移位状态告警时间/应答时间
      */

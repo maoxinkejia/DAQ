@@ -1,5 +1,6 @@
 package com.qcxk.service.impl;
 
+import com.qcxk.common.RecordEnum;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.MessageDao;
 import com.qcxk.model.device.TerminalDevice;
@@ -17,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import sun.applet.Main;
 
 import java.util.*;
 
@@ -142,9 +144,41 @@ public class MessageServiceImpl implements MessageService {
             return;
         }
 
+        StringBuilder builder = new StringBuilder(String.format("%070d", 0));
         for (TerminalDeviceConfig config : configs) {
-            response.add(buildServerSend2DeviceMessage(message, terminalDevice, config));
+            builder = buildConfig2String(config, builder);
         }
+
+
+        response.add(buildServerSend2DeviceMessage(message, builder));
+    }
+
+    private StringBuilder buildConfig2String(TerminalDeviceConfig config, StringBuilder builder) {
+        switch (Objects.requireNonNull(RecordEnum.of(config.getConfType()))) {
+            case CH4_GAS_VOLUME_ALARM_ZERO:
+                break;
+            case CH4_GAS_VOLUME_ALARM_RANGE:
+                break;
+            case TEMPERATURE_CORRECTION:
+                break;
+            case WELL_LID_OPEN_ALARM:
+                break;
+            case WATER_DEPTH_ALARM_THRESHOLD:
+                break;
+            case CH4_GAS_VOLUME_THRESHOLD:
+                break;
+            case TEMPERATURE_THRESHOLD:
+                break;
+            case DEVICE_BAT_VOL_THRESHOLD:
+                break;
+            case UPLOAD_DATA_PERIOD:
+                break;
+            case WELL_LID_BAT_VOL_THRESHOLD:
+                break;
+            default:
+                break;
+        }
+        return builder;
     }
 
     @Override
@@ -179,17 +213,6 @@ public class MessageServiceImpl implements MessageService {
      * 解析设备上传的采集信息功能码（A2），并构建填充设备对象
      */
     private void buildDeviceUploadFunction(TerminalDevice device, String data) {
-        String version = BusinessUtil.getVersion(data);
-
-        Integer wellLidUploadTime = BusinessUtil.getWellLidUploadTime(data);
-        Map<Integer, Boolean> hardwareFailure = BusinessUtil.getHardwareErrorCode(data);
-
-
-        Double ch4GasVolumeConcentration = BusinessUtil.getCH4GasVolumeConcentration(data);
-        Integer ch4SensorEnum = BusinessUtil.getCH4SensorEnum(data);
-        Integer rssi = BusinessUtil.getRSSI(data);
-
-
         alarmService.addDeviceAlarm(getSystemErrorCode(data), device.getDeviceNum(), device.getLocation());
 
         List<TerminalDeviceDetail> list = new ArrayList<>();
@@ -199,8 +222,6 @@ public class MessageServiceImpl implements MessageService {
         resolveWellLidStatus(device, data, list);
         resolveDeviceBatVol(device, data, list);
 
-        device.setUpdateTime(new Date());
-        device.setUpdateUser(SYSTEM_USER);
         terminalDeviceService.updateDevice(device);
 
         if (CollectionUtils.isEmpty(list)) {

@@ -57,7 +57,7 @@
     <select id="findByUsername" resultType="com.qcxk.model.user.User">
         <include refid="selectUser"/>
         WHERE t.username = #{username}
-        AND t.del_status = 0
+        AND t.del_status != 1
     </select>
 
     <select id="findById" resultType="com.qcxk.model.user.User">

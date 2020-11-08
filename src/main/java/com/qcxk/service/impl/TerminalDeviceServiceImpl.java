@@ -96,23 +96,15 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     public List<TerminalDeviceConfig> findConfigByDeviceNum(String deviceNum) {
-        return dao.findConfigByDeviceNum(deviceNum);
+        return dao.findConfigByDeviceNum(deviceNum, null);
     }
 
     @Override
     public List<TerminalDevice> findList(TerminalDeviceDTO dto) {
         List<TerminalDevice> list = findBaseList(dto);
         for (TerminalDevice device : list) {
-            List<TerminalDeviceConfig> configs = dao.findConfigByDeviceNum(device.getDeviceNum());
+            List<TerminalDeviceConfig> configs = dao.findConfigByDeviceNum(device.getDeviceNum(), null);
             buildTerminalDeviceStatus(device, configs);
-
-            String imagePath = device.getImagePath();
-            if (StringUtils.isBlank(imagePath)) {
-                device.setImagePaths(Collections.emptyList());
-                continue;
-            }
-
-            device.setImagePaths(Arrays.asList(imagePath.split(";")));
         }
 
         return list;
@@ -195,6 +187,14 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         list.forEach(device -> {
             calculateDeviceBatVolLeft(device);
             calculateWellLidBatVolLeft(device);
+            String imagePath = device.getImagePath();
+
+            if (StringUtils.isBlank(imagePath)) {
+                device.setImagePaths(Collections.emptyList());
+                return;
+            }
+
+            device.setImagePaths(Arrays.asList(imagePath.split(";")));
         });
 
         return list;
@@ -202,7 +202,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     public List<TerminalDeviceConfig> findConfigList(TerminalDeviceDTO dto) {
-        return dao.findConfigByDeviceNum(dto.getDeviceNum());
+        return dao.findConfigByDeviceNum(dto.getDeviceNum(), dto.getSettingType());
     }
 
     @Override
@@ -219,7 +219,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         for (TerminalDeviceConfigDTO dto : list) {
 
             config.setConfVal(dto.getConfVal());
-            config.setChangeStatus(ENABLED);
+            config.setChangeStatus(NOT_SEND);
             config.setUpdateTime(new Date());
 
             int num = dao.updateDeviceConfig(config);

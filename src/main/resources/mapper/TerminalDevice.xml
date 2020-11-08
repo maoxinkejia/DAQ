@@ -6,7 +6,6 @@
         INSERT INTO terminal_device(
           device_num,
           IOT_card_num,
-          device_ip,
           longitude,
           latitude,
           location,
@@ -35,7 +34,6 @@
         ) VALUES (
           #{deviceNum},
           #{iotCardNum},
-          #{deviceIP},
           #{longitude},
           #{latitude},
           #{location},
@@ -110,7 +108,6 @@
       UPDATE terminal_device
       SET send_status = #{sendStatus}
       WHERE device_num = #{deviceNum}
-      AND update_time = now()
     </update>
 
     <update id="updateApplyTime">
@@ -152,6 +149,12 @@
     <select id="findConfigByDeviceNum" resultType="com.qcxk.model.device.TerminalDeviceConfig">
         <include refid="selectTerminalDeviceConfig"/>
         WHERE t.device_num = #{deviceNum}
+        <if test="settingType != null and settingType == 1">
+            AND t.conf_type in (3, 4, 6)
+        </if>
+        <if test="settingType != null and settingType == 2">
+            AND t.conf_type IN (7, 8, 9, 10, 11, 12, 13, 14)
+        </if>
     </select>
 
     <select id="findConfigList" resultType="com.qcxk.model.device.TerminalDeviceConfig">
@@ -175,7 +178,7 @@
     <select id="findChangedConfByDeviceNum" resultType="com.qcxk.model.device.TerminalDeviceConfig">
         <include refid="selectTerminalDeviceConfig"/>
         WHERE t.device_num = #{deviceNum}
-        AND t.change_status = 0
+        AND t.change_status = 1
     </select>
 
     <sql id="selectTerminalDeviceConfig">
@@ -195,6 +198,9 @@
     <sql id="updateTerminalDevice">
         UPDATE terminal_device
         <set>
+            <if test="iotCardNum != null and iotCardNum != ''">
+                IOT_card_num = #{iotCardNum},
+            </if>
             <if test="temperature != null">
                 temperature = #{temperature},
             </if>
@@ -257,7 +263,6 @@
           t.id,
           t.device_num AS deviceNum,
           t.IOT_card_num AS IOTCardNum,
-          t.device_ip AS deviceIP,
           t.longitude,
           t.latitude,
           t.location,

@@ -1,5 +1,6 @@
 package com.qcxk.service.impl;
 
+import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.DeviceAlarmDao;
 import com.qcxk.dao.TerminalDeviceDetailDao;
 import com.qcxk.model.VO.TerminalDataDetailVO;
@@ -8,6 +9,7 @@ import com.qcxk.model.device.TerminalDeviceDetail;
 import com.qcxk.service.TerminalDeviceDetailService;
 import com.qcxk.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,5 +57,20 @@ public class TerminalDeviceDetailServiceImpl implements TerminalDeviceDetailServ
         vo.setAlarmList(alarmList);
 
         return vo;
+    }
+
+    @Override
+    public List<TerminalDeviceDetail> findOriginalDataList(TerminalDeviceDTO dto) throws ParseException {
+        Date start = null;
+        Date end = null;
+
+        if (StringUtils.isNotBlank(dto.getStartDate())) {
+            start = DateUtils.parseDate(dto.getStartDate(), DateUtils.yyyy_MM_dd);
+        }
+        if (StringUtils.isNotBlank(dto.getEndDate())) {
+            end = DateUtils.getNextDate(dto.getEndDate());
+        }
+
+        return dao.findOriginalDataList(dto.getDeviceNum(), start, end);
     }
 }

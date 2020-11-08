@@ -12,9 +12,7 @@ public class GlobalExceptionController {
 
     @ExceptionHandler
     public Response onException(Exception e) {
-        if (e instanceof ParamException) {
-            log.error("request param error");
-        }
+        log.error("error", e);
         return Response.build().fail(e.getMessage());
     }
 }
