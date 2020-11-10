@@ -238,8 +238,14 @@
             <if test="imagePath != null and imagePath != ''">
                 image_path = #{imagePath},
             </if>
-            <if test="remarks != null and imagePath != ''">
+            <if test="remarks != null and remarks != ''">
                 remarks = #{remarks},
+            </if>
+            <if test="bootTime != null and bootTime != ''">
+                boot_time = #{bootTime},
+            </if>
+            <if test="shutdownTime != null and shutdownTime != ''">
+                shutdownTime = #{shutdownTime},
             </if>
             <if test="applyTime != null">
                 apply_time = #{applyTime},

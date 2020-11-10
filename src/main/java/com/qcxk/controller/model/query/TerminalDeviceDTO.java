@@ -40,4 +40,9 @@ public class TerminalDeviceDTO extends PageAndPageSize {
      * 数据类型，参考TerminalDeviceDetail的valueType
      */
     private Integer valueType;
+
+    public TerminalDeviceDTO(String deviceNum, Integer settingType) {
+        this.deviceNum = deviceNum;
+        this.settingType = settingType;
+    }
 }

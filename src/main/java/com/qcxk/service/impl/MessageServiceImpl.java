@@ -1,6 +1,7 @@
 package com.qcxk.service.impl;
 
 import com.qcxk.common.RecordEnum;
+import com.qcxk.controller.model.query.TerminalDeviceConfigDTO;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.MessageDao;
 import com.qcxk.model.device.TerminalDevice;
@@ -55,7 +56,6 @@ public class MessageServiceImpl implements MessageService {
                 case DEVICE_UPLOAD_DETAILS_CODE:
                     log.info("receive device details code: A1, data: {}", data);
                     buildDeviceUploadDetails(device, data);
-                    terminalDeviceService.updateDevice(device);
                     break;
                 case DEVICE_UPLOAD_FUNC_CODE:
                     log.info("receive device function code: A2, data: {}", data);
@@ -196,18 +196,41 @@ public class MessageServiceImpl implements MessageService {
      * 解析设备上传探测器基本信息（A1），并构建填充设备对象
      */
     private void buildDeviceUploadDetails(TerminalDevice device, String data) {
+        List<TerminalDeviceConfig> alarmConfigs = terminalDeviceService.findConfigList(new TerminalDeviceDTO(device.getDeviceNum(), ALARM_TYPE));
+        List<TerminalDeviceConfigDTO> updateList = new ArrayList<>(7);
+        for (TerminalDeviceConfig config : alarmConfigs) {
+            setConfVal(data, config);
+            updateList.add(buildConfig2DTO(config));
+        }
 
-        Integer waterDepthStatus = BusinessUtil.getWaterDepthStatus(data);
-        Double waterDepthThreshold = BusinessUtil.getWaterDepthThreshold(data);
-        Integer gasSensorStatus = BusinessUtil.getGasSensorStatus(data);
-        Double gasConcentrationThreshold = BusinessUtil.getGasConcentrationThreshold(data);
-        Double gasConcentration = BusinessUtil.getGasConcentration(data);
-        Double batVolThreshold = BusinessUtil.getBatVolThreshold(data);
-        String serverHost = BusinessUtil.getServerHost(data);
-        String serverPort = BusinessUtil.getServerPort(data);
-        Integer batLeftWorkTime = BusinessUtil.getBatLeftWorkTime(data);
+        terminalDeviceService.updateConfigByDeviceNum(updateList);
+    }
 
+    private void setConfVal(String data, TerminalDeviceConfig config) {
+        switch (Objects.requireNonNull(RecordEnum.of(config.getConfType()))) {
+            case WELL_LID_OPEN_ALARM:
+                config.setConfVal(getWellLidAlarmOpenStatus(data).doubleValue());
+                break;
+            case WATER_DEPTH_ALARM_THRESHOLD:
+                config.setConfVal(getWaterDepthThreshold(data));
+                break;
+            case CH4_GAS_VOLUME_THRESHOLD:
+                config.setConfVal(getGasConcentrationThreshold(data));
+                break;
+            case TEMPERATURE_THRESHOLD:
+                config.setConfVal(getTemperatureThreshold(data));
+                break;
+            case DEVICE_BAT_VOL_THRESHOLD:
+                config.setConfVal(getDeviceBatVolThreshold(data));
+                break;
+            case UPLOAD_DATA_PERIOD:
+                config.setConfVal(getDeviceUploadTime(data));
+                break;
+        }
+    }
 
+    private TerminalDeviceConfigDTO buildConfig2DTO(TerminalDeviceConfig config) {
+        return new TerminalDeviceConfigDTO(config.getDeviceNum(), config.getConfType(), config.getConfVal());
     }
 
     /**

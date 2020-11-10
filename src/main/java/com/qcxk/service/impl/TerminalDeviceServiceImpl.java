@@ -89,6 +89,11 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateDevice(TerminalDevice device) {
         checkTerminalDeviceParam(device);
+        TerminalDevice exists = dao.findByDeviceNum(device.getDeviceNum());
+        if (!Objects.equals(exists.getLocation(), device.getLocation())) {
+            log.info("update device location, need to update other tables, old location: {}, new location: {}", exists.getLocation(), device.getLocation());
+            //todo 更新其他含有location的表字段
+        }
 
         device.setUpdateTime(new Date());
         dao.update(device);
