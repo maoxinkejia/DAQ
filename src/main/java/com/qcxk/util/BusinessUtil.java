@@ -454,6 +454,7 @@ public class BusinessUtil {
         device.setDeviceNum(message.getDeviceNum());
         device.setLocation("暂无");
         device.setCreateUser(SYSTEM_USER);
+        device.setControlStatus(DISABLED);
         return device;
     }
 
@@ -574,7 +575,7 @@ public class BusinessUtil {
         detail.setAlarmType(alarmType);
         detail.setAlarmDescription(alarmDescription);
         detail.setAlarmTime(new Date());
-        detail.setApplyStatus(DISABLED);
+        detail.setApplyStatus(alarmType == WELL_LID_OPEN ? DISABLED : NO_NEED_APPLY);
         detail.setApplyTime(null);
 
         return detail;
