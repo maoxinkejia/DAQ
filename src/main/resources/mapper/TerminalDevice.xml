@@ -14,7 +14,7 @@
           ch4_gas_concentration,
           water_depth,
           temperature,
-          device_bat_bol,
+          device_bat_vol,
           well_lid_bat_vol,
           tube_well_description,
           control_status,

@@ -126,15 +126,15 @@ public class BusinessUtil {
     /**
      * 获取登陆时电池电压
      */
-    public static Integer getLoginBatVol(String data) {
-        return Integer.parseInt(data.substring(12, 14), 16);
+    public static Double getLoginBatVol(String data) {
+        return getDoubleValue(Integer.parseInt(data.substring(14, 16), 16));
     }
 
     /**
      * 获取登陆时信号强度
      */
     public static Integer getLoginRSSI(String data) {
-        return Integer.parseInt(data.substring(14, 16), 16);
+        return Integer.parseInt(data.substring(16, 18), 16);
     }
 
     /**

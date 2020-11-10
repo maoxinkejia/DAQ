@@ -2,6 +2,7 @@ package com.qcxk.thms;
 
 import com.qcxk.model.message.Message;
 import com.qcxk.service.MessageService;
+import com.qcxk.service.TerminalDeviceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,12 @@ public class ThmsApplicationTests {
 
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private TerminalDeviceService terminalDeviceService;
 
     @Test
     public void test1() {
-        String s = "6804000000a23200000000000000010000000005000000020100000000000000936270000000000000000000000000000000000000000000005216";
+        String s = "68000315138509140b0a020c161b8a00ed16";
         List<Message> messages = messageService.parse2Msg(s, new ArrayList<>());
         messageService.processMsg(messages);
     }

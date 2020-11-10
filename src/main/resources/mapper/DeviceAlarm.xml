@@ -41,7 +41,7 @@
               #{model.deviceNum},
               #{model.location},
               #{model.alarmType},
-              #{model.alarmDescription}
+              #{model.alarmDescription},
               #{model.alarmTime},
               #{model.applyStatus},
               #{model.applyTime}

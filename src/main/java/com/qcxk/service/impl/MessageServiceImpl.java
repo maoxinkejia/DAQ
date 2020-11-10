@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import sun.applet.Main;
 
 import java.util.*;
 
@@ -298,7 +297,7 @@ public class MessageServiceImpl implements MessageService {
      * 构建设备登录时数据
      */
     private void buildDeviceLoginCode(TerminalDevice device, String data) {
-        device.setDeviceBatVol(getLoginBatVol(data).doubleValue());
+        device.setDeviceBatVol(getLoginBatVol(data));
         device.setUpdateUser(SYSTEM_USER);
 
         terminalDeviceService.updateDevice(device);
