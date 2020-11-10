@@ -127,21 +127,21 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void applyAlarm(Long id) {
+    public void applyAlarm(Long id, String username) {
         DeviceAlarmDetail alarm = dao.findById(id);
         Objects.requireNonNull(alarm, "告警对象为空");
 
-        int num = dao.updateApplyAlarm(id);
+        int num = dao.updateApplyAlarm(id, username);
         int num1 = terminalDeviceService.updateApplyTime(alarm.getDeviceNum());
         log.info("deviceAlarm apply success, deviceNum: {}, id: {}, num: {}, num1: {}", alarm.getDeviceNum(), id, num, num1);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void applyByDeviceNum(String deviceNum) {
+    public void applyByDeviceNum(String deviceNum, String username) {
         DeviceAlarmDetail alarm = dao.findWellLidOpenAlarm(deviceNum, WELL_LID_OPEN);
         if (alarm != null) {
-            applyAlarm(alarm.getId());
+            applyAlarm(alarm.getId(), username);
             return;
         }
 

@@ -56,7 +56,7 @@
 
     <update id="updateApplyAlarm">
         UPDATE device_alarm_detail
-        SET apply_status = 1, apply_time = now()
+        SET apply_status = 1, apply_time = now(), apply_user = #{applyUser}
         WHERE id = #{id}
     </update>
 
@@ -86,6 +86,7 @@
                 AND t.apply_status = #{applyStatus}
             </if>
         </where>
+        ORDER BY t.id DESC
     </select>
 
     <select id="findById" resultType="com.qcxk.model.alarm.DeviceAlarmDetail">
@@ -151,6 +152,7 @@
           t.alarm_description AS alarmDescription,
           t.apply_status AS applyStatus,
           t.apply_time AS applyTime,
+          t.apply_user AS applyUser,
           t.alarm_time AS alarmTime
         FROM
           device_alarm_detail t

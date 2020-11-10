@@ -95,11 +95,11 @@ public class TerminalDevice {
     /**
      * 设备开机时间
      */
-    private Date bootTime;
+    private String bootTime;
     /**
      * 设备关机时间
      */
-    private Date shutdownTime;
+    private String shutdownTime;
     /**
      * 更新时间
      */

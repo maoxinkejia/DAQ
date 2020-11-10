@@ -46,8 +46,6 @@ public class MessageServiceImpl implements MessageService {
                 device = terminalDeviceService.add(buildNewTerminalDevice(message));
             }
 
-            terminalDeviceService.updateBootTime(device);
-
             String data = message.getData();
             switch (message.getFunctionNum()) {
                 case DEVICE_LOGIN_CODE:
@@ -198,6 +196,7 @@ public class MessageServiceImpl implements MessageService {
      * 解析设备上传探测器基本信息（A1），并构建填充设备对象
      */
     private void buildDeviceUploadDetails(TerminalDevice device, String data) {
+
         Integer waterDepthStatus = BusinessUtil.getWaterDepthStatus(data);
         Double waterDepthThreshold = BusinessUtil.getWaterDepthThreshold(data);
         Integer gasSensorStatus = BusinessUtil.getGasSensorStatus(data);

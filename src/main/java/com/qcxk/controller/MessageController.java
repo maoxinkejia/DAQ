@@ -22,8 +22,6 @@ import java.util.List;
 @RequestMapping(value = "/message")
 public class MessageController {
     @Autowired
-    private MessageService messageService;
-    @Autowired
     private TerminalDeviceDetailService terminalDeviceDetailService;
 
     @GetMapping(value = "/list")

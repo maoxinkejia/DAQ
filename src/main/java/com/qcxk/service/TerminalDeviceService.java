@@ -20,8 +20,6 @@ public interface TerminalDeviceService {
 
     List<TerminalDevice> findList(TerminalDeviceDTO dto);
 
-    void updateBootTime(TerminalDevice device);
-
     String uploadDeviceImages(MultipartFile[] files);
 
     List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto);

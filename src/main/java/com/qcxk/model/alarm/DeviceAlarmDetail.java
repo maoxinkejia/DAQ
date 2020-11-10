@@ -28,11 +28,15 @@ public class DeviceAlarmDetail {
      */
     private Integer applyStatus;
     /**
-     * 报警时间
-     */
-    private Date alarmTime;
-    /**
      * 应答时间
      */
     private Date applyTime;
+    /**
+     * 应答人
+     */
+    private String applyUser;
+    /**
+     * 报警时间
+     */
+    private Date alarmTime;
 }

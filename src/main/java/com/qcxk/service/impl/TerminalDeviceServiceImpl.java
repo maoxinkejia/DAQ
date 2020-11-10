@@ -96,30 +96,18 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     public List<TerminalDeviceConfig> findConfigByDeviceNum(String deviceNum) {
-        return dao.findConfigByDeviceNum(deviceNum, null);
+        return dao.findConfigByDeviceNum(deviceNum, ALARM_TYPE);
     }
 
     @Override
     public List<TerminalDevice> findList(TerminalDeviceDTO dto) {
         List<TerminalDevice> list = findBaseList(dto);
         for (TerminalDevice device : list) {
-            List<TerminalDeviceConfig> configs = dao.findConfigByDeviceNum(device.getDeviceNum(), null);
+            List<TerminalDeviceConfig> configs = dao.findConfigByDeviceNum(device.getDeviceNum(), ALARM_TYPE);
             buildTerminalDeviceStatus(device, configs);
         }
 
         return list;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void updateBootTime(TerminalDevice device) {
-        if (device.getBootTime() != null) {
-            return;
-        }
-
-        device.setBootTime(new Date());
-        dao.updateBootTime(device);
-        log.info("device first online, bootTime: {}, deviceNum: {}", device.getBootTime(), device.getDeviceNum());
     }
 
     @Override

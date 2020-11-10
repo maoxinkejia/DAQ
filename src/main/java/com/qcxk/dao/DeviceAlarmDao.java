@@ -20,7 +20,7 @@ public interface DeviceAlarmDao {
 
     List<DeviceAlarmDetail> findAlarmList(AlarmDTO dto);
 
-    int updateApplyAlarm(Long id);
+    int updateApplyAlarm(@Param("id") Long id, @Param("applyUser") String username);
 
     int batchAddAlarmDetails(List<DeviceAlarmDetail> alarmList);
 

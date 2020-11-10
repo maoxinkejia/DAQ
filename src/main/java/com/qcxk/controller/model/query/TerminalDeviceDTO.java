@@ -36,4 +36,8 @@ public class TerminalDeviceDTO extends PageAndPageSize {
      * 标定列表类型 1：标定 2：告警值
      */
     private Integer settingType;
+    /**
+     * 数据类型，参考TerminalDeviceDetail的valueType
+     */
+    private Integer valueType;
 }

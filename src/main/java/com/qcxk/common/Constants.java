@@ -63,9 +63,11 @@ public class Constants {
     public static final Integer NOT_DELETED = 0;
     public static final Integer ENABLED = 1;
     public static final Integer DISABLED = 0;
+    public static final Integer NO_NEED_APPLY = 2;
     public static final Integer ALARM = 1;
     public static final Integer NOT_ALARM = 0;
-    public static final Integer NO_NEED_APPLY = 2;
+    public static final Integer SETTING_TYPE = 1;
+    public static final Integer ALARM_TYPE = 2;
 
 
     /*====================================详情类型 && 告警类型=======================================*/

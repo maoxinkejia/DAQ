@@ -71,6 +71,6 @@ public class TerminalDeviceDetailServiceImpl implements TerminalDeviceDetailServ
             end = DateUtils.getNextDate(dto.getEndDate());
         }
 
-        return dao.findOriginalDataList(dto.getDeviceNum(), start, end);
+        return dao.findOriginalDataList(dto.getDeviceNum(), start, end, dto.getValueType());
     }
 }

@@ -22,7 +22,7 @@ public interface AlarmService {
 
     List<DeviceAlarmDetail> findAlarmList(AlarmDTO dto);
 
-    void applyAlarm(Long id);
+    void applyAlarm(Long id, String username);
 
-    void applyByDeviceNum(String deviceNum);
+    void applyByDeviceNum(String deviceNum, String username);
 }

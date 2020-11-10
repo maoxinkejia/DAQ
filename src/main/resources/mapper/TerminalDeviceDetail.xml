@@ -24,21 +24,26 @@
         WHERE t.device_num = #{deviceNum}
         AND t.value_type = #{type}
         AND (t.create_time BETWEEN #{startTime} AND #{endTime})
+        ORDER BY t.id DESC
     </select>
 
     <select id="findOriginalDataList" resultType="com.qcxk.model.device.TerminalDeviceDetail">
         <include refid="selectTerminalDeviceDetail"/>
         <where>
             <if test="deviceNum != null and deviceNum != ''">
-                t.device_num = #{deviceNum} AND
+                AND t.device_num LIKE CONCAT('%',CONCAT(#{deviceNum},'%'))
             </if>
             <if test="start != null">
-                t.create_time &gt;= #{start} AND
+                AND t.create_time &gt;= #{start}
             </if>
             <if test="end != null">
-                t.create_time &lt;= #{end}
+                AND t.create_time &lt;= #{end}
+            </if>
+            <if test="valueType != null">
+                AND t.value_type = #{valueType}
             </if>
         </where>
+        ORDER BY t.id DESC
     </select>
 
     <sql id="selectTerminalDeviceDetail">

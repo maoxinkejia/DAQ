@@ -37,15 +37,15 @@ public class AlarmController {
         return PageResponse.pageResponse(pagination, list).success();
     }
 
-    @PutMapping(value = "/apply/{id}")
-    public Response applyAlarm(@PathVariable(value = "id") Long id) {
-        alarmService.applyAlarm(id);
+    @PutMapping(value = "/apply/{id}/{username}")
+    public Response applyAlarm(@PathVariable("id") Long id, @PathVariable("username") String username) {
+        alarmService.applyAlarm(id, username);
         return Response.build().success();
     }
 
-    @PutMapping(value = "/apply2/{deviceNum}")
-    public Response applyByDeviceNum(@PathVariable(value = "deviceNum") String deviceNum) {
-        alarmService.applyByDeviceNum(deviceNum);
+    @PutMapping(value = "/apply2/{deviceNum}/{username}")
+    public Response applyByDeviceNum(@PathVariable("deviceNum") String deviceNum, @PathVariable("username") String username) {
+        alarmService.applyByDeviceNum(deviceNum, username);
         return Response.build().success();
     }
 
