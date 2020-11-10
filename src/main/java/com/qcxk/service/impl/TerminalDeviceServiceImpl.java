@@ -213,20 +213,16 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
             return;
         }
 
-        TerminalDeviceConfig config = dao.findConfigByDeviceNumValueType(list.get(0));
-        Assert.notNull(config, "设备标定对象为空");
+        TerminalDevice device = dao.findByDeviceNum(list.get(0).getDeviceNum());
+        Assert.notNull(device, "设备标定对象为空");
 
         for (TerminalDeviceConfigDTO dto : list) {
-
-            config.setConfVal(dto.getConfVal());
-            config.setChangeStatus(NOT_SEND);
-            config.setUpdateTime(new Date());
-
-            int num = dao.updateDeviceConfig(config);
-            int num1 = dao.updateDeviceSendStatus(dto.getDeviceNum(), NOT_SEND);
-            log.info("update device config success, deviceNum: {}, confName, confType: {}, num: {}, num1: {}",
-                    dto.getDeviceNum(), config.getConfName(), config.getConfType(), num, num1);
+            int num = dao.updateDeviceConfig(dto);
+            log.info("update device config success, deviceNum: {}, confType: {}, num: {}", dto.getDeviceNum(), dto.getConfType(), num);
         }
+
+        int num = dao.updateDeviceSendStatus(list.get(0).getDeviceNum(), NOT_SEND);
+        log.info("update terminalDevice sendStatus success, deviceNum: {}, num: {}", list.get(0).getDeviceNum(), num);
     }
 
     @Override
@@ -265,6 +261,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         config.setLocation(device.getLocation());
         config.setConfName(recordEnum.getName());
         config.setConfType(recordEnum.getType());
+        config.setConfUnit(recordEnum.getUnit());
         config.setConfVal((Objects.equals(recordEnum, RecordEnum.WELL_LID_BAT_VOL_THRESHOLD) ? WELL_LID_BAT_VOL_THRESHOLD : null));
         config.setChangeStatus(DISABLED);
         config.setUpdateTime(null);

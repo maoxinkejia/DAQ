@@ -69,6 +69,7 @@
           conf_name,
           conf_val,
           conf_type,
+          conf_unit,
           change_status,
           update_time,
           update_user
@@ -79,6 +80,7 @@
               #{model.confName},
               #{model.confVal},
               #{model.confType},
+              #{model.confUnit},
               #{model.changeStatus},
               #{model.updateTime},
               #{model.updateUser}
@@ -99,7 +101,7 @@
 
     <update id="updateDeviceConfig">
         UPDATE terminal_device_config
-        SET conf_val = #{confVal}, update_time = #{updateTime}, change_status = #{changeStatus}
+        SET conf_val = #{confVal}, update_time = now(), change_status = 1
         WHERE device_num = #{deviceNum}
         AND conf_type = #{confType}
     </update>
@@ -188,6 +190,7 @@
           t.conf_name AS confName,
           t.conf_val AS confVal,
           t.conf_type AS confType,
+          t.conf_unit AS confUnit,
           t.change_status AS changeStatus,
           t.update_time AS updateTime,
           t.update_user AS updateUser

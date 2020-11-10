@@ -28,7 +28,7 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
 
     TerminalDeviceConfig findConfigByDeviceNumValueType(TerminalDeviceConfigDTO dto);
 
-    int updateDeviceConfig(TerminalDeviceConfig config);
+    int updateDeviceConfig(TerminalDeviceConfigDTO configDTO);
 
     int addTerminalDevice(TerminalDevice device);
 

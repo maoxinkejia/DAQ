@@ -145,8 +145,11 @@ public class MessageServiceImpl implements MessageService {
         }
 
         StringBuilder builder = new StringBuilder(String.format("%070d", 0));
+        log.info("need to write to device configs size: {}, init builder: {}", configs.size(), builder);
+
         for (TerminalDeviceConfig config : configs) {
             builder = buildConfig2String(config, builder);
+            log.info("builder: {}", builder.toString());
         }
 
 
