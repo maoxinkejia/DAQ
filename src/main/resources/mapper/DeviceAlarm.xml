@@ -63,6 +63,8 @@
     <select id="findAlarmListByDeviceNum" resultType="com.qcxk.model.alarm.DeviceAlarmDetail">
         <include refid="selectDeviceAlarmDetail"/>
         WHERE t.device_num = #{deviceNum}
+        AND (t.alarm_time BETWEEN #{start} AND #{end})
+        ORDER BY t.id DESC
     </select>
 
     <select id="findDeviceAlarmType" resultType="com.qcxk.model.alarm.DeviceAlarmType">

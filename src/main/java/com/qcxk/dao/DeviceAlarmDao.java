@@ -6,11 +6,12 @@ import com.qcxk.model.alarm.DeviceAlarmType;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface DeviceAlarmDao {
-    List<DeviceAlarmDetail> findAlarmListByDeviceNum(String deviceNum);
+    List<DeviceAlarmDetail> findAlarmListByDeviceNum(@Param("deviceNum") String deviceNum, @Param("start") Date start, @Param("end") Date end);
 
     DeviceAlarmType findDeviceAlarmType(String deviceNum);
 

@@ -214,8 +214,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
             log.info("update device config success, deviceNum: {}, confType: {}, num: {}", dto.getDeviceNum(), dto.getConfType(), num);
         }
 
-        int num = dao.updateDeviceSendStatus(list.get(0).getDeviceNum(), NOT_SEND);
-        log.info("update terminalDevice sendStatus success, deviceNum: {}, num: {}", list.get(0).getDeviceNum(), num);
+        updateDeviceSendStatus(list.get(0).getDeviceNum(), NOT_SEND);
     }
 
     @Override
@@ -233,6 +232,22 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     public void updateAlarmTime(String deviceNum) {
         int num = dao.updateAlarmTime(deviceNum);
         log.info("update alarmTime success, deviceNum: {}, num: {}", deviceNum, num);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateDeviceSendStatus(String deviceNum, Integer sendStatus) {
+        int num = dao.updateDeviceSendStatus(deviceNum, sendStatus);
+        log.info("update terminalDevice sendStatus success, deviceNum: {}, sendStatus: {}, num: {}", deviceNum, sendStatus, num);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateConfigSendStatus(TerminalDeviceConfig config) {
+        config.setUpdateTime(new Date());
+        config.setChangeStatus(SENT);
+        int num = dao.updateConfigSendStatus(config);
+        log.info("update terminalDeviceConfig changeStatus success, deviceNum: {}, changeStatus: {}, num: {}", config.getDeviceNum(), config.getChangeStatus(), num);
     }
 
     /**

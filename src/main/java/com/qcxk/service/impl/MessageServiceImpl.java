@@ -14,10 +14,13 @@ import com.qcxk.service.MessageService;
 import com.qcxk.service.TerminalDeviceDetailService;
 import com.qcxk.service.TerminalDeviceService;
 import com.qcxk.util.BusinessUtil;
+import com.qcxk.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -107,6 +110,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<String> responseMessage(List<Message> messages) {
         List<String> response = new ArrayList<>(1);
 
@@ -120,7 +124,7 @@ public class MessageServiceImpl implements MessageService {
                     response.add(BusinessUtil.buildReceiveRightDataMessage(message));
                     break;
                 case DEVICE_RECEIVE_SERVER_CODE:
-//                    buildDeviceFuncNum2Message(message, response);
+                    buildDeviceFuncNum2Message(message, response);
                     break;
             }
         }
@@ -142,43 +146,47 @@ public class MessageServiceImpl implements MessageService {
         }
 
         StringBuilder builder = new StringBuilder(String.format("%0140d", 0));
-        log.info("need to write to device configs size: {}, init builder: {}", configs.size(), builder);
+        log.info("need to write to device configs size: {}", configs.size());
 
         for (TerminalDeviceConfig config : configs) {
             buildConfig2String(config, builder);
-            log.info("builder: {}", builder.toString());
+            terminalDeviceService.updateConfigSendStatus(config);
+            log.info("update terminalDeviceConfig status sent success, configId: {}", config.getId());
         }
 
+        Date now = new Date();
+        builder.replace(28, 34, DateUtils.getDateHex(now));
+        builder.replace(34, 36, DateUtils.getWeekHex(now));
+        builder.replace(36, 42, DateUtils.getMinuteHex(now));
 
         response.add(buildServerSend2DeviceMessage(message, builder));
+
+        terminalDeviceService.updateDeviceSendStatus(terminalDevice.getDeviceNum(), SENT);
     }
 
-    private StringBuilder buildConfig2String(TerminalDeviceConfig config, StringBuilder builder) {
+    private void buildConfig2String(TerminalDeviceConfig config, StringBuilder builder) {
         switch (Objects.requireNonNull(RecordEnum.of(config.getConfType()))) {
             case CH4_GAS_VOLUME_ALARM_ZERO:
+                log.info("ch4 gas zero setting, deviceNum: {}", config.getDeviceNum());
+                builder.replace(1, 2, "1");
                 break;
             case CH4_GAS_VOLUME_ALARM_RANGE:
+                log.info("ch4 gas range setting, deviceNum: {}", config.getDeviceNum());
+                builder.replace(3, 4, "1");
+                builder.replace(4, 6, String.format("%02x", config.getConfVal().intValue()));
                 break;
             case TEMPERATURE_CORRECTION:
-                break;
-            case WELL_LID_OPEN_ALARM:
-                break;
-            case WATER_DEPTH_ALARM_THRESHOLD:
-                break;
-            case CH4_GAS_VOLUME_THRESHOLD:
-                break;
-            case TEMPERATURE_THRESHOLD:
-                break;
-            case DEVICE_BAT_VOL_THRESHOLD:
+                log.info("temperature setting, deviceNum: {}", config.getDeviceNum());
+                builder.replace(7, 8, "1");
+                builder.replace(8, 10, String.format("%02x", config.getConfVal().intValue()));
                 break;
             case UPLOAD_DATA_PERIOD:
-                break;
-            case WELL_LID_BAT_VOL_THRESHOLD:
+                log.info("upload time setting, deviceNum: {}", config.getDeviceNum());
+                builder.replace(86, 90, String.format("%04x", config.getConfVal().intValue()));
                 break;
             default:
                 break;
         }
-        return builder;
     }
 
     @Override

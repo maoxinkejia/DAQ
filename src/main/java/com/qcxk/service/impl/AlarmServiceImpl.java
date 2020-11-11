@@ -28,11 +28,6 @@ public class AlarmServiceImpl implements AlarmService {
     private TerminalDeviceService terminalDeviceService;
 
     @Override
-    public List<DeviceAlarmDetail> findAlarmListByDeviceNum(String deviceNum) {
-        return dao.findAlarmListByDeviceNum(deviceNum);
-    }
-
-    @Override
     public DeviceAlarmType findDeviceAlarmType(String deviceNum) {
         return dao.findDeviceAlarmType(deviceNum);
     }

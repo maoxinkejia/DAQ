@@ -122,6 +122,12 @@
         WHERE device_num = #{deviceNum}
     </update>
 
+    <update id="updateConfigSendStatus">
+        UPDATE terminal_device_config
+        SET change_status = #{changeStatus}, update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
     <select id="findByDeviceNum" resultType="com.qcxk.model.device.TerminalDevice">
         <include refid="selectTerminalDevice"/>
         WHERE t.device_num = #{deviceNum}

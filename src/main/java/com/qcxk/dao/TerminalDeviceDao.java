@@ -39,4 +39,6 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
     int updateApplyTime(String deviceNum);
 
     int updateAlarmTime(String deviceNum);
+
+    int updateConfigSendStatus(TerminalDeviceConfig config);
 }

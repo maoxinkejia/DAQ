@@ -37,4 +37,8 @@ public interface TerminalDeviceService {
     int updateApplyTime(String deviceNum);
 
     void updateAlarmTime(String deviceNum);
+
+    void updateDeviceSendStatus(String deviceNum, Integer sendStatus);
+
+    void updateConfigSendStatus(TerminalDeviceConfig config);
 }
