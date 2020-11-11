@@ -12,7 +12,8 @@
           well_lid_status,
           temperature_status,
           water_depth_status,
-          create_time
+          create_time,
+          del_status
         ) VALUES (
           #{deviceNum},
           #{ch4GasStatus},
@@ -21,7 +22,8 @@
           #{wellLidStatus},
           #{temperatureStatus},
           #{waterDepthStatus},
-          #{createTime}
+          #{createTime},
+          #{delStatus}
         )
     </insert>
 
@@ -34,7 +36,8 @@
           alarm_description,
           alarm_time,
           apply_status,
-          apply_time
+          apply_time,
+          del_status
         ) VALUES
         <foreach collection="list" separator="," item="model">
             (
@@ -44,7 +47,8 @@
               #{model.alarmDescription},
               #{model.alarmTime},
               #{model.applyStatus},
-              #{model.applyTime}
+              #{model.applyTime},
+              #{model.delStatus}
             )
         </foreach>
     </insert>
@@ -60,21 +64,36 @@
         WHERE id = #{id}
     </update>
 
+    <update id="updateAlarmType2Deleted">
+        UPDATE device_alarm_type
+        SET del_status = 1
+        WHERE device_num = #{deviceNum}
+    </update>
+
+    <update id="updateAlarmDetail2Deleted">
+        UPDATE device_alarm_detail
+        SET del_status = 1
+        WHERE device_num = #{deviceNum}
+    </update>
+
     <select id="findAlarmListByDeviceNum" resultType="com.qcxk.model.alarm.DeviceAlarmDetail">
         <include refid="selectDeviceAlarmDetail"/>
         WHERE t.device_num = #{deviceNum}
         AND (t.alarm_time BETWEEN #{start} AND #{end})
+        AND t.del_status = 0
         ORDER BY t.id DESC
     </select>
 
     <select id="findDeviceAlarmType" resultType="com.qcxk.model.alarm.DeviceAlarmType">
         <include refid="selectDeviceAlarmType"/>
         WHERE t.device_num = #{deviceNum}
+        AND t.del_status = 0
     </select>
 
     <select id="findAlarmList" resultType="com.qcxk.model.alarm.DeviceAlarmDetail" parameterType="com.qcxk.controller.model.query.AlarmDTO">
         <include refid="selectDeviceAlarmDetail"/>
         <where>
+            t.del_status = 0
             <if test="deviceNum != null and deviceNum != ''">
                 AND t.device_num LIKE CONCAT('%',CONCAT(#{deviceNum},'%'))
             </if>
@@ -100,6 +119,7 @@
         <include refid="selectDeviceAlarmDetail"/>
         WHERE t.device_num = #{deviceNum}
         AND t.alarm_type = #{alarmType}
+        AND t.del_status = 0
         ORDER BY t.id DESC
         LIMIT 1
     </select>
@@ -140,7 +160,8 @@
           t.temperature_status AS temperatureStatus,
           t.water_depth_status AS waterDepthStatus,
           t.create_time AS createTime,
-          t.update_time AS updateTime
+          t.update_time AS updateTime,
+          t.del_status AS delStatus
         FROM
           device_alarm_type t
     </sql>
@@ -155,7 +176,8 @@
           t.apply_status AS applyStatus,
           t.apply_time AS applyTime,
           t.apply_user AS applyUser,
-          t.alarm_time AS alarmTime
+          t.alarm_time AS alarmTime，
+          t.del_status AS delStatus
         FROM
           device_alarm_detail t
     </sql>

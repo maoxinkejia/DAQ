@@ -10,6 +10,7 @@ import com.qcxk.model.VO.TerminalDataListVO;
 import com.qcxk.model.device.TerminalDevice;
 import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.service.AlarmService;
+import com.qcxk.service.TerminalDeviceDetailService;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -38,9 +39,11 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     private String imageUrl;
 
     @Autowired
+    private TerminalDeviceDao dao;
+    @Autowired
     private AlarmService alarmService;
     @Autowired
-    private TerminalDeviceDao dao;
+    private TerminalDeviceDetailService terminalDeviceDetailService;
 
     @Override
     public TerminalDevice findByDeviceNum(String deviceNum) {
@@ -92,7 +95,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         TerminalDevice exists = dao.findByDeviceNum(device.getDeviceNum());
         if (!Objects.equals(exists.getLocation(), device.getLocation())) {
             log.info("update device location, need to update other tables, old location: {}, new location: {}", exists.getLocation(), device.getLocation());
-            //todo 更新其他含有location的表字段
+
         }
 
         device.setUpdateTime(new Date());
@@ -170,8 +173,16 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         device.setUpdateTime(new Date());
 
         int num = dao.update(device);
+        int num1 = dao.updateConfig2Deleted(deviceNum);
+        int num2 = terminalDeviceDetailService.updateDetail2Deleted(deviceNum);
+        int num3 = alarmService.updateAlarmType2Deleted(deviceNum);
+        int num4 = alarmService.updateAlarmDetail2Deleted(deviceNum);
 
         log.info("delete terminalDevice success, num: {}", num);
+        log.info("delete terminalDeviceConfig success, num: {}", num1);
+        log.info("delete terminalDeviceDetail success, num: {}", num2);
+        log.info("delete alarmType success, num: {}", num3);
+        log.info("delete alarmDetail success, num: {}", num4);
     }
 
     @Override
@@ -274,6 +285,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         config.setChangeStatus(DISABLED);
         config.setUpdateTime(null);
         config.setUpdateUser(device.getCreateUser());
+        config.setDelStatus(NOT_DELETED);
 
         return config;
     }

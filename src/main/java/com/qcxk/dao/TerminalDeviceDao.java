@@ -18,15 +18,9 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
 
     List<TerminalDevice> findList(TerminalDeviceDTO dto);
 
-    void updateBootTime(TerminalDevice device);
-
     int batchAddTerminalDeviceConfigs(List<TerminalDeviceConfig> configs);
 
     List<TerminalDeviceConfig> findConfigByDeviceNum(@Param("deviceNum") String deviceNum, @Param("settingType") Integer settingType);
-
-    List<TerminalDeviceConfig> findConfigList(TerminalDeviceDTO dto);
-
-    TerminalDeviceConfig findConfigByDeviceNumValueType(TerminalDeviceConfigDTO dto);
 
     int updateDeviceConfig(TerminalDeviceConfigDTO configDTO);
 
@@ -41,4 +35,6 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
     int updateAlarmTime(String deviceNum);
 
     int updateConfigSendStatus(TerminalDeviceConfig config);
+
+    int updateConfig2Deleted(String deviceNum);
 }

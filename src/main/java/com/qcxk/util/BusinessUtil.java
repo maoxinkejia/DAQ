@@ -485,6 +485,7 @@ public class BusinessUtil {
 
         detail.setValue(value);
         detail.setCreateTime(new Date());
+        detail.setDelStatus(NOT_DELETED);
 
         return detail;
     }
@@ -545,14 +546,14 @@ public class BusinessUtil {
                     if (val == null || val <= 0) {
                         vo.setDeviceBatVolStatus(NOT_ALARM);
                     } else {
-                        vo.setDeviceBatVolStatus((vo.getDeviceBatVol() < val ? NOT_ALARM : ALARM));
+                        vo.setDeviceBatVolStatus((vo.getDeviceBatVol() > val ? NOT_ALARM : ALARM));
                     }
                     break;
                 case WELL_LID_BAT_VOL_THRESHOLD:
                     if (val == null || val <= 0) {
                         vo.setWellLidBatVolStatus(NOT_ALARM);
                     } else {
-                        vo.setWellLidBatVolStatus((vo.getWellLidBatVol() < val ? NOT_ALARM : ALARM));
+                        vo.setWellLidBatVolStatus((vo.getWellLidBatVol() > val ? NOT_ALARM : ALARM));
                     }
                     break;
                 default:
@@ -576,6 +577,7 @@ public class BusinessUtil {
         detail.setAlarmTime(new Date());
         detail.setApplyStatus(alarmType == WELL_LID_OPEN ? DISABLED : NO_NEED_APPLY);
         detail.setApplyTime(null);
+        detail.setDelStatus(NOT_DELETED);
 
         return detail;
     }

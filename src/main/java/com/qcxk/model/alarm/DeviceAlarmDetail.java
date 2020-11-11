@@ -39,4 +39,8 @@ public class DeviceAlarmDetail {
      * 报警时间
      */
     private Date alarmTime;
+    /**
+     * 删除状态
+     */
+    private Integer delStatus;
 }

@@ -28,4 +28,8 @@ public interface DeviceAlarmDao {
     DeviceAlarmDetail findById(Long id);
 
     DeviceAlarmDetail findWellLidOpenAlarm(@Param("deviceNum") String deviceNum, @Param("alarmType") int alarmType);
+
+    int updateAlarmType2Deleted(String deviceNum);
+
+    int updateAlarmDetail2Deleted(String deviceNum);
 }

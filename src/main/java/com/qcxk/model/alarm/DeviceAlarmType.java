@@ -44,4 +44,8 @@ public class DeviceAlarmType {
      * 修改时间
      */
     private Date updateTime;
+    /**
+     * 删除状态
+     */
+    private Integer delStatus;
 }

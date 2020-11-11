@@ -7,29 +7,38 @@
           device_num,
           value_type,
           `value`,
-          create_time
+          create_time,
+          del_status
         ) VALUES
         <foreach collection="list" item="model" separator=",">
             (
             #{model.deviceNum},
             #{model.valueType},
             #{model.value},
-            #{model.createTime}
+            #{model.createTime},
+            #{model.delStatus}
             )
         </foreach>
     </insert>
+
+    <update id="update2DeletedByDeviceNum">
+        UPDATE terminal_device_detail
+        SET del_status = 1
+        WHERE device_num = #{deviceNum}
+    </update>
 
     <select id="findList" resultType="com.qcxk.model.device.TerminalDeviceDetail">
         <include refid="selectTerminalDeviceDetail"/>
         WHERE t.device_num = #{deviceNum}
         AND t.value_type = #{type}
         AND (t.create_time BETWEEN #{startTime} AND #{endTime})
-        ORDER BY t.id DESC
+        AND t.del_status = 0
     </select>
 
     <select id="findOriginalDataList" resultType="com.qcxk.model.device.TerminalDeviceDetail">
         <include refid="selectTerminalDeviceDetail"/>
         <where>
+            t.del_status = 0
             <if test="deviceNum != null and deviceNum != ''">
                 AND t.device_num LIKE CONCAT('%',CONCAT(#{deviceNum},'%'))
             </if>
@@ -52,7 +61,8 @@
           t.device_num AS deviceNum,
           t.value_type AS valueType,
           t.value,
-          t.create_time AS createTime
+          t.create_time AS createTime,
+          t.del_status AS delStatus
         FROM
           terminal_device_detail t
     </sql>

@@ -70,7 +70,8 @@
           conf_unit,
           change_status,
           update_time,
-          update_user
+          update_user,
+          del_status
         ) VALUES
         <foreach collection="list" item="model" separator=",">
             (
@@ -81,7 +82,8 @@
               #{model.confUnit},
               #{model.changeStatus},
               #{model.updateTime},
-              #{model.updateUser}
+              #{model.updateUser},
+              #{model.delStatus}
             )
         </foreach>
     </insert>
@@ -89,12 +91,6 @@
     <update id="update">
         <include refid="updateTerminalDevice"/>
         WHERE id = #{id}
-    </update>
-
-    <update id="updateBootTime">
-        UPDATE terminal_device
-        SET boot_time = #{bootTime}
-        WHERE device_num = #{deviceNum}
     </update>
 
     <update id="updateDeviceConfig">
@@ -128,6 +124,12 @@
         WHERE id = #{id}
     </update>
 
+    <update id="updateConfig2Deleted">
+        UPDATE terminal_device_config
+        SET del_status = 1
+        WHERE device_num = #{deviceNum}
+    </update>
+
     <select id="findByDeviceNum" resultType="com.qcxk.model.device.TerminalDevice">
         <include refid="selectTerminalDevice"/>
         WHERE t.device_num = #{deviceNum}
@@ -155,6 +157,7 @@
     <select id="findConfigByDeviceNum" resultType="com.qcxk.model.device.TerminalDeviceConfig">
         <include refid="selectTerminalDeviceConfig"/>
         WHERE t.device_num = #{deviceNum}
+        AND t.del_status = 0
         <if test="settingType != null and settingType == 1">
             AND t.conf_type in (3, 4, 6, 13)
         </if>
@@ -163,29 +166,12 @@
         </if>
     </select>
 
-    <select id="findConfigList" resultType="com.qcxk.model.device.TerminalDeviceConfig">
-        <include refid="selectTerminalDeviceConfig"/>
-        <where>
-            <if test="deviceNum != null and deviceNum != ''">
-                t.device_num LIKE CONCAT('%',CONCAT(#{deviceNum},'%')) AND
-            </if>
-            <if test="location != null and location != ''">
-                t.location LIKE CONCAT('%',CONCAT(#{location},'%')) AND
-            </if>
-        </where>
-    </select>
-
-    <select id="findConfigByDeviceNumValueType" resultType="com.qcxk.model.device.TerminalDeviceConfig">
-        <include refid="selectTerminalDeviceConfig"/>
-        WHERE t.device_num = #{deviceNum}
-        AND t.conf_type = #{confType}
-    </select>
-
     <select id="findChangedConfByDeviceNum" resultType="com.qcxk.model.device.TerminalDeviceConfig">
         <include refid="selectTerminalDeviceConfig"/>
         WHERE t.device_num = #{deviceNum}
         AND t.change_status = 1
         AND t.conf_type IN (3, 4, 6, 13)
+        AND t.del_status = 0
     </select>
 
     <sql id="selectTerminalDeviceConfig">
@@ -198,7 +184,8 @@
           t.conf_unit AS confUnit,
           t.change_status AS changeStatus,
           t.update_time AS updateTime,
-          t.update_user AS updateUser
+          t.update_user AS updateUser,
+          t.del_status AS delStatus
         FROM
           terminal_device_config t
     </sql>

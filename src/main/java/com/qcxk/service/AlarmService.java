@@ -23,4 +23,8 @@ public interface AlarmService {
     void applyAlarm(Long id, String username);
 
     void applyByDeviceNum(String deviceNum, String username);
+
+    int updateAlarmType2Deleted(String deviceNum);
+
+    int updateAlarmDetail2Deleted(String deviceNum);
 }

@@ -24,9 +24,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/terminal")
 public class TerminalController {
-
-    @Autowired
-    private AlarmService alarmService;
     @Autowired
     private TerminalDeviceService service;
     @Autowired

@@ -102,6 +102,7 @@ public class AlarmServiceImpl implements AlarmService {
         alarmType.setTemperatureStatus(DISABLED);
         alarmType.setWellLidStatus(DISABLED);
         alarmType.setCreateTime(new Date());
+        alarmType.setDelStatus(NOT_DELETED);
 
         int num = dao.addDeviceAlarmType(alarmType);
         log.info("init device alarmType success, num: {}", num);
@@ -142,5 +143,17 @@ public class AlarmServiceImpl implements AlarmService {
 
         int num = terminalDeviceService.updateApplyTime(deviceNum);
         log.info("deviceAlarm apply success, deviceNum: {}, num: {}", deviceNum, num);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int updateAlarmType2Deleted(String deviceNum) {
+        return dao.updateAlarmType2Deleted(deviceNum);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int updateAlarmDetail2Deleted(String deviceNum) {
+        return dao.updateAlarmDetail2Deleted(deviceNum);
     }
 }

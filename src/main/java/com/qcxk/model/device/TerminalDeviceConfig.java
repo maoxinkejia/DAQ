@@ -43,4 +43,8 @@ public class TerminalDeviceConfig {
      * 更新人
      */
     private String updateUser;
+    /**
+     * 删除状态
+     */
+    private Integer delStatus;
 }

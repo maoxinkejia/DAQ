@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -72,5 +74,11 @@ public class TerminalDeviceDetailServiceImpl implements TerminalDeviceDetailServ
         }
 
         return dao.findOriginalDataList(dto.getDeviceNum(), start, end, dto.getValueType());
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int updateDetail2Deleted(String deviceNum) {
+        return dao.update2DeletedByDeviceNum(deviceNum);
     }
 }

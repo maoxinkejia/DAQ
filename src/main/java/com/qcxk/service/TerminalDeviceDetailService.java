@@ -13,4 +13,6 @@ public interface TerminalDeviceDetailService {
     TerminalDataDetailVO findList(String startDate, String endDate, String deviceNum) throws ParseException;
 
     List<TerminalDeviceDetail> findOriginalDataList(TerminalDeviceDTO dto) throws ParseException;
+
+    int updateDetail2Deleted(String deviceNum);
 }

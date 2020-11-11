@@ -18,4 +18,6 @@ public interface TerminalDeviceDetailDao extends BaseMapper<TerminalDeviceDetail
 
     List<TerminalDeviceDetail> findOriginalDataList(@Param("deviceNum") String deviceNum, @Param("start") Date start,
                                                     @Param("end") Date end, @Param("valueType") Integer valueType);
+
+    int update2DeletedByDeviceNum(String deviceNum);
 }

@@ -14,4 +14,8 @@ public class TerminalDeviceDetail {
     private Integer valueType;
     private Double value;
     private Date createTime;
+    /**
+     * 删除状态
+     */
+    private Integer delStatus;
 }
