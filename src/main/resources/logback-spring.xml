@@ -15,7 +15,7 @@
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_DIR}/%d{yyyy-MM-dd}/daq-%i.log</fileNamePattern>
-            <maxHistory>90</maxHistory>
+            <maxHistory>30</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>200 MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>

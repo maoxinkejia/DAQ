@@ -120,7 +120,7 @@ public class MessageServiceImpl implements MessageService {
                     response.add(BusinessUtil.buildReceiveRightDataMessage(message));
                     break;
                 case DEVICE_RECEIVE_SERVER_CODE:
-                    buildDeviceFuncNum2Message(message, response);
+//                    buildDeviceFuncNum2Message(message, response);
                     break;
             }
         }
@@ -141,11 +141,11 @@ public class MessageServiceImpl implements MessageService {
             return;
         }
 
-        StringBuilder builder = new StringBuilder(String.format("%070d", 0));
+        StringBuilder builder = new StringBuilder(String.format("%0140d", 0));
         log.info("need to write to device configs size: {}, init builder: {}", configs.size(), builder);
 
         for (TerminalDeviceConfig config : configs) {
-            builder = buildConfig2String(config, builder);
+            buildConfig2String(config, builder);
             log.info("builder: {}", builder.toString());
         }
 

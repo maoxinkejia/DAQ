@@ -3,8 +3,10 @@ package com.qcxk.controller.model.query;
 import com.qcxk.controller.model.page.PageAndPageSize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class TerminalDeviceDTO extends PageAndPageSize {
     /**

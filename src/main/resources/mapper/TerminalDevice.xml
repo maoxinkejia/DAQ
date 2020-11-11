@@ -150,7 +150,7 @@
         <include refid="selectTerminalDeviceConfig"/>
         WHERE t.device_num = #{deviceNum}
         <if test="settingType != null and settingType == 1">
-            AND t.conf_type in (3, 4, 6)
+            AND t.conf_type in (3, 4, 6, 13)
         </if>
         <if test="settingType != null and settingType == 2">
             AND t.conf_type IN (7, 8, 9, 10, 11, 12, 13, 14)
@@ -179,6 +179,7 @@
         <include refid="selectTerminalDeviceConfig"/>
         WHERE t.device_num = #{deviceNum}
         AND t.change_status = 1
+        AND t.conf_type IN (3, 4, 6, 13)
     </select>
 
     <sql id="selectTerminalDeviceConfig">
@@ -245,7 +246,7 @@
                 boot_time = #{bootTime},
             </if>
             <if test="shutdownTime != null and shutdownTime != ''">
-                shutdownTime = #{shutdownTime},
+                shutdown_time = #{shutdownTime},
             </if>
             <if test="applyTime != null">
                 apply_time = #{applyTime},

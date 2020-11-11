@@ -127,7 +127,7 @@ public class BusinessUtil {
      * 获取登陆时电池电压
      */
     public static Double getLoginBatVol(String data) {
-        return getDoubleValue(Integer.parseInt(data.substring(14, 16), 16), 10);
+        return getDoubleValue(Integer.parseInt(data.substring(14, 16), 16));
     }
 
     /**
@@ -169,10 +169,10 @@ public class BusinessUtil {
     }
 
     /**
-     * 获取水位深度阈值 单位：米
+     * 获取水位深度阈值 单位：cm
      */
     public static Double getWaterDepthThreshold(String data) {
-        return getDoubleValue(Integer.valueOf(data.substring(18, 20), 16), 100);
+        return Integer.valueOf(data.substring(18, 20), 16).doubleValue();
     }
 
     /**
@@ -201,7 +201,7 @@ public class BusinessUtil {
      * 电池电压报警阈值  单位：V  解析完需要/10
      */
     public static Double getDeviceBatVolThreshold(String data) {
-        return getDoubleValue(Integer.valueOf(data.substring(26, 28), 16), 10);
+        return getDoubleValue(Integer.valueOf(data.substring(26, 28), 16));
     }
 
     /**
@@ -261,7 +261,7 @@ public class BusinessUtil {
      */
     public static Double getWellLidBatVol(String data) {
         int batVol = Integer.parseInt(data.substring(22, 24), 16);
-        return getDoubleValue(batVol, 10);
+        return getDoubleValue(batVol);
     }
 
     /**
@@ -295,7 +295,7 @@ public class BusinessUtil {
      */
     public static Double getWaterDepth(String data) {
         int waterDepth = Integer.parseInt(data.substring(36, 38), 16);
-        return getDoubleValue(waterDepth, 10);
+        return getDoubleValue(waterDepth);
     }
 
     /**
@@ -310,7 +310,7 @@ public class BusinessUtil {
      */
     public static Double getCH4GasConcentration(String data) {
         int ch4Concentration = Integer.parseInt(data.substring(40, 44), 16);
-        return getDoubleValue(ch4Concentration, 10);
+        return getDoubleValue(ch4Concentration);
     }
 
     /**
@@ -318,7 +318,7 @@ public class BusinessUtil {
      */
     public static Double getCH4GasVolumeConcentration(String data) {
         int ch4VolumeConcentration = Integer.parseInt(data.substring(44, 46), 16);
-        return getDoubleValue(ch4VolumeConcentration, 10);
+        return getDoubleValue(ch4VolumeConcentration);
     }
 
     /**
@@ -340,7 +340,7 @@ public class BusinessUtil {
      */
     public static Double getDeviceBatVol(String data) {
         int deviceBatVol = Integer.parseInt(data.substring(50, 52), 16);
-        return getDoubleValue(deviceBatVol, 10);
+        return getDoubleValue(deviceBatVol);
     }
 
     public static Map<Integer, Boolean> getSystemErrorCode(String data) {
@@ -602,8 +602,8 @@ public class BusinessUtil {
     /**
      * 根据int值，除以10，取1位小数
      */
-    private static double getDoubleValue(int intVal, int num) {
-        return new BigDecimal(intVal).divide(new BigDecimal(num), 1, BigDecimal.ROUND_DOWN).doubleValue();
+    private static double getDoubleValue(int intVal) {
+        return new BigDecimal(intVal).divide(new BigDecimal(10), 2, BigDecimal.ROUND_DOWN).doubleValue();
     }
 
     /**
