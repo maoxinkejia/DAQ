@@ -7,7 +7,7 @@ public enum RecordEnum implements BaseEnum<RecordEnum, Integer> {
     CH4_GAS_VOLUME_ALARM_RANGE(4, "甲烷浓度量程标定(LEL)", "%"),
     TEMPERATURE_CORRECTION(6, "温度校准", "℃"),
     WELL_LID_OPEN_ALARM(7, "是否启动倾斜移位报警", ""),
-    WATER_DEPTH_ALARM_THRESHOLD(8, "液位报警值", "cm"),
+    WATER_DEPTH_ALARM_THRESHOLD(8, "液位报警值", "m"),
     CH4_GAS_VOLUME_THRESHOLD(10, "甲烷气体浓度报警阈值(LEL)", "%"),
     TEMPERATURE_THRESHOLD(11, "温度报警阈值", "℃"),
     DEVICE_BAT_VOL_THRESHOLD(12, "设备电池电量报警阈值", "V"),
