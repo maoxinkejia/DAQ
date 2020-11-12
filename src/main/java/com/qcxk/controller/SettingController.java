@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.qcxk.common.Constants.SETTING_TYPE;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/setting")
@@ -28,7 +30,7 @@ public class SettingController {
 
     @PutMapping(value = "/update")
     public Response updateSetting(@RequestBody List<TerminalDeviceConfigDTO> dto) {
-        terminalDeviceService.updateConfigByDeviceNum(dto);
+        terminalDeviceService.updateConfigByDeviceNum(dto, SETTING_TYPE);
         return Response.build().success();
     }
 }

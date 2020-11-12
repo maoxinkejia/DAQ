@@ -211,7 +211,7 @@ public class MessageServiceImpl implements MessageService {
             updateList.add(buildConfig2DTO(config));
         }
 
-        terminalDeviceService.updateConfigByDeviceNum(updateList);
+        terminalDeviceService.updateConfigByDeviceNum(updateList, ALARM_TYPE);
     }
 
     private void setConfVal(String data, TerminalDeviceConfig config) {
@@ -230,9 +230,6 @@ public class MessageServiceImpl implements MessageService {
                 break;
             case DEVICE_BAT_VOL_THRESHOLD:
                 config.setConfVal(getDeviceBatVolThreshold(data));
-                break;
-            case UPLOAD_DATA_PERIOD:
-                config.setConfVal(getDeviceUploadTime(data));
                 break;
         }
     }

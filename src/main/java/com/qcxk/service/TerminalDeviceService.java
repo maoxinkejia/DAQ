@@ -30,7 +30,7 @@ public interface TerminalDeviceService {
 
     List<TerminalDeviceConfig> findConfigList(TerminalDeviceDTO dto);
 
-    void updateConfigByDeviceNum(List<TerminalDeviceConfigDTO> dto);
+    void updateConfigByDeviceNum(List<TerminalDeviceConfigDTO> dto, Integer alarmType);
 
     List<TerminalDeviceConfig> findChangedConfByDeviceNum(String deviceNum);
 

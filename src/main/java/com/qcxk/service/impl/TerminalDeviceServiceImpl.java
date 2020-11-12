@@ -211,7 +211,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateConfigByDeviceNum(List<TerminalDeviceConfigDTO> list) {
+    public void updateConfigByDeviceNum(List<TerminalDeviceConfigDTO> list, Integer type) {
         if (CollectionUtils.isEmpty(list)) {
             log.info("update list is empty");
             return;
@@ -223,6 +223,11 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         for (TerminalDeviceConfigDTO dto : list) {
             int num = dao.updateDeviceConfig(dto);
             log.info("update device config success, deviceNum: {}, confType: {}, num: {}", dto.getDeviceNum(), dto.getConfType(), num);
+        }
+
+        if (Objects.equals(type, ALARM_TYPE)) {
+            // 告警类型不需要往设备回写，不需要更新设备状态
+            return;
         }
 
         updateDeviceSendStatus(list.get(0).getDeviceNum(), NOT_SEND);

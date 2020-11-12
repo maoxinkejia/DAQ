@@ -162,7 +162,7 @@
             AND t.conf_type in (3, 4, 6, 13)
         </if>
         <if test="settingType != null and settingType == 2">
-            AND t.conf_type IN (7, 8, 9, 10, 11, 12, 13, 14)
+            AND t.conf_type IN (7, 8, 9, 10, 11, 12, 14)
         </if>
     </select>
 
