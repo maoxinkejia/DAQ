@@ -172,7 +172,7 @@ public class BusinessUtil {
      * 获取水位深度阈值 单位：米
      */
     public static Double getWaterDepthThreshold(String data) {
-        return getDoubleValue(Integer.valueOf(data.substring(18, 20), 16),100);
+        return getDoubleValue(Integer.valueOf(data.substring(18, 20), 16), 100);
     }
 
     /**
@@ -344,7 +344,7 @@ public class BusinessUtil {
     }
 
     public static Map<Integer, Boolean> getSystemErrorCode(String data) {
-        int errorCode = Integer.parseInt(data.substring(66, 70), 16);
+        int errorCode = Integer.parseInt(Integer.toBinaryString(Integer.parseInt(data.substring(66, 70), 16) & 0xff));
         Map<Integer, Boolean> systemFailure = new HashMap<>(7);
         putProperty(systemFailure, CH4_TEMPERATURE_OVER_PROOF, errorCode);
         putProperty(systemFailure, CH4_CONCENTRATION_OVER_PROOF, errorCode);
@@ -358,7 +358,8 @@ public class BusinessUtil {
     }
 
     private static void putProperty(Map<Integer, Boolean> map, Integer type, int errorCode) {
-        map.put(type, (errorCode & type) == type);
+        int typeCode = Integer.parseInt(Integer.toBinaryString(Integer.parseInt(type.toString(), 16) & 0xff));
+        map.put(type, (errorCode & typeCode) == typeCode);
     }
 
     /**
