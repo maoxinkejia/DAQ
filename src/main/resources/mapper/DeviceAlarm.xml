@@ -176,7 +176,7 @@
           t.apply_status AS applyStatus,
           t.apply_time AS applyTime,
           t.apply_user AS applyUser,
-          t.alarm_time AS alarmTime，
+          t.alarm_time AS alarmTime,
           t.del_status AS delStatus
         FROM
           device_alarm_detail t
