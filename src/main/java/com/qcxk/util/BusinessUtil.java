@@ -454,7 +454,6 @@ public class BusinessUtil {
         device.setDeviceNum(message.getDeviceNum());
         device.setLocation("暂无");
         device.setCreateUser(SYSTEM_USER);
-        device.setControlStatus(DISABLED);
         return device;
     }
 

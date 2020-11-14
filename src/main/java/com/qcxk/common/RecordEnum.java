@@ -12,7 +12,8 @@ public enum RecordEnum implements BaseEnum<RecordEnum, Integer> {
     TEMPERATURE_THRESHOLD(11, "温度报警阈值", "℃"),
     DEVICE_BAT_VOL_THRESHOLD(12, "设备电池电量报警阈值", "V"),
     WELL_LID_BAT_VOL_THRESHOLD(14, "井盖电池电量报警阈值", "V"),
-    UPLOAD_DATA_PERIOD(13, "数据上传周期", "min");
+    UPLOAD_DATA_PERIOD(13, "数据上传周期", "min"),
+    DEVICE_UPLOAD_DATA_PERIOD(15, "设备数据上传周期", "min");
 
 
     private final Integer type;

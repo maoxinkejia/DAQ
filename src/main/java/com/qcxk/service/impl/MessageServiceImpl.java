@@ -231,6 +231,9 @@ public class MessageServiceImpl implements MessageService {
             case DEVICE_BAT_VOL_THRESHOLD:
                 config.setConfVal(getDeviceBatVolThreshold(data));
                 break;
+            case DEVICE_UPLOAD_DATA_PERIOD:
+                config.setConfVal(BusinessUtil.getDeviceUploadTime(data));
+                break;
         }
     }
 

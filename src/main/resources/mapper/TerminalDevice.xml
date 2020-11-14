@@ -162,7 +162,7 @@
             AND t.conf_type in (3, 4, 6, 13)
         </if>
         <if test="settingType != null and settingType == 2">
-            AND t.conf_type IN (7, 8, 9, 10, 11, 12, 14)
+            AND t.conf_type IN (7, 8, 9, 10, 11, 12, 14, 15)
         </if>
     </select>
 
@@ -229,7 +229,7 @@
             <if test="controlStatus != null">
                 control_status = #{controlStatus},
             </if>
-            <if test="imagePath != null and imagePath != ''">
+            <if test="imagePath != null">
                 image_path = #{imagePath},
             </if>
             <if test="remarks != null and remarks != ''">
