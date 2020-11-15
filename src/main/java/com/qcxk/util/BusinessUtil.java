@@ -10,6 +10,7 @@ import com.qcxk.model.device.TerminalDeviceDetail;
 import com.qcxk.model.message.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import sun.applet.Main;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -553,7 +554,7 @@ public class BusinessUtil {
                     if (val == null || val <= 0) {
                         vo.setWellLidBatVolStatus(NOT_ALARM);
                     } else {
-                        vo.setWellLidBatVolStatus((vo.getWellLidBatVol() > val ? NOT_ALARM : ALARM));
+                        vo.setWellLidBatVolStatus(vo.getWellLidBatVol() == 0 ? NOT_ALARM : (vo.getWellLidBatVol() > val ? NOT_ALARM : ALARM));
                     }
                     break;
                 default:
@@ -618,6 +619,11 @@ public class BusinessUtil {
             return;
         }
 
+        if (batVol >= DEVICE_BAT_VOL_MAX) {
+            device.setDeviceBatVolLeft(100d);
+            return;
+        }
+
         double left = batVol - DEVICE_BAT_VOL_MIX;
         if (left <= 0) {
             device.setDeviceBatVolLeft(0d);
@@ -635,6 +641,11 @@ public class BusinessUtil {
         Double batVol = device.getWellLidBatVol();
         if (batVol == null || batVol <= 0) {
             device.setWellLidBatVolLeft(0d);
+            return;
+        }
+
+        if (batVol >= WELL_LID_BAT_VOL_MAX) {
+            device.setWellLidBatVolLeft(100d);
             return;
         }
 
