@@ -10,7 +10,6 @@ import com.qcxk.model.device.TerminalDeviceDetail;
 import com.qcxk.model.message.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import sun.applet.Main;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -494,28 +493,10 @@ public class BusinessUtil {
     /**
      * 构建数据列表数据
      */
-    public static TerminalDataListVO buildTerminalDataList(TerminalDevice device, List<TerminalDeviceConfig> configs) {
-        TerminalDataListVO vo = new TerminalDataListVO();
-        vo.setDeviceNum(device.getDeviceNum());
-        vo.setLatitude(device.getLatitude());
-        vo.setLongitude(device.getLongitude());
-        vo.setCh4GasConcentration(device.getCh4GasConcentration() == null ? 0.0d : device.getCh4GasConcentration());
-        vo.setWaterDepth(device.getWaterDepth() == null ? 0.0d : device.getWaterDepth());
-        vo.setTemperature(device.getTemperature() == null ? 0.0d : device.getTemperature());
-        vo.setDeviceBatVol(device.getDeviceBatVol() == null ? 0.0d : device.getDeviceBatVol());
-        vo.setWellLidBatVol(device.getWellLidBatVol() == null ? 0.0d : device.getWellLidBatVol());
-        vo.setDeviceBatVolLeft(device.getDeviceBatVolLeft());
-        vo.setWellLidBatVolLeft(device.getWellLidBatVolLeft());
-        vo.setWellLidOpenStatus(device.getWellLidOpenStatus());
-        vo.setLocation(device.getLocation());
-        vo.setWellLidOpenStatusAlarmTime(device.getAlarmTime());
-        vo.setWellLidOpenStatusApplyTime(device.getApplyTime());
-        vo.setUpdateTime(device.getUpdateTime());
-        vo.setImagePaths(device.getImagePaths());
-
+    public static void buildTerminalDataList(TerminalDataListVO vo, List<TerminalDeviceConfig> configs) {
+        calculateDeviceBatVolLeft(vo);
+        calculateWellLidBatVolLeft(vo);
         buildDataListAlarmStatus(vo, configs);
-
-        return vo;
     }
 
     private static void buildDataListAlarmStatus(TerminalDataListVO vo, List<TerminalDeviceConfig> configs) {
@@ -613,50 +594,53 @@ public class BusinessUtil {
      * 计算设备剩余电池电量
      */
     public static void calculateDeviceBatVolLeft(TerminalDevice device) {
-        Double batVol = device.getDeviceBatVol();
-        if (batVol == null || batVol <= 0) {
-            device.setDeviceBatVolLeft(0d);
-            return;
-        }
-
-        if (batVol >= DEVICE_BAT_VOL_MAX) {
-            device.setDeviceBatVolLeft(100d);
-            return;
-        }
-
-        double left = batVol - DEVICE_BAT_VOL_MIX;
-        if (left <= 0) {
-            device.setDeviceBatVolLeft(0d);
-            return;
-        }
-
-        double num = (left / DEVICE_BAT_VOL_TOTAL) * 100;
-        device.setDeviceBatVolLeft(Double.parseDouble(String.valueOf(num).substring(0, 2)));
+        device.setDeviceBatVolLeft(getDeviceBatVolLeft(device.getDeviceBatVol()));
     }
 
     /**
      * 计算井盖剩余电池电量
      */
     public static void calculateWellLidBatVolLeft(TerminalDevice device) {
-        Double batVol = device.getWellLidBatVol();
+        device.setWellLidBatVolLeft(getWellLidBatVolLeft(device.getWellLidBatVol()));
+    }
+
+    /**
+     * 计算设备剩余电池电量
+     */
+    private static void calculateDeviceBatVolLeft(TerminalDataListVO vo) {
+        vo.setDeviceBatVolLeft(getDeviceBatVolLeft(vo.getDeviceBatVol()));
+    }
+
+    private static double getDeviceBatVolLeft(Double batVol) {
+        double num = aaa(batVol, DEVICE_BAT_VOL_MAX, DEVICE_BAT_VOL_MIX, DEVICE_BAT_VOL_TOTAL);
+        return Double.parseDouble(String.valueOf(num).substring(0, 2));
+    }
+
+    private static double getWellLidBatVolLeft(Double batVol) {
+        double num = aaa(batVol, WELL_LID_BAT_VOL_MAX, WELL_LID_BAT_VOL_MIX, WELL_LID_BAT_VOL_TOTAL);
+        return Double.parseDouble(String.valueOf(num).substring(0, 2));
+    }
+
+    private static double aaa(Double batVol, Double max, Double mix, Double total) {
         if (batVol == null || batVol <= 0) {
-            device.setWellLidBatVolLeft(0d);
-            return;
+            return 0d;
         }
-
-        if (batVol >= WELL_LID_BAT_VOL_MAX) {
-            device.setWellLidBatVolLeft(100d);
-            return;
+        if (batVol >= max) {
+            return 100d;
         }
-
-        double left = batVol - WELL_LID_BAT_VOL_MIX;
+        double left = batVol - mix;
         if (left <= 0) {
-            device.setWellLidBatVolLeft(0d);
-            return;
+            return 0d;
         }
 
-        double num = (left / WELL_LID_BAT_VOL_TOTAL) * 100;
-        device.setWellLidBatVolLeft(Double.parseDouble(String.valueOf(num).substring(0, 2)));
+        return (left / total) * 100;
+    }
+
+    /**
+     * 计算井盖剩余电池电量
+     */
+    private static void calculateWellLidBatVolLeft(TerminalDataListVO vo) {
+        vo.setWellLidBatVolLeft(getWellLidBatVolLeft(vo.getWellLidBatVol()));
     }
 
     public static TerminalDataDetailVO.TerminalDataDetailListVO buildTerminalDeviceDetailListVO(List<TerminalDeviceDetail> list) {

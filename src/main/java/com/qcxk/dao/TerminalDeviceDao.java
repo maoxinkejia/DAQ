@@ -3,6 +3,7 @@ package com.qcxk.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qcxk.controller.model.query.TerminalDeviceConfigDTO;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
+import com.qcxk.model.VO.TerminalDataListVO;
 import com.qcxk.model.device.TerminalDevice;
 import com.qcxk.model.device.TerminalDeviceConfig;
 import org.apache.ibatis.annotations.Param;
@@ -37,4 +38,6 @@ public interface TerminalDeviceDao extends BaseMapper<TerminalDevice> {
     int updateConfigSendStatus(TerminalDeviceConfig config);
 
     int updateConfig2Deleted(String deviceNum);
+
+    List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto);
 }

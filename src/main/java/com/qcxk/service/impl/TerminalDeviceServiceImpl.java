@@ -159,9 +159,10 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
 
     @Override
     public List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto) {
-        return findBaseList(dto).stream()
-                .map(terminalDevice -> buildTerminalDataList(terminalDevice, findConfigByDeviceNum(terminalDevice.getDeviceNum())))
-                .collect(Collectors.toList());
+        List<TerminalDataListVO> list = dao.findDataList(dto);
+        list.forEach(vo -> buildTerminalDataList(vo, findConfigByDeviceNum(vo.getDeviceNum())));
+
+        return list;
     }
 
     @Override

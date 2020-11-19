@@ -174,6 +174,58 @@
         AND t.del_status = 0
     </select>
 
+    <select id="findDataList" resultType="com.qcxk.model.VO.TerminalDataListVO">
+        <include refid="selectTerminalDeviceData"/>
+        <where>
+            t.del_status = #{delStatus}
+            <if test="deviceNum != null and deviceNum != ''">
+                AND t.device_num LIKE CONCAT('%',CONCAT(#{deviceNum},'%'))
+            </if>
+            <if test="location != null and location != ''">
+                AND t.location LIKE CONCAT('%',CONCAT(#{location},'%'))
+            </if>
+            <if test="tubeWellDescription != null and tubeWellDescription != ''">
+                AND t.tube_well_description LIKE CONCAT('%',CONCAT(#{tubeWellDescription},'%'))
+            </if>
+            <if test="controlStatus != null">
+                AND t.control_status LIKE CONCAT('%',CONCAT(#{controlStatus},'%'))
+            </if>
+        </where>
+    </select>
+
+    <sql id="selectTerminalDeviceData">
+        SELECT
+          t.id,
+          t.device_num AS deviceNum,
+          t.IOT_card_num AS IOTCardNum,
+          t.longitude,
+          t.latitude,
+          t.location,
+          t.ch4_gas_concentration AS ch4GasConcentration,
+          t.water_depth AS waterDepth,
+          t.device_bat_vol AS deviceBatVol,
+          t.well_lid_bat_vol AS wellLidBatVol,
+          t.temperature,
+          t.well_lid_open_status AS wellLidOpenStatus,
+          t.del_status AS delStatus,
+          t.tube_well_description AS tubeWellDescription,
+          t.control_status AS controlStatus,
+          t.image_path AS imagePath,
+          t.remarks,
+          t.send_status AS sendStatus,
+          t.apply_time AS wellLidOpenStatusApplyTime,
+          t.alarm_time AS wellLidOpenStatusAlarmTime,
+          t.create_time AS createTime,
+          t.boot_time AS bootTime,
+          t.shutdown_time AS shutdownTime,
+          t.update_time AS updateTime,
+          t.create_user AS createUser,
+          t.update_user AS updateUser,
+          t.del_time AS delTime
+        FROM
+          terminal_device t
+    </sql>
+
     <sql id="selectTerminalDeviceConfig">
         SELECT
           t.id,

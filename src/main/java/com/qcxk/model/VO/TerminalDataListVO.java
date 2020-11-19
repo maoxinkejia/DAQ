@@ -27,7 +27,7 @@ public class TerminalDataListVO {
     /**
      * 水位深度
      */
-    private Double waterDepth;
+    private Double waterDepth = 0.0d;
     /**
      * 是否达到阈值
      */
@@ -35,7 +35,7 @@ public class TerminalDataListVO {
     /**
      * 设备温度
      */
-    private Double temperature;
+    private Double temperature = 0.0d;
     /**
      * 是否到达阈值
      */
@@ -43,7 +43,7 @@ public class TerminalDataListVO {
     /**
      * 电池电压
      */
-    private Double deviceBatVol;
+    private Double deviceBatVol = 0.0d;
     /**
      * 设备剩余电池电量  单位：%
      */
@@ -55,7 +55,7 @@ public class TerminalDataListVO {
     /**
      * 甲烷气体浓度(LEL%)
      */
-    private Double ch4GasConcentration;
+    private Double ch4GasConcentration = 0.0d;
     /**
      * 是否达到阈值
      */
@@ -67,7 +67,7 @@ public class TerminalDataListVO {
     /**
      * 井盖电池电量
      */
-    private Double wellLidBatVol;
+    private Double wellLidBatVol = 0.0d;
     /**
      * 井盖剩余电池电量 单位：%
      */
