@@ -1,6 +1,6 @@
 FROM centos:7
 
-MAINTAINER maoxinkejia@163.com
+MAINTAINER zhangmaoxin@kingsoft.com
 
 # jdk 安装
 WORKDIR /opt
@@ -18,13 +18,14 @@ ENV PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 
 
 # 添加解压服务
-WORKDIR /home
+RUN mkdir /app
+WORKDIR /app
 
-ADD daq.tar .
+ADD dts-web.tar .
 
 # 暴露端口
 EXPOSE 9010
 
 
 # 开始构建
-CMD ["java","-jar","/home/daq/bin/app.sh start dev"]
+CMD "sh /app/dts-web/bin/app.sh start dev"
