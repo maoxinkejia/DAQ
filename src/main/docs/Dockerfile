@@ -1,7 +1,5 @@
 FROM centos:7
 
-MAINTAINER zhangmaoxin@kingsoft.com
-
 # jdk 安装
 WORKDIR /opt
 
