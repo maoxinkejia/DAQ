@@ -497,6 +497,13 @@ public class BusinessUtil {
         calculateDeviceBatVolLeft(vo);
         calculateWellLidBatVolLeft(vo);
         buildDataListAlarmStatus(vo, configs);
+
+        if (StringUtils.isBlank(vo.getImagePath())) {
+            vo.setImagePaths(Collections.emptyList());
+            return;
+        }
+
+        vo.setImagePaths(Arrays.asList(vo.getImagePath().split(";")));
     }
 
     private static void buildDataListAlarmStatus(TerminalDataListVO vo, List<TerminalDeviceConfig> configs) {

@@ -21,5 +21,11 @@ public class ThmsApplicationTests {
         System.out.println(builder.length());
     }
 
+    @Test
+    public void readFile() {
+        String principal = String.format("p%s", "1234");
+        System.out.println(principal);
+    }
+
 }
 

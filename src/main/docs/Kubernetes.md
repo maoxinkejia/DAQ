@@ -40,6 +40,73 @@ Controller Manager由kube-controller-manager和cloud-controller-manager组成，
 * RS和RC没有本质的不同，只是名字不一样，并且RS支持集合式的selector（RC仅支持等式）。
 * 虽然RS和RC可以独立使用，但建议使用Deployment来自动管理，这样就无需担心跟其他机制不兼容问题
 
+### Requests Limit
+kubernetes 是允许管理员在命名空间中指定Requests和Limit的，这一特性对于资源管理限制非常有用。但它还存在一定局限：
+**如果管理员在命名空间中设置了CPU Requests配额，那么所有Pod也要在其定义中设置CPU Requests，否则就无法被调配资源**。
+```yaml
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: mem-cpu-example
+spec:
+  hard:
+    requests.cpu: 2
+    requests.memory: 2Gi
+    limits.cpu: 3
+    limits.memory: 4Gi
+```
+如果我们把这个文件应用于命名空间，他会设置以下限制：
+* 所有Pod容器都必须声明对CPU和RAM的Request和Limit
+* 所有CPU Request的总和不能超过3个内核
+* 所有CPU Limits的总和不能超过3个内核
+* 所有RAM Requests的总和不能超过2 GiB
+* 所有RAM Limits的总和不能超过4 GiB
+
+假设，我们已经为其他Pods分配了1.9个内核，开始响应新Pod提出的200m CPU分配请求，那么由于超过了最大Request限制，
+这个Pod会一直保持Pending状态，无法被调度。
+
+#### 什么是POd Request和Limit
+下面是一个部署实例：
+```yaml
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+ name: redis
+ labels:
+   name: redis-deployment
+   app: example-voting-app
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+    name: redis
+    role: redisdb
+    app: example-voting-app
+ template:
+   spec:
+     containers:
+       - name: redis
+         image: redis:5.0.3-alpine
+         resources:
+           limits:
+             memory: 600Mi
+             cpu: 1
+           requests:
+             memory: 300Mi
+             cpu: 500m
+       - name: busybox
+         image: busybox:1.28
+         resources:
+           limits:
+             memory: 200Mi
+             cpu: 300m
+           requests:
+             memory: 100Mi
+             cpu: 100m
+```
+参考：https://zhuanlan.zhihu.com/p/114765307
+
+---
 
 ### 常用命令
 * kubectl get node 查询k8s所有的node节点
@@ -47,4 +114,3 @@ Controller Manager由kube-controller-manager和cloud-controller-manager组成，
 * kubectl get pod --all-namespaces -o wide 查看所有pod所属namespace信息，展示多数据
 * kubectl get pod -n <ns> 查看指定namespace下的pod
 * kubectl describe pod <podname> -n <ns>  显示pod的详细信息，特别是查看pod无法创建时候的日志
-* 

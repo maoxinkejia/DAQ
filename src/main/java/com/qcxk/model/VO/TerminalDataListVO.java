@@ -82,6 +82,10 @@ public class TerminalDataListVO {
      */
     private Integer deviceStatus;
     /**
+     * 图片信息
+     */
+    private String imagePath;
+    /**
      * 图片列表信息
      */
     private List<String> imagePaths;

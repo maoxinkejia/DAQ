@@ -16,14 +16,13 @@ ENV PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 
 
 # 添加解压服务
-RUN mkdir /app
-WORKDIR /app
+WORKDIR /home
 
-ADD dts-web.tar .
+ADD thms.tar .
 
 # 暴露端口
 EXPOSE 9010
 
+WORKDIR /home/daq/bin
 
-# 开始构建
-CMD "sh /app/dts-web/bin/app.sh start dev"
+CMD "sh app.sh dev"
