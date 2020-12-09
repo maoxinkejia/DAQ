@@ -4,6 +4,9 @@ server:
   port: 9010
   servlet:
     context-path: /
+  tomcat:
+    basedir: /tmp/tomcat
+
 delay: -30
 
 spring:
