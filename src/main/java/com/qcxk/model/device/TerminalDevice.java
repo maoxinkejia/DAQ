@@ -125,7 +125,7 @@ public class TerminalDevice {
     /**
      * 图片地址列表
      */
-    private List<String> imagePaths;
+    private List<TerminalPictures> pictures;
     /**
      * 设备剩余电池电量，单位%
      */

@@ -20,7 +20,7 @@ public interface TerminalDeviceService {
 
     List<TerminalDevice> findList(TerminalDeviceDTO dto);
 
-    String uploadDeviceImages(MultipartFile[] files);
+    void uploadDeviceImages(List<MultipartFile> files, String deviceNum);
 
     List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto);
 

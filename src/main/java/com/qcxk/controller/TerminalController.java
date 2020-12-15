@@ -9,7 +9,6 @@ import com.qcxk.model.VO.TerminalDataDetailVO;
 import com.qcxk.model.VO.TerminalDataListVO;
 import com.qcxk.model.device.TerminalDevice;
 import com.qcxk.model.device.TerminalDeviceConfig;
-import com.qcxk.service.AlarmService;
 import com.qcxk.service.TerminalDeviceDetailService;
 import com.qcxk.service.TerminalDeviceService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
 import java.text.ParseException;
 import java.util.List;
 
@@ -46,10 +46,10 @@ public class TerminalController {
         return Response.build().success();
     }
 
-    @PostMapping(value = "/upload")
-    public Response uploadPicture(@RequestBody MultipartFile[] files) {
-        String imagePath = service.uploadDeviceImages(files);
-        return Response.build(imagePath).success();
+    @PostMapping(value = "/upload/{deviceNum}")
+    public Response uploadPicture(@PathVariable("deviceNum") String deviceNum, @RequestBody List<MultipartFile> files) {
+        service.uploadDeviceImages(files, deviceNum);
+        return Response.build().success();
     }
 
     @PutMapping(value = "/updateDevice")
@@ -59,7 +59,7 @@ public class TerminalController {
     }
 
     @DeleteMapping(value = "/deleteDevice/{deviceNum}")
-    public Response deleteTerminalDevice(@PathVariable(value = "deviceNum") String deviceNum) {
+    public Response deleteTerminalDevice(@NotBlank(message = "deviceNum不能为空") @PathVariable(value = "deviceNum") String deviceNum) {
         service.delete(deviceNum);
         return Response.build().success();
     }

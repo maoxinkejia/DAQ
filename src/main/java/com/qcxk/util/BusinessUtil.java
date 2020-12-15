@@ -7,6 +7,7 @@ import com.qcxk.model.alarm.DeviceAlarmDetail;
 import com.qcxk.model.device.TerminalDevice;
 import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.model.device.TerminalDeviceDetail;
+import com.qcxk.model.device.TerminalPictures;
 import com.qcxk.model.message.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -497,13 +498,6 @@ public class BusinessUtil {
         calculateDeviceBatVolLeft(vo);
         calculateWellLidBatVolLeft(vo);
         buildDataListAlarmStatus(vo, configs);
-
-        if (StringUtils.isBlank(vo.getImagePath())) {
-            vo.setImagePaths(Collections.emptyList());
-            return;
-        }
-
-        vo.setImagePaths(Arrays.asList(vo.getImagePath().split(";")));
     }
 
     private static void buildDataListAlarmStatus(TerminalDataListVO vo, List<TerminalDeviceConfig> configs) {
@@ -731,5 +725,18 @@ public class BusinessUtil {
      */
     public static Double getDeviceUploadTime(String data) {
         return Integer.valueOf(data.substring(86, 90), 16).doubleValue();
+    }
+
+    /**
+     * 构建设备图片对象
+     */
+    public static TerminalPictures buildTerminalPictures(String picturePath, String deviceNum) {
+        TerminalPictures terminalPictures = new TerminalPictures();
+        terminalPictures.setDeviceNum(deviceNum);
+        terminalPictures.setPicturePath(picturePath);
+        terminalPictures.setStatus(NOT_DELETED);
+        terminalPictures.setCreateTime(new Date());
+        terminalPictures.setDelTime(null);
+        return terminalPictures;
     }
 }

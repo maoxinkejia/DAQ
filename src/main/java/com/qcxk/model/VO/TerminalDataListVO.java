@@ -1,6 +1,7 @@
 package com.qcxk.model.VO;
 
 import com.qcxk.model.alarm.DeviceAlarmDetail;
+import com.qcxk.model.device.TerminalPictures;
 import lombok.Data;
 
 import java.util.Date;
@@ -88,7 +89,7 @@ public class TerminalDataListVO {
     /**
      * 图片列表信息
      */
-    private List<String> imagePaths;
+    private List<TerminalPictures> pictures;
     /**
      * 设备更新时间
      */

@@ -12,8 +12,8 @@ import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.service.AlarmService;
 import com.qcxk.service.TerminalDeviceDetailService;
 import com.qcxk.service.TerminalDeviceService;
+import com.qcxk.service.TerminalPicturesService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,8 +25,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.qcxk.common.Constants.*;
@@ -36,12 +38,14 @@ import static com.qcxk.util.BusinessUtil.*;
 @Service
 public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     @Value("${upload.image.url:/home/pictures}")
-    private String imageUrl;
+    private String pictureUrl;
 
     @Autowired
     private TerminalDeviceDao dao;
     @Autowired
     private AlarmService alarmService;
+    @Autowired
+    private TerminalPicturesService terminalPicturesService;
     @Autowired
     private TerminalDeviceDetailService terminalDeviceDetailService;
 
@@ -119,48 +123,36 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
     }
 
     @Override
-    public String uploadDeviceImages(MultipartFile[] files) {
-        log.info("upload files length: {}", files.length);
+    public void uploadDeviceImages(List<MultipartFile> files, String deviceNum) {
+        log.info("upload files size: {}", files.size());
 
-        if (files.length == 0) {
-            return "";
+        mkdir(deviceNum);
+
+        TerminalDevice terminalDevice = dao.findByDeviceNum(deviceNum);
+        if (terminalDevice == null) {
+            // 新设备需要全部添加
+            terminalPicturesService.processNewDevicePictures(files, pictureUrl, deviceNum);
+            return;
         }
 
-        Assert.hasLength(imageUrl, "imageUrl mast not be null!!!");
-        File file = new File(imageUrl);
+        terminalPicturesService.processExistsDevicePictures(files, pictureUrl, deviceNum);
+    }
+
+    private void mkdir(String deviceNum) {
+        File file = new File(pictureUrl + File.separator + deviceNum);
         if (!file.exists()) {
             boolean mkdirs = file.mkdirs();
-            log.info("imageUrl doesn't exists, mkdirs: {}", mkdirs);
+            log.info("pictureUrl doesn't exists, mkdirs: {}", mkdirs);
         }
-
-        List<String> imagePathList = new ArrayList<>(files.length);
-
-        for (MultipartFile pictureFile : files) {
-            if (pictureFile.isEmpty()) {
-                continue;
-            }
-
-            String fullPath = imageUrl + File.separator + pictureFile.getOriginalFilename();
-            try {
-                FileUtils.copyInputStreamToFile(pictureFile.getInputStream(), new File(fullPath));
-                imagePathList.add(fullPath);
-            } catch (IOException e) {
-                log.error("upload picture failed, picture: {}, error: {}", pictureFile.getOriginalFilename(), e);
-            }
-        }
-
-
-        if (CollectionUtils.isEmpty(imagePathList)) {
-            return "";
-        }
-
-        return String.join(";", imagePathList);
     }
 
     @Override
     public List<TerminalDataListVO> findDataList(TerminalDeviceDTO dto) {
         List<TerminalDataListVO> list = dao.findDataList(dto);
-        list.forEach(vo -> buildTerminalDataList(vo, findConfigByDeviceNum(vo.getDeviceNum())));
+        list.forEach(vo -> {
+            buildTerminalDataList(vo, findConfigByDeviceNum(vo.getDeviceNum()));
+            vo.setPictures(terminalPicturesService.findByDeviceNum(vo.getDeviceNum(), NOT_DELETED));
+        });
 
         return list;
     }
@@ -192,14 +184,7 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         list.forEach(device -> {
             calculateDeviceBatVolLeft(device);
             calculateWellLidBatVolLeft(device);
-            String imagePath = device.getImagePath();
-
-            if (StringUtils.isBlank(imagePath)) {
-                device.setImagePaths(Collections.emptyList());
-                return;
-            }
-
-            device.setImagePaths(Arrays.asList(imagePath.split(";")));
+            device.setPictures(terminalPicturesService.findByDeviceNum(device.getDeviceNum(), NOT_DELETED));
         });
 
         return list;
