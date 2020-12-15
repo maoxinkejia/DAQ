@@ -619,12 +619,19 @@ public class BusinessUtil {
     }
 
     private static double getDeviceBatVolLeft(Double batVol) {
-        double num = aaa(batVol, DEVICE_BAT_VOL_MAX, DEVICE_BAT_VOL_MIX, DEVICE_BAT_VOL_TOTAL);
-        return Double.parseDouble(String.valueOf(num).substring(0, 2));
+        return aa(batVol, DEVICE_BAT_VOL_MAX, DEVICE_BAT_VOL_MIX, DEVICE_BAT_VOL_TOTAL);
     }
 
     private static double getWellLidBatVolLeft(Double batVol) {
-        double num = aaa(batVol, WELL_LID_BAT_VOL_MAX, WELL_LID_BAT_VOL_MIX, WELL_LID_BAT_VOL_TOTAL);
+        return aa(batVol, WELL_LID_BAT_VOL_MAX, WELL_LID_BAT_VOL_MIX, WELL_LID_BAT_VOL_TOTAL);
+    }
+
+    private static double aa(Double batVol, Double batVolMax, Double batVolMix, Double batVolTotal) {
+        double num = aaa(batVol, batVolMax, batVolMix, batVolTotal);
+        if (num == 100d || num == 0d) {
+            return num;
+        }
+
         return Double.parseDouble(String.valueOf(num).substring(0, 2));
     }
 
