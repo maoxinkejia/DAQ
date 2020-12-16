@@ -292,9 +292,5 @@ public class TerminalDeviceServiceImpl implements TerminalDeviceService {
         if (StringUtils.isBlank(device.getDeviceNum())) {
             throw new ParamException("设备序列号不能为空");
         }
-
-        if (StringUtils.isBlank(device.getLocation())) {
-            throw new ParamException("设备位置不能为空");
-        }
     }
 }
