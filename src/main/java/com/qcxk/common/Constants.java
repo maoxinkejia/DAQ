@@ -51,9 +51,9 @@ public class Constants {
     public static final Integer CH4_CONCENTRATION_OVER_PROOF = 2;
     public static final Integer WATER_DEPTH_OVER_PROOF = 4;
     public static final Integer WELL_LID_OPENED = 8;
-    public static final Integer WELL_LID_BAT_VOL_LOW = 10;
-    public static final Integer DEVICE_BAT_VOL_LOW = 20;
-    public static final Integer SYSTEM_UPLOAD_DATA = 40;
+    public static final Integer WELL_LID_BAT_VOL_LOW = 16;
+    public static final Integer DEVICE_BAT_VOL_LOW = 32;
+    public static final Integer SYSTEM_UPLOAD_DATA = 64;
 
     public static final String IP_SEPARATOR = ".";
 

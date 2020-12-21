@@ -345,7 +345,7 @@ public class BusinessUtil {
     }
 
     public static Map<Integer, Boolean> getSystemErrorCode(String data) {
-        int errorCode = Integer.parseInt(Integer.toBinaryString(Integer.parseInt(data.substring(66, 70), 16) & 0xff));
+        int errorCode = Integer.parseInt(data.substring(66, 70), 16);
         Map<Integer, Boolean> systemFailure = new HashMap<>(7);
         putProperty(systemFailure, CH4_TEMPERATURE_OVER_PROOF, errorCode);
         putProperty(systemFailure, CH4_CONCENTRATION_OVER_PROOF, errorCode);
@@ -359,7 +359,7 @@ public class BusinessUtil {
     }
 
     private static void putProperty(Map<Integer, Boolean> map, Integer type, int errorCode) {
-        int typeCode = Integer.parseInt(Integer.toBinaryString(Integer.parseInt(type.toString(), 16) & 0xff));
+        int typeCode = Integer.parseInt(type.toString(), 16);
         map.put(type, (errorCode & typeCode) == typeCode);
     }
 
