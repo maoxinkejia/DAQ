@@ -333,7 +333,13 @@ public class BusinessUtil {
      * 获取甲烷气体传感器内部温度
      */
     public static Double getCH4GasTemperature(String data) {
-        return Integer.valueOf(data.substring(48, 50), 16).doubleValue();
+        Integer temperature = Integer.valueOf(data.substring(48, 50), 16);
+        boolean flag = (temperature & 128) == 128;
+        if (flag) {
+            return -temperature.doubleValue();
+        }
+
+        return temperature.doubleValue();
     }
 
     /**
