@@ -353,6 +353,7 @@ public class BusinessUtil {
 
     public static Map<Integer, Boolean> getSystemErrorCode(String data) {
         int errorCode = Integer.parseInt(data.substring(66, 70), 16);
+        log.info("errorCode: {}", errorCode);
         Map<Integer, Boolean> systemFailure = new HashMap<>(7);
         putProperty(systemFailure, CH4_TEMPERATURE_OVER_PROOF, errorCode);
         putProperty(systemFailure, CH4_CONCENTRATION_OVER_PROOF, errorCode);
