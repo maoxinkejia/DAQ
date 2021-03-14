@@ -4,6 +4,7 @@ import com.qcxk.common.RecordEnum;
 import com.qcxk.controller.model.query.TerminalDeviceConfigDTO;
 import com.qcxk.controller.model.query.TerminalDeviceDTO;
 import com.qcxk.dao.MessageDao;
+import com.qcxk.model.alarm.DeviceAlarmType;
 import com.qcxk.model.device.TerminalDevice;
 import com.qcxk.model.device.TerminalDeviceConfig;
 import com.qcxk.model.device.TerminalDeviceDetail;
@@ -279,6 +280,12 @@ public class MessageServiceImpl implements MessageService {
     private void resolveWellLidStatus(TerminalDevice device, String data, List<TerminalDeviceDetail> list) {
         if (!Objects.equals(ENABLED, getWellLidStatus(data))) {
             log.info("wellLidStatus is Disabled, deviceNum: {}", device.getDeviceNum());
+            return;
+        }
+
+        DeviceAlarmType alarmType = alarmService.findDeviceAlarmType(device.getDeviceNum());
+        if (Objects.equals(alarmType.getWellLidStatus(), DISABLED)) {
+            log.info("device alarm type: wellLidStatus is Disabled, deviceNum: {}", device.getDeviceNum());
             return;
         }
 
